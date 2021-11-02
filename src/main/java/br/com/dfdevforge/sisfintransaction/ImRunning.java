@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ImRunning {
 	@GetMapping
 	public String imRunning() {
-		return "I'm Running";
+		return "Sisfin Transaction is running";
 	}
 }
