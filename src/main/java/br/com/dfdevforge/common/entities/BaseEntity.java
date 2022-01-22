@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BaseEntity {
+	private String filter;
 	private Map<String, Object> map;
 }

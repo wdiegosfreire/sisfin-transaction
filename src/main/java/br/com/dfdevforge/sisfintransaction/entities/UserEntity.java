@@ -2,8 +2,6 @@ package br.com.dfdevforge.sisfintransaction.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -17,7 +15,6 @@ import lombok.EqualsAndHashCode;
 public class UserEntity {
 	@Id
 	@Column(name = "usr_identity")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long identity;
 
 	@Column(name = "usr_name")

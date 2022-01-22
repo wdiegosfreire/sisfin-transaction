@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.dfdevforge.common.entities.BaseEntity;
@@ -23,13 +21,18 @@ public class LocationEntity extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long identity;
 
+	@Column(name = "loc_cnpj")
+	private String cnpj;
+
 	@Column(name = "loc_name")
 	private String name;
+
+	@Column(name = "loc_branch")
+	private String branch;
 
 	@Column(name = "loc_note")
 	private String note;
 
-	@ManyToOne()
-	@JoinColumn(name="usr_identity")
-	private UserEntity user;
+	@Column(name = "usr_identity")
+	private Long userIdentity;
 }
