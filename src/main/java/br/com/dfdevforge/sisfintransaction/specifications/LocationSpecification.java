@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import br.com.dfdevforge.sisfintransaction.entities.LocationEntity;
 
 public class LocationSpecification {
-	public static Specification<LocationEntity> searchInAllProperties(Object searchParam) {
+	public static Specification<LocationEntity> searchInAllProperties(String searchParam) {
 		return new Specification<LocationEntity>() {
 			private static final long serialVersionUID = 1L;
 
