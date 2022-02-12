@@ -24,9 +24,7 @@ public class LocationResource {
 
 	@Autowired private LocationAccessModuleService locationAccessModuleService;
 	@Autowired private LocationAccessEditionService locationAccessEditionService;
-
 	@Autowired private LocationExecuteSearchService locationExecuteSearchService;
-
 	@Autowired private LocationExecuteEditionService locationExecuteEditionService;
 	@Autowired private LocationExecuteExclusionService locationExecuteExclusionService;
 	@Autowired private LocationExecuteRegistrationService locationExecuteRegistrationService;
