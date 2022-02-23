@@ -18,7 +18,7 @@ public class DatabaseConfig {
 		@SuppressWarnings("rawtypes")
 		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
 
-		URI jdbcUri = new URI(System.getenv("DATABASE_SISFIN_TRANSACTION"));
+		URI jdbcUri = new URI(System.getenv("SISFIN_DATABASE_TRANSACTION"));
 
 		dataSourceBuilder.driverClassName(CLASS_NAME);
 		dataSourceBuilder.username(jdbcUri.getUserInfo().split(":")[0]);
