@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.dfdevforge</groupId>
 	<artifactId>sisfin-transaction</artifactId>
-	<version>2022-01-25 2118</version>
+	<version>2022-03-24 1430</version>
 	<packaging>war</packaging>
 	<name>sisfin-transaction</name>
 	<description>Spring Boot project for Sisfin application, module transaction</description>
@@ -92,9 +92,15 @@
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
 
+		<!-- Other Dependencies -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
 		</dependency>
 	</dependencies>
 
