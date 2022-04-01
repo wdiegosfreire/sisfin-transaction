@@ -6,10 +6,11 @@ import java.util.Map;
 import br.com.dfdevforge.common.exceptions.BaseException;
 
 public abstract class BaseService implements CommonService {
+	protected String token;
 	protected Map<String, Object> resultMap = new HashMap<>();
 
 	@Override
-	public void validateUserAccess() {
+	public void validateUserAccess() throws BaseException {
 		
 	}
 
