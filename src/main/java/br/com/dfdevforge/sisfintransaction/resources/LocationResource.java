@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.common.entities.ResourceDataEntity;
@@ -31,48 +32,48 @@ public class LocationResource {
 
 
 	@PostMapping(value = "/accessModule")
-	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody LocationEntity location) throws BaseException {
-		this.locationAccessModuleService.setEntity(location);
+	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody LocationEntity location, @RequestParam String token) throws BaseException {
+		this.locationAccessModuleService.setParams(location, token);
 		this.resourceData.setMap(this.locationAccessModuleService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
-	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody LocationEntity location) throws BaseException {
-		this.locationAccessEditionService.setEntity(location);
+	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody LocationEntity location, @RequestParam String token) throws BaseException {
+		this.locationAccessEditionService.setParams(location, token);
 		this.resourceData.setMap(this.locationAccessEditionService.execute());
-		
+
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeSearch")
-	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody LocationEntity location) throws BaseException {
-		this.locationExecuteSearchService.setEntity(location);
+	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody LocationEntity location, @RequestParam String token) throws BaseException {
+		this.locationExecuteSearchService.setParams(location, token);
 		this.resourceData.setMap(this.locationExecuteSearchService.execute());
-		
+
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
-	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody LocationEntity location) throws BaseException {
-		this.locationExecuteEditionService.setEntity(location);
+	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody LocationEntity location, @RequestParam String token) throws BaseException {
+		this.locationExecuteEditionService.setParams(location, token);
 		this.resourceData.setMap(this.locationExecuteEditionService.execute());
-		
+
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
-	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody LocationEntity location) throws BaseException {
-		this.locationExecuteExclusionService.setEntity(location);
+	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody LocationEntity location, @RequestParam String token) throws BaseException {
+		this.locationExecuteExclusionService.setParams(location, token);
 		this.resourceData.setMap(this.locationExecuteExclusionService.execute());
-		
+
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
-	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody LocationEntity location) throws BaseException {
-		this.locationExecuteRegistrationService.setEntity(location);
+	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody LocationEntity location, @RequestParam String token) throws BaseException {
+		this.locationExecuteRegistrationService.setParams(location, token);
 		this.resourceData.setMap(this.locationExecuteRegistrationService.execute());
 
 		return ResponseEntity.ok(this.resourceData);

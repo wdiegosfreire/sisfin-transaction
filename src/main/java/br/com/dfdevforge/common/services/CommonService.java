@@ -16,7 +16,7 @@ public interface CommonService {
 	/**
 	 * Its purpose is to validate user access before executing the business rule.
 	 */
-	public void validateUserAccess();
+	public void validateUserAccess() throws BaseException;
 
 	/**
 	 * Its purpose is to group all necessary methods to business rule execution.

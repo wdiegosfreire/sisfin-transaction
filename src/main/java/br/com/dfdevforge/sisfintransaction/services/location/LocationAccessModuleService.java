@@ -17,6 +17,6 @@ public class LocationAccessModuleService extends LocationBaseService implements 
 	}
 
 	private void findAllLocations() {
-		this.setArtifact("locationList", this.locationRepository.findAll());
+		this.setArtifact("locationList", this.locationRepository.findByUserIdentity(locationParam.getUserIdentity()));
 	}
 }
