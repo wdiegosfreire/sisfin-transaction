@@ -13,6 +13,7 @@ import br.com.dfdevforge.common.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.services.account.AccountAccessEditionService;
 import br.com.dfdevforge.sisfintransaction.services.account.AccountAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.services.account.AccountAccessRegistrationService;
 import br.com.dfdevforge.sisfintransaction.services.account.AccountExecuteEditionService;
 import br.com.dfdevforge.sisfintransaction.services.account.AccountExecuteExclusionService;
 import br.com.dfdevforge.sisfintransaction.services.account.AccountExecuteRegistrationService;
@@ -25,6 +26,8 @@ public class AccountResource {
 
 	@Autowired private AccountAccessModuleService accountAccessModuleService;
 	@Autowired private AccountAccessEditionService accountAccessEditionService;
+	@Autowired private AccountAccessRegistrationService accountAccessRegistrationService;
+
 	@Autowired private AccountExecuteSearchService accountExecuteSearchService;
 	@Autowired private AccountExecuteEditionService accountExecuteEditionService;
 	@Autowired private AccountExecuteExclusionService accountExecuteExclusionService;
@@ -44,6 +47,14 @@ public class AccountResource {
 		this.accountAccessEditionService.setParams(account, token);
 		this.resourceData.setMap(this.accountAccessEditionService.execute());
 
+		return ResponseEntity.ok(this.resourceData);
+	}
+
+	@PostMapping(value = "/accessRegistration")
+	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
+		this.accountAccessRegistrationService.setParams(account, token);
+		this.resourceData.setMap(this.accountAccessRegistrationService.execute());
+		
 		return ResponseEntity.ok(this.resourceData);
 	}
 

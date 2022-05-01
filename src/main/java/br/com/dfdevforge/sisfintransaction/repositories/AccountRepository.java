@@ -9,4 +9,5 @@ import br.com.dfdevforge.sisfintransaction.entities.AccountEntity;
 public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 	public AccountEntity findByIdentity(Long identity);
 	public List<AccountEntity> findByUserIdentity(Long userIdentity);
+	public List<AccountEntity> findByUserIdentityOrderByLevel(Long userIdentity);
 }

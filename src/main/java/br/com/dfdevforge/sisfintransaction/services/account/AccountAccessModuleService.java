@@ -17,6 +17,6 @@ public class AccountAccessModuleService extends AccountBaseService implements Co
 	}
 
 	private void findAllAccounts() {
-		this.setArtifact("accountList", this.accountRepository.findByUserIdentity(accountParam.getUserIdentity()));
+		this.setArtifact("accountList", this.accountRepository.findByUserIdentityOrderByLevel(accountParam.getUserIdentity()));
 	}
 }
