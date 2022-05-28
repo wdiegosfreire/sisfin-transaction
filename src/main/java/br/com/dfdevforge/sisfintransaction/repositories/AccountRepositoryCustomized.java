@@ -40,4 +40,39 @@ public class AccountRepositoryCustomized {
 		
 		return query.getResultList();
 	}
+
+	public List<AccountEntity> searchAllWithLevel(Integer level) {
+		if (level == 1)
+			level = 3;
+		else if (level == 2)
+			level = 6;
+		else if (level == 3)
+			level = 9;
+
+		StringBuilder jpql = new StringBuilder();
+
+		jpql.append("select acc from AccountEntity as acc ");
+		jpql.append("where ");
+		jpql.append("  length(acc.level) = :level ");
+
+		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
+
+		query.setParameter("level", level);
+
+		return query.getResultList();
+	}
+
+	public List<AccountEntity> searchAllWithParent(Long accountIdentityParent) {
+		StringBuilder jpql = new StringBuilder();
+
+		jpql.append("select acc from AccountEntity as acc ");
+		jpql.append("where ");
+		jpql.append("  acc.accountParent.identity = :accountIdentityParent ");
+
+		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
+
+		query.setParameter("accountIdentityParent", accountIdentityParent);
+
+		return query.getResultList();
+	}
 }

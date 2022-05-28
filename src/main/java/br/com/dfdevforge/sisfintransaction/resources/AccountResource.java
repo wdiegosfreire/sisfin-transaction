@@ -33,7 +33,6 @@ public class AccountResource {
 	@Autowired private AccountExecuteExclusionService accountExecuteExclusionService;
 	@Autowired private AccountExecuteRegistrationService accountExecuteRegistrationService;
 
-
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
 		this.accountAccessModuleService.setParams(account, token);
@@ -54,7 +53,7 @@ public class AccountResource {
 	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
 		this.accountAccessRegistrationService.setParams(account, token);
 		this.resourceData.setMap(this.accountAccessRegistrationService.execute());
-		
+
 		return ResponseEntity.ok(this.resourceData);
 	}
 

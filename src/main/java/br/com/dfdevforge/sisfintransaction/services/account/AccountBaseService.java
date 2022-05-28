@@ -21,7 +21,14 @@ public abstract class AccountBaseService extends BaseService {
 
 	@Override
 	public void validateUserAccess() throws BaseException {
-		UserEntity userValidatedByToken = this.userFeignClient.validateToken(this.token);
+		UserEntity userValidatedByToken = null;
+
+		try {
+			userValidatedByToken = this.userFeignClient.validateToken(this.token);
+		}
+		catch (Exception e) {
+			throw e;
+		}
 
 		if (this.accountParam.getUserIdentity() != userValidatedByToken.getIdentity())
 			throw new UserUnauthorizedException();

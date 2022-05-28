@@ -19,6 +19,7 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();
+		this.setDefaultValues();
 		this.saveAccount();
 		this.findAllAccounts();
 	}
@@ -36,6 +37,8 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 			errorList.add("Please, enter the name.");
 		if (this.accountParam.getLevel() == null || this.accountParam.getLevel().equals(""))
 			errorList.add("Please, enter the level.");
+		if (this.accountParam.getAccountParent() == null || this.accountParam.getAccountParent().getIdentity() == null)
+			errorList.add("Please, enter the parent account.");
 		if (this.accountParam.getUserIdentity() == null)
 			errorList.add("Please, the account need to be associated with a user.");
 
@@ -43,11 +46,15 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
+	private void setDefaultValues() {
+		this.accountParam.setIsInactive(Boolean.FALSE);
+	}
+
 	private void saveAccount() throws BaseException {
 		this.accountRepository.save(this.accountParam);
 	}
 
 	private void findAllAccounts() {
-		this.setArtifact("accountList", this.accountRepository.findAll());
+		this.setArtifact("accountList", this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
 	}
 }
