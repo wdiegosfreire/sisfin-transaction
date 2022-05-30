@@ -48,6 +48,9 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 
 	private void setDefaultValues() {
 		this.accountParam.setIsInactive(Boolean.FALSE);
+
+		if (this.accountParam.getIcon() == null || this.accountParam.getIcon().trim().equals(""))
+			this.accountParam.setIcon("fa-font-awesome");
 	}
 
 	private void saveAccount() throws BaseException {

@@ -32,6 +32,9 @@ public class AccountEntity extends BaseEntity {
 	@Column(name = "acc_note")
 	private String note;
 
+	@Column(name = "acc_icon")
+	private String icon;
+
 	@Column(name = "acc_is_inactive")
 	private Boolean isInactive;
 
