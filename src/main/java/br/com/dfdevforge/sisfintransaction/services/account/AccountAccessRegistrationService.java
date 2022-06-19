@@ -24,7 +24,7 @@ public class AccountAccessRegistrationService extends AccountBaseService impleme
 	}
 
 	private void findAccountsLevelOne() throws DataForEditionNotFoundException {
-		List<AccountEntity> accountListComboLevelOne = this.accountRepositoryCustomized.searchAllWithLevel(1);
+		List<AccountEntity> accountListComboLevelOne = this.accountRepositoryCustomized.searchAllWithLevel(1, this.accountParam.getUserIdentity());
 
 		if (accountListComboLevelOne == null)
 			throw new DataForEditionNotFoundException();
@@ -33,7 +33,7 @@ public class AccountAccessRegistrationService extends AccountBaseService impleme
 	}
 
 	private void findAccountsLevelTwo() throws DataForEditionNotFoundException {
-		List<AccountEntity> accountListComboLevelTwo = this.accountRepositoryCustomized.searchAllWithParent(this.accountParam.getIdentity());
+		List<AccountEntity> accountListComboLevelTwo = this.accountRepositoryCustomized.searchAllWithParent(this.accountParam.getIdentity(), this.accountParam.getUserIdentity());
 
 		if (accountListComboLevelTwo == null)
 			throw new DataForEditionNotFoundException();

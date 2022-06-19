@@ -40,6 +40,6 @@ public class LocationExecuteEditionService extends LocationBaseService implement
 	}
 
 	private void findAllLocations() {
-		this.setArtifact("locationList", this.locationRepository.findAll());
+		this.setArtifact("locationList", this.locationRepository.findByUserIdentity(locationParam.getUserIdentity()));
 	}
 }
