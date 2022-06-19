@@ -20,21 +20,23 @@ public class PaymentMethodRepositoryCustomized {
 	public List<PaymentMethodEntity> searchInAllProperties(PaymentMethodEntity paymentMethod) {
 		StringBuilder whereClause = new StringBuilder();
 
-		whereClause.append(" or pam.name like :filter ");
-		whereClause.append(" or pam.acronym like :filter ");
+		whereClause.append(" pam.userIdentity = :userIdentity ");
+
+		whereClause.append(" and ( ");
+		whereClause.append("   pam.name like :filter ");
+		whereClause.append("   or pam.acronym like :filter ");
+		whereClause.append(" ) ");
 
 		if (Utils.value.isNumber(paymentMethod.getFilter()))
 			whereClause.append(" or pam.identity like :filter ");
 
-		if (whereClause.substring(0, 4).equals(" or ") || whereClause.substring(0, 5).equals(" and "))
-			whereClause.replace(0, 4, " where ");
-
 		StringBuilder jpql = new StringBuilder();
 
-		jpql.append("select pam from PaymentMethodEntity as pam " + whereClause);
+		jpql.append("select pam from PaymentMethodEntity as pam where " + whereClause);
 
 		var query = this.entityManager.createQuery(jpql.toString(), PaymentMethodEntity.class);
 
+		query.setParameter("userIdentity", paymentMethod.getUserIdentity());
 		query.setParameter("filter", "%" + paymentMethod.getFilter() + "%");
 		
 		return query.getResultList();

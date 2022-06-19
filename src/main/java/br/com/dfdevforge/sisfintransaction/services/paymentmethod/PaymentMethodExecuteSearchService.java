@@ -21,7 +21,7 @@ public class PaymentMethodExecuteSearchService extends PaymentMethodBaseService 
 
 	private void findAllPaymentMethods() {
 		if (Utils.value.notExists(this.paymentMethodParam.getFilter()))
-			this.setArtifact("paymentMethodList", this.paymentMethodRepository.findAll());
+			this.setArtifact("paymentMethodList", this.paymentMethodRepository.findByUserIdentity(paymentMethodParam.getUserIdentity()));
 		else
 			this.setArtifact("paymentMethodList", this.paymentMethodRepositoryCustomized.searchInAllProperties(this.paymentMethodParam));
 	}
