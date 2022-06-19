@@ -41,7 +41,7 @@ public class AccountExecuteExclusionService extends AccountBaseService implement
 	}
 
 	private void checkIfAccountHaveChildren() throws ChildrenInformationFoundException {
-		List<AccountEntity> accountList = this.accountRepositoryCustomized.searchAllWithParent(this.accountParam.getIdentity());
+		List<AccountEntity> accountList = this.accountRepositoryCustomized.searchAllWithParent(this.accountParam.getIdentity(), this.accountParam.getUserIdentity());
 
 		if (accountList != null && !accountList.isEmpty())
 			throw new ChildrenInformationFoundException();
@@ -52,6 +52,6 @@ public class AccountExecuteExclusionService extends AccountBaseService implement
 	}
 
 	private void findAllAccounts() {
-		this.setArtifact("accountList", this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
+		this.setArtifact(ACCOUNT_LIST, this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
 	}
 }

@@ -40,6 +40,6 @@ public class PaymentMethodExecuteExclusionService extends PaymentMethodBaseServi
 	}
 
 	private void findAllPaymentMethods() {
-		this.setArtifact("paymentMethodList", this.paymentMethodRepository.findAll());
+		this.setArtifact("paymentMethodList", this.paymentMethodRepository.findByUserIdentity(paymentMethodParam.getUserIdentity()));
 	}
 }

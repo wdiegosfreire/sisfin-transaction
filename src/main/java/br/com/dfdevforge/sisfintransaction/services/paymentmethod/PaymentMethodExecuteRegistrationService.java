@@ -48,7 +48,6 @@ public class PaymentMethodExecuteRegistrationService extends PaymentMethodBaseSe
 	}
 
 	private void savePaymentMethod() throws BaseException {
-		
 		try {
 			this.paymentMethodRepository.save(this.paymentMethodParam);
 		}
@@ -62,6 +61,6 @@ public class PaymentMethodExecuteRegistrationService extends PaymentMethodBaseSe
 	}
 
 	private void findAllPaymentMethods() {
-		this.setArtifact("paymentMethodList", this.paymentMethodRepository.findAll());
+		this.setArtifact("paymentMethodList", this.paymentMethodRepository.findByUserIdentity(paymentMethodParam.getUserIdentity()));
 	}
 }

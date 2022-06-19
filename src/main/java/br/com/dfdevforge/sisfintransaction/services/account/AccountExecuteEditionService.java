@@ -40,6 +40,6 @@ public class AccountExecuteEditionService extends AccountBaseService implements 
 	}
 
 	private void findAllAccounts() {
-		this.setArtifact("accountList", this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
+		this.setArtifact(ACCOUNT_LIST, this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
 	}
 }

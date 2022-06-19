@@ -20,8 +20,8 @@ public class AccountExecuteSearchService extends AccountBaseService implements C
 
 	private void findAllAccounts() {
 		if (this.accountParam.getFilter() == null || this.accountParam.getFilter().contentEquals(""))
-			this.setArtifact("accountList", this.accountRepository.findAll());
+			this.setArtifact(ACCOUNT_LIST, this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
 		else
-			this.setArtifact("accountList", this.accountRepositoryCustomized.searchInAllProperties(this.accountParam));
+			this.setArtifact(ACCOUNT_LIST, this.accountRepositoryCustomized.searchInAllProperties(this.accountParam));
 	}
 }

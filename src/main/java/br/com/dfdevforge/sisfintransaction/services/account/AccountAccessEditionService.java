@@ -8,7 +8,6 @@ import br.com.dfdevforge.common.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.repositories.AccountRepository;
-import br.com.dfdevforge.sisfintransaction.repositories.AccountRepositoryCustomized;
 
 @Service
 public class AccountAccessEditionService extends AccountBaseService implements CommonService {

@@ -10,6 +10,8 @@ import br.com.dfdevforge.sisfintransaction.exceptions.UserUnauthorizedException;
 import br.com.dfdevforge.sisfintransaction.feignclients.UserFeignClient;
 
 public abstract class AccountBaseService extends BaseService {
+	protected static final String ACCOUNT_LIST = "accountList";
+
 	protected AccountEntity accountParam;
 
 	@Autowired private UserFeignClient userFeignClient;
