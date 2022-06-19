@@ -20,28 +20,30 @@ public class AccountRepositoryCustomized {
 	public List<AccountEntity> searchInAllProperties(AccountEntity account) {
 		StringBuilder whereClause = new StringBuilder();
 
-		whereClause.append(" or acc.name like :filter ");
-		whereClause.append(" or acc.level like :filter ");
-		whereClause.append(" or acc.note like :filter ");
+		whereClause.append(" acc.userIdentity = :userIdentity ");
+
+		whereClause.append(" and ( ");
+		whereClause.append("   acc.name like :filter ");
+		whereClause.append("   or acc.level like :filter ");
+		whereClause.append("   or acc.note like :filter ");
+		whereClause.append(" ) ");
 
 		if (Utils.value.isNumber(account.getFilter()))
 			whereClause.append(" or acc.identity like :filter ");
 
-		if (whereClause.substring(0, 4).equals(" or ") || whereClause.substring(0, 5).equals(" and "))
-			whereClause.replace(0, 4, " where ");
-
 		StringBuilder jpql = new StringBuilder();
 
-		jpql.append("select acc from AccountEntity as acc " + whereClause);
+		jpql.append("select acc from AccountEntity as acc where " + whereClause);
 
 		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
 
+		query.setParameter("userIdentity", account.getUserIdentity());
 		query.setParameter("filter", "%" + account.getFilter() + "%");
 		
 		return query.getResultList();
 	}
 
-	public List<AccountEntity> searchAllWithLevel(Integer level) {
+	public List<AccountEntity> searchAllWithLevel(Integer level, long userIdentity) {
 		if (level == 1)
 			level = 3;
 		else if (level == 2)
@@ -53,16 +55,18 @@ public class AccountRepositoryCustomized {
 
 		jpql.append("select acc from AccountEntity as acc ");
 		jpql.append("where ");
-		jpql.append("  length(acc.level) = :level ");
+		jpql.append("  acc.userIdentity = :userIdentity ");
+		jpql.append("  and length(acc.level) = :level ");
 
 		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
 
+		query.setParameter("userIdentity", userIdentity);
 		query.setParameter("level", level);
 
 		return query.getResultList();
 	}
 
-	public List<AccountEntity> searchAllWithParent(Long accountIdentityParent) {
+	public List<AccountEntity> searchAllWithParent(long accountIdentityParent, long userIdentity) {
 		StringBuilder jpql = new StringBuilder();
 
 		jpql.append("select acc from AccountEntity as acc ");
