@@ -20,23 +20,25 @@ public class LocationRepositoryCustomized {
 	public List<LocationEntity> searchInAllProperties(LocationEntity location) {
 		StringBuilder whereClause = new StringBuilder();
 
-		whereClause.append(" or loc.cnpj like :filter ");
-		whereClause.append(" or loc.name like :filter ");
-		whereClause.append(" or loc.branch like :filter ");
-		whereClause.append(" or loc.note like :filter ");
+		whereClause.append(" loc.userIdentity = :userIdentity ");
+
+		whereClause.append(" and ( ");
+		whereClause.append("   loc.cnpj like :filter ");
+		whereClause.append("   or loc.name like :filter ");
+		whereClause.append("   or loc.branch like :filter ");
+		whereClause.append("   or loc.note like :filter ");
+		whereClause.append(" ) ");
 
 		if (Utils.value.isNumber(location.getFilter()))
 			whereClause.append(" or loc.identity like :filter ");
 
-		if (whereClause.substring(0, 4).equals(" or ") || whereClause.substring(0, 5).equals(" and "))
-			whereClause.replace(0, 4, " where ");
-
 		StringBuilder jpql = new StringBuilder();
 
-		jpql.append("select loc from LocationEntity as loc " + whereClause);
+		jpql.append("select loc from LocationEntity as loc where " + whereClause);
 
 		var query = this.entityManager.createQuery(jpql.toString(), LocationEntity.class);
 
+		query.setParameter("userIdentity", location.getUserIdentity());
 		query.setParameter("filter", "%" + location.getFilter() + "%");
 		
 		return query.getResultList();
