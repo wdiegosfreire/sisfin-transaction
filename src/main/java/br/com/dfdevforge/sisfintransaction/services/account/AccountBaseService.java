@@ -8,6 +8,7 @@ import br.com.dfdevforge.sisfintransaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.entities.UserEntity;
 import br.com.dfdevforge.sisfintransaction.exceptions.UserUnauthorizedException;
 import br.com.dfdevforge.sisfintransaction.feignclients.UserFeignClient;
+import feign.FeignException;
 
 public abstract class AccountBaseService extends BaseService {
 	protected static final String ACCOUNT_LIST = "accountList";
@@ -27,12 +28,12 @@ public abstract class AccountBaseService extends BaseService {
 
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
-		}
-		catch (Exception e) {
-			throw e;
-		}
 
-		if (this.accountParam.getUserIdentity() != userValidatedByToken.getIdentity())
+			if (this.accountParam.getUserIdentity() != userValidatedByToken.getIdentity())
+				throw new UserUnauthorizedException();
+		}
+		catch (FeignException e) {
 			throw new UserUnauthorizedException();
+		}
 	}
 }
