@@ -9,5 +9,5 @@ import br.com.dfdevforge.sisfintransaction.entities.PaymentMethodEntity;
 
 public interface PaymentMethodRepository extends JpaRepository<PaymentMethodEntity, Long>, JpaSpecificationExecutor<PaymentMethodEntity> {
 	public PaymentMethodEntity findByIdentity(Long identity);
-	public List<PaymentMethodEntity> findByUserIdentity(Long userIdentity);
+	public List<PaymentMethodEntity> findByUserIdentityOrderByNameAsc(Long userIdentity);
 }

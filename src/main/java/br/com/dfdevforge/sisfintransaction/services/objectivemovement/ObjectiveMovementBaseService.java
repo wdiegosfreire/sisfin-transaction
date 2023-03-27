@@ -8,6 +8,7 @@ import br.com.dfdevforge.sisfintransaction.entities.ObjectiveMovementEntity;
 import br.com.dfdevforge.sisfintransaction.entities.UserEntity;
 import br.com.dfdevforge.sisfintransaction.exceptions.UserUnauthorizedException;
 import br.com.dfdevforge.sisfintransaction.feignclients.UserFeignClient;
+import feign.FeignException;
 
 public abstract class ObjectiveMovementBaseService extends BaseService {
 	protected ObjectiveMovementEntity objectiveMovementParam;
@@ -21,9 +22,16 @@ public abstract class ObjectiveMovementBaseService extends BaseService {
 
 	@Override
 	public void validateUserAccess() throws BaseException {
-		UserEntity userValidatedByToken = this.userFeignClient.validateToken(this.token);
+		UserEntity userValidatedByToken = null;
 
-		if (this.objectiveMovementParam.getUserIdentity() != userValidatedByToken.getIdentity())
+		try {
+			userValidatedByToken = this.userFeignClient.validateToken(this.token);
+
+			if (this.objectiveMovementParam.getUserIdentity() != userValidatedByToken.getIdentity())
+				throw new UserUnauthorizedException();
+		}
+		catch (FeignException e) {
 			throw new UserUnauthorizedException();
+		}
 	}
 }

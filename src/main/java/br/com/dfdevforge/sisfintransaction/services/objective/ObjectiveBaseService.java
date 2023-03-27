@@ -8,6 +8,7 @@ import br.com.dfdevforge.sisfintransaction.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.entities.UserEntity;
 import br.com.dfdevforge.sisfintransaction.exceptions.UserUnauthorizedException;
 import br.com.dfdevforge.sisfintransaction.feignclients.UserFeignClient;
+import feign.FeignException;
 
 public abstract class ObjectiveBaseService extends BaseService {
 	protected static final String OBJECTIVE_LIST = "objectiveList";
@@ -27,12 +28,12 @@ public abstract class ObjectiveBaseService extends BaseService {
 
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
-		}
-		catch (Exception e) {
-			throw e;
-		}
 
-		if (this.objectiveParam.getUserIdentity() != userValidatedByToken.getIdentity())
+			if (this.objectiveParam.getUserIdentity() != userValidatedByToken.getIdentity())
+				throw new UserUnauthorizedException();
+		}
+		catch (FeignException e) {
 			throw new UserUnauthorizedException();
+		}
 	}
 }

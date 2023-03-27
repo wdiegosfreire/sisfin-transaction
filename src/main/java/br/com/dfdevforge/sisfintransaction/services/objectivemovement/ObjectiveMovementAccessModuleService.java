@@ -5,18 +5,18 @@ import org.springframework.stereotype.Service;
 
 import br.com.dfdevforge.common.exceptions.BaseException;
 import br.com.dfdevforge.common.services.CommonService;
-import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveMovementRepository;
+import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveMovementRepositoryCustomized;
 
 @Service
 public class ObjectiveMovementAccessModuleService extends ObjectiveMovementBaseService implements CommonService {
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
+	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
-		this.findAllObjectiveMovements();
+		this.findObjectiveMovementsByUserAndPeriod();
 	}
 
-	private void findAllObjectiveMovements() {
-		this.setArtifact("objectiveMovementList", this.objectiveMovementRepository.findByUserIdentity(objectiveMovementParam.getUserIdentity()));
+	private void findObjectiveMovementsByUserAndPeriod() {
+		this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(objectiveMovementParam));
 	}
 }

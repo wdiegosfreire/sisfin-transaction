@@ -5,12 +5,10 @@ import org.springframework.stereotype.Service;
 
 import br.com.dfdevforge.common.exceptions.BaseException;
 import br.com.dfdevforge.common.services.CommonService;
-import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveMovementRepository;
 import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveMovementRepositoryCustomized;
 
 @Service
 public class ObjectiveMovementExecuteSearchService extends ObjectiveMovementBaseService implements CommonService {
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
 	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 
 	@Override
@@ -20,8 +18,8 @@ public class ObjectiveMovementExecuteSearchService extends ObjectiveMovementBase
 
 	private void findAllObjectiveMovements() {
 		if (this.objectiveMovementParam.getFilter() == null || this.objectiveMovementParam.getFilter().contentEquals(""))
-			this.setArtifact("objectiveMovementList", this.objectiveMovementRepository.findByUserIdentity(objectiveMovementParam.getUserIdentity()));
+			this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam));
 		else
-			this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchInAllProperties(this.objectiveMovementParam));
+			this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchInAllPropertiesByPeriod(this.objectiveMovementParam));
 	}
 }

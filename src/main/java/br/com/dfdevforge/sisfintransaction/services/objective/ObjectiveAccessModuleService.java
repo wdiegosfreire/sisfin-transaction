@@ -24,7 +24,5 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	private void findAllObjectivesByMonthAndYear() {
 		this.objectiveList = this.objectiveRepository.findByUserIdentity(this.objectiveParam.getUserIdentity());
 		this.setArtifact(OBJECTIVE_LIST, this.objectiveRepository.findByUserIdentity(this.objectiveParam.getUserIdentity()));
-	}
-
-	
+	}	
 }

@@ -17,6 +17,6 @@ public class PaymentMethodAccessModuleService extends PaymentMethodBaseService i
 	}
 
 	private void findAllLocations() {
-		this.setArtifact("paymentMethodList", this.paymentMethodRepository.findByUserIdentity(paymentMethodParam.getUserIdentity()));
+		this.setArtifact("paymentMethodList", this.paymentMethodRepository.findByUserIdentityOrderByNameAsc(paymentMethodParam.getUserIdentity()));
 	}
 }

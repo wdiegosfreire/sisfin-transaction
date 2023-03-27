@@ -13,6 +13,7 @@ import br.com.dfdevforge.common.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.entities.ObjectiveMovementEntity;
 import br.com.dfdevforge.sisfintransaction.services.objectivemovement.ObjectiveMovementAccessEditionService;
 import br.com.dfdevforge.sisfintransaction.services.objectivemovement.ObjectiveMovementAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.services.objectivemovement.ObjectiveMovementAccessRegistrationService;
 import br.com.dfdevforge.sisfintransaction.services.objectivemovement.ObjectiveMovementExecuteEditionService;
 import br.com.dfdevforge.sisfintransaction.services.objectivemovement.ObjectiveMovementExecuteExclusionService;
 import br.com.dfdevforge.sisfintransaction.services.objectivemovement.ObjectiveMovementExecuteRegistrationService;
@@ -25,6 +26,8 @@ public class ObjectiveMovementResource {
 
 	@Autowired private ObjectiveMovementAccessModuleService objectiveMovementAccessModuleService;
 	@Autowired private ObjectiveMovementAccessEditionService objectiveMovementAccessEditionService;
+	@Autowired private ObjectiveMovementAccessRegistrationService objectiveMovementAccessRegistrationService;
+
 	@Autowired private ObjectiveMovementExecuteSearchService objectiveMovementExecuteSearchService;
 	@Autowired private ObjectiveMovementExecuteEditionService objectiveMovementExecuteEditionService;
 	@Autowired private ObjectiveMovementExecuteExclusionService objectiveMovementExecuteExclusionService;
@@ -33,8 +36,6 @@ public class ObjectiveMovementResource {
 
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody ObjectiveMovementEntity objectiveMovement, @RequestParam String token) throws BaseException {
-		System.out.println(objectiveMovement.getPaymentDate());
-
 		this.objectiveMovementAccessModuleService.setParams(objectiveMovement, token);
 		this.resourceData.setMap(this.objectiveMovementAccessModuleService.execute());
 
@@ -45,6 +46,14 @@ public class ObjectiveMovementResource {
 	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody ObjectiveMovementEntity objectiveMovement, @RequestParam String token) throws BaseException {
 		this.objectiveMovementAccessEditionService.setParams(objectiveMovement, token);
 		this.resourceData.setMap(this.objectiveMovementAccessEditionService.execute());
+
+		return ResponseEntity.ok(this.resourceData);
+	}
+
+	@PostMapping(value = "/accessRegistration")
+	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody ObjectiveMovementEntity objectiveMovement, @RequestParam String token) throws BaseException {
+		this.objectiveMovementAccessRegistrationService.setParams(objectiveMovement, token);
+		this.resourceData.setMap(this.objectiveMovementAccessRegistrationService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
