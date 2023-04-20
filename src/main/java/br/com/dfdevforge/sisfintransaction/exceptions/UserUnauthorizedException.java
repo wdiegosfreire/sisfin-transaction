@@ -9,4 +9,8 @@ public class UserUnauthorizedException extends BaseException implements HttpStat
 	public UserUnauthorizedException() {
 		super("User Unauthorized", "User credentials are incorrect. Please review your credentials and try again.");
 	}
+
+	public UserUnauthorizedException(Throwable cause) {
+		super("User Unauthorized", "User credentials are incorrect. Please review your credentials and try again.", cause);
+	}
 }

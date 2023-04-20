@@ -11,7 +11,7 @@
 	<groupId>br.com.dfdevforge</groupId>
 	<artifactId>sisfin-transaction</artifactId>
 	<version>2022-06-19 1839</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>sisfin-transaction</name>
 	<description>Spring Boot project for Sisfin application, module transaction</description>
 	<properties>

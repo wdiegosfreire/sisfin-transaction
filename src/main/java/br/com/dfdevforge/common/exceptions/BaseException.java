@@ -30,6 +30,11 @@ public class BaseException extends Exception {
 		this.message = this.prepareMessage(summary, detail);
 	}
 
+	public BaseException(String summary, String detail, Throwable cause) {
+		super(cause);
+		this.message = this.prepareMessage(summary, detail);
+	}
+
 	public BaseException(List<String> messageList) {
 		this.message = this.prepareMessage(SUMMARY, messageList);
 	}
