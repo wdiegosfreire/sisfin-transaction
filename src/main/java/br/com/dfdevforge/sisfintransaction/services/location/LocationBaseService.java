@@ -8,6 +8,7 @@ import br.com.dfdevforge.sisfintransaction.entities.LocationEntity;
 import br.com.dfdevforge.sisfintransaction.entities.UserEntity;
 import br.com.dfdevforge.sisfintransaction.exceptions.UserUnauthorizedException;
 import br.com.dfdevforge.sisfintransaction.feignclients.UserFeignClient;
+import feign.FeignException;
 
 public abstract class LocationBaseService extends BaseService {
 	protected LocationEntity locationParam;
@@ -21,9 +22,16 @@ public abstract class LocationBaseService extends BaseService {
 
 	@Override
 	public void validateUserAccess() throws BaseException {
-		UserEntity userValidatedByToken = this.userFeignClient.validateToken(this.token);
+		UserEntity userValidatedByToken = null;
 
-		if (this.locationParam.getUserIdentity() != userValidatedByToken.getIdentity())
+		try {
+			userValidatedByToken = this.userFeignClient.validateToken(this.token);
+
+			if (this.locationParam.getUserIdentity() != userValidatedByToken.getIdentity())
+				throw new UserUnauthorizedException();
+		}
+		catch (FeignException e) {
 			throw new UserUnauthorizedException();
+		}
 	}
 }

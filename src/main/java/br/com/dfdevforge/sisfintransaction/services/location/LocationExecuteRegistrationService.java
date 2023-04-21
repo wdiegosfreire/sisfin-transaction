@@ -50,6 +50,6 @@ public class LocationExecuteRegistrationService extends LocationBaseService impl
 	}
 
 	private void findAllLocations() {
-		this.setArtifact("locationList", this.locationRepository.findByUserIdentity(locationParam.getUserIdentity()));
+		this.setArtifact("locationList", this.locationRepository.findByUserIdentityOrderByNameAscBranchAsc(locationParam.getUserIdentity()));
 	}
 }

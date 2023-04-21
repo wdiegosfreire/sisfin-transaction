@@ -156,10 +156,25 @@ public class DateUtils {
 	 * 
 	 * @return objeto <i>Date</i> correspondente a data do ultimo dia do mes referente a data fornecida
 	 */
+	public Date getFirstDayOfMonth(Date date) {
+		LocalDate localDateAux = toLocalDate(date);
+		localDateAux = localDateAux.withDayOfMonth(1);
+
+		return Date.from(localDateAux.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	/**
+	 * <p>Tem a finalidade de recuperar o ultimo dia mo mes referente a data informada.</p>
+	 * 
+	 * @param date
+	 * @param amount
+	 * 
+	 * @return objeto <i>Date</i> correspondente a data do ultimo dia do mes referente a data fornecida
+	 */
 	public Date getLastDayOfMonth(Date date) {
 		LocalDate localDateAux = toLocalDate(date);
 		localDateAux = localDateAux.withDayOfMonth(localDateAux.getMonth().length(localDateAux.isLeapYear()));
-
+		
 		return Date.from(localDateAux.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 	}
 

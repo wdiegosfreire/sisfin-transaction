@@ -8,6 +8,7 @@ import br.com.dfdevforge.sisfintransaction.entities.PaymentMethodEntity;
 import br.com.dfdevforge.sisfintransaction.entities.UserEntity;
 import br.com.dfdevforge.sisfintransaction.exceptions.UserUnauthorizedException;
 import br.com.dfdevforge.sisfintransaction.feignclients.UserFeignClient;
+import feign.FeignException;
 
 public abstract class PaymentMethodBaseService extends BaseService {
 	protected PaymentMethodEntity paymentMethodParam;
@@ -21,9 +22,16 @@ public abstract class PaymentMethodBaseService extends BaseService {
 
 	@Override
 	public void validateUserAccess() throws BaseException {
-		UserEntity userValidatedByToken = this.userFeignClient.validateToken(this.token);
+		UserEntity userValidatedByToken = null;
 
-		if (this.paymentMethodParam.getUserIdentity() != userValidatedByToken.getIdentity())
+		try {
+			userValidatedByToken = this.userFeignClient.validateToken(this.token);
+
+			if (this.paymentMethodParam.getUserIdentity() != userValidatedByToken.getIdentity())
+				throw new UserUnauthorizedException();
+		}
+		catch (FeignException e) {
 			throw new UserUnauthorizedException();
+		}
 	}
 }
