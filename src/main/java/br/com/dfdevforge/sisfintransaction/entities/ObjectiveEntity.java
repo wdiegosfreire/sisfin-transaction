@@ -33,8 +33,19 @@ public class ObjectiveEntity extends BaseEntity {
 	@JoinColumn(name = "loc_identity")
 	private LocationEntity location;
 
+	@ManyToOne
+	@JoinColumn(name = "acc_identity_source")
+	private AccountEntity accountSource;
+
+	@ManyToOne
+	@JoinColumn(name = "acc_identity_target")
+	private AccountEntity accountTarget;
+
 	@Transient
-	private Set<ObjectiveMovementEntity> objectiveMovementList; 
+	private Set<ObjectiveMovementEntity> objectiveMovementList;
+
+	@Transient
+	private Set<ObjectiveItemEntity> objectiveItemList;
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;

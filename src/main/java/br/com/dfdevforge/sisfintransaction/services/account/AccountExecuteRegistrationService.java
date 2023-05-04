@@ -40,8 +40,6 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 			this.accountParam.getUserIdentity()
 		);
 
-		System.out.println(accountList);
-
 		int newLevel = 1;
 		if (accountList != null && !accountList.isEmpty())
 			newLevel = accountList.size() + 1;

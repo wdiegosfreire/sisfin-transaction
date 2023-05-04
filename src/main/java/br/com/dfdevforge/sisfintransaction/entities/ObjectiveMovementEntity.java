@@ -49,14 +49,6 @@ public class ObjectiveMovementEntity extends BaseEntity {
 	@JoinColumn(name = "pam_identity")
 	private PaymentMethodEntity paymentMethod;
 
-	@ManyToOne
-	@JoinColumn(name = "acc_identity_source")
-	private AccountEntity accountSource;
-
-	@ManyToOne
-	@JoinColumn(name = "acc_identity_target")
-	private AccountEntity accountTarget;
-
 	@Column(name = "usr_identity")
 	private Long userIdentity;
 }
