@@ -114,10 +114,24 @@ public class DateUtils {
 	 * 
 	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de dias especificada em <i>amount</i>.
 	 */
-	public Date plusDays(Date date, Integer days) {
-		LocalDate newDate = toLocalDate(date).plusDays(days);
+	public Date plusDays(Date date, Integer amount) {
+		LocalDate newDate = toLocalDate(date).plusDays(amount);
 
 		return Date.from(newDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	/**
+	 * <p>Tem a finalidade de adicionar meses a uma determinada data.</p>
+	 * 
+	 * @param date
+	 * @param months
+	 * 
+	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de meses especificada em <i>amount</i>.
+	 */
+	public Date plusMonths(Date date, Integer amount) {
+		LocalDateTime newDate = this.toLocalDateTime(date).plusMonths(amount);
+
+		return Date.from(newDate.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	/**
@@ -128,8 +142,8 @@ public class DateUtils {
 	 * 
 	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de dias especificada em <i>amount</i>.
 	 */
-	public Date plusSeconds(Date date, Integer seconds) {
-		LocalDateTime newDate = this.toLocalDateTime(date).plusSeconds(seconds);
+	public Date plusSeconds(Date date, Integer amount) {
+		LocalDateTime newDate = this.toLocalDateTime(date).plusSeconds(amount);
 
 		return Date.from(newDate.atZone(ZoneId.systemDefault()).toInstant());
 	}

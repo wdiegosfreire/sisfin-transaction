@@ -1,6 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.entities;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import br.com.dfdevforge.common.entities.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +22,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "obj_objective")
-@EqualsAndHashCode(callSuper=false, of={"identity"})
+@EqualsAndHashCode(callSuper = false, of = {"identity"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity")
 public class ObjectiveEntity extends BaseEntity {
 	@Id
 	@Column(name = "obj_identity")
@@ -34,7 +38,10 @@ public class ObjectiveEntity extends BaseEntity {
 	private LocationEntity location;
 
 	@Transient
-	private Set<ObjectiveMovementEntity> objectiveMovementList; 
+	private List<ObjectiveMovementEntity> objectiveMovementList;
+
+	@Transient
+	private List<ObjectiveItemEntity> objectiveItemList;
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;
