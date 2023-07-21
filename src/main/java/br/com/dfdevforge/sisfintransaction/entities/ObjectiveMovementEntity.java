@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "obm_objective_movement")
-@EqualsAndHashCode(callSuper=false, of={"identity"})
+@EqualsAndHashCode(callSuper = false, of = {"identity"})
 public class ObjectiveMovementEntity extends BaseEntity {
 	@Id
 	@Column(name = "obm_identity")
@@ -48,6 +48,10 @@ public class ObjectiveMovementEntity extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "pam_identity")
 	private PaymentMethodEntity paymentMethod;
+
+	@ManyToOne
+	@JoinColumn(name = "acc_identity_source")
+	private AccountEntity accountSource;
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;
