@@ -9,16 +9,23 @@ import br.com.dfdevforge.common.exceptions.BaseException;
 import br.com.dfdevforge.common.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.entities.ObjectiveMovementEntity;
 import br.com.dfdevforge.sisfintransaction.exceptions.DataForExclusionNotFoundException;
+import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveItemRepository;
 import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveMovementRepository;
+import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveMovementRepositoryCustomized;
 
 @Service
 public class ObjectiveMovementExecuteExclusionService extends ObjectiveMovementBaseService implements CommonService {
+	@Autowired private ObjectiveItemRepository objectiveItemRepository;
 	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
+	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+
+	private ObjectiveMovementEntity objectiveMovementExclusion;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.findById();
-		this.deleteObjectiveMovement();
+		this.deleteAllItemsByObjective();
+		this.deleteAllMovementsByObjective();
 		this.findAllObjectiveMovements();
 	}
 
@@ -29,17 +36,21 @@ public class ObjectiveMovementExecuteExclusionService extends ObjectiveMovementB
 	}
 
 	private void findById() throws DataForExclusionNotFoundException {
-		ObjectiveMovementEntity objectiveMovement = this.objectiveMovementRepository.findByIdentity(this.objectiveMovementParam.getIdentity());
+		this.objectiveMovementExclusion = this.objectiveMovementRepository.findByIdentity(this.objectiveMovementParam.getIdentity());
 
-		if (objectiveMovement == null)
+		if (this.objectiveMovementExclusion == null)
 			throw new DataForExclusionNotFoundException();
 	}
 
-	private void deleteObjectiveMovement() throws BaseException {
-		this.objectiveMovementRepository.delete(this.objectiveMovementParam);
+	private void deleteAllItemsByObjective() throws BaseException {
+		this.objectiveItemRepository.deleteByObjective(this.objectiveMovementExclusion.getObjective());
+	}
+
+	private void deleteAllMovementsByObjective() throws BaseException {
+		this.objectiveMovementRepository.deleteByObjective(this.objectiveMovementExclusion.getObjective());
 	}
 
 	private void findAllObjectiveMovements() {
-		this.setArtifact("objectiveMovementList", this.objectiveMovementRepository.findByUserIdentity(objectiveMovementParam.getUserIdentity()));
+		this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam));
 	}
 }

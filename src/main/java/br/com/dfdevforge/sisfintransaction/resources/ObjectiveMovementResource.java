@@ -33,7 +33,6 @@ public class ObjectiveMovementResource {
 	@Autowired private ObjectiveMovementExecuteExclusionService objectiveMovementExecuteExclusionService;
 	@Autowired private ObjectiveMovementExecuteRegistrationService objectiveMovementExecuteRegistrationService;
 
-
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody ObjectiveMovementEntity objectiveMovement, @RequestParam String token) throws BaseException {
 		this.objectiveMovementAccessModuleService.setParams(objectiveMovement, token);
