@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import br.com.dfdevforge.common.exceptions.BaseException;
@@ -20,7 +19,6 @@ import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveMovementReposit
 import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveRepository;
 
 @Service
-@Transactional
 public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService implements CommonService {
 	@Autowired private ObjectiveRepository objectiveRepository;
 	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
@@ -32,8 +30,6 @@ public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService im
 		this.saveObjective();
 		this.saveObjectiveMovements();
 		this.saveObjectiveItems();
-
-		this.findAllAccounts();
 	}
 
 	@Override
@@ -81,9 +77,5 @@ public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService im
 			objectiveItemInsert.setUserIdentity(this.objectiveParam.getUserIdentity());
 			this.objectiveItemRepository.save(objectiveItemInsert);
 		}
-	}
-
-	private void findAllAccounts() {
-		this.setArtifact(OBJECTIVE_LIST, this.objectiveRepository.findByUserIdentity(this.objectiveParam.getUserIdentity()));
 	}
 }

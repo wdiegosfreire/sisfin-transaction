@@ -7,10 +7,8 @@ import javax.sql.DataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableTransactionManagement
 public class DatabaseConfig {
 	private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
 

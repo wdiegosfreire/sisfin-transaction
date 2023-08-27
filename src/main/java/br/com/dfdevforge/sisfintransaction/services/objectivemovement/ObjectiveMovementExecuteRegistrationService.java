@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.dfdevforge.common.exceptions.BaseException;
 import br.com.dfdevforge.common.services.CommonService;
@@ -23,7 +22,6 @@ import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveMovementReposit
 import br.com.dfdevforge.sisfintransaction.repositories.ObjectiveRepository;
 
 @Service
-@Transactional
 public class ObjectiveMovementExecuteRegistrationService extends ObjectiveMovementBaseService implements CommonService {
 	private BigDecimal installmentValue;
 	private BigDecimal installmentDiference;
