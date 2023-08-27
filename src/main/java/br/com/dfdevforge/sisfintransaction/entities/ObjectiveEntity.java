@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -16,13 +17,17 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.common.entities.BaseEntity;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "obj_objective")
-@EqualsAndHashCode(callSuper = false, of = {"identity"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity")
 public class ObjectiveEntity extends BaseEntity {
 	@Id
@@ -38,9 +43,11 @@ public class ObjectiveEntity extends BaseEntity {
 	private LocationEntity location;
 
 	@Transient
+	@OneToMany
 	private List<ObjectiveMovementEntity> objectiveMovementList;
 
 	@Transient
+	@OneToMany
 	private List<ObjectiveItemEntity> objectiveItemList;
 
 	@Column(name = "usr_identity")

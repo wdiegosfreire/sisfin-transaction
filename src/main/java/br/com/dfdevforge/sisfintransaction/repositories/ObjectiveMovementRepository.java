@@ -14,4 +14,6 @@ public interface ObjectiveMovementRepository extends JpaRepository<ObjectiveMove
 	public List<ObjectiveMovementEntity> findByUserIdentity(Long userIdentity);
 	public List<ObjectiveMovementEntity> findByObjective(ObjectiveEntity objective);
 	public List<ObjectiveMovementEntity> findByUserIdentityAndPaymentDateBetween(Long userIdentity, Date startDate, Date endDate);
+
+	public void deleteByObjective(ObjectiveEntity objective);
 }

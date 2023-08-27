@@ -17,6 +17,23 @@ public class ObjectiveRepositoryCustomized {
 		this.entityManager = entityManager;
 	}
 
+	public List<ObjectiveEntity> searchByPeriod(ObjectiveEntity objective) {
+		StringBuilder jpql = new StringBuilder();
+
+		jpql.append("select ");
+		jpql.append("  objective ");
+		jpql.append("from ");
+		jpql.append("  ObjectiveEntity as objective ");
+		jpql.append("where ");
+		jpql.append("  objective.userIdentity = :userIdentity ");
+
+		var query = this.entityManager.createQuery(jpql.toString(), ObjectiveEntity.class);
+
+		query.setParameter("userIdentity", objective.getUserIdentity());
+
+		return query.getResultList();
+	}
+
 	public List<ObjectiveEntity> searchInAllProperties(ObjectiveEntity objective) {
 		StringBuilder whereClause = new StringBuilder();
 

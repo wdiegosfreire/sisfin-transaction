@@ -222,6 +222,16 @@ public class DateUtils {
 		return this.toLocalDate(date).getYear();
 	}
 
+	/**
+	 * <p>Tem a finalidade de recuperar o periodo referente a data informada.</p>
+	 * 
+	 * @param date
+	 * @return objeto <i>Integer</i> correspondente ao mes referente a data fornecida
+	 */
+	public Integer getPeriodOf(Date date) {
+		return Integer.parseInt(this.getYearOf(date).toString() + this.getMonthOf(date).toString());
+	}
+
 	public Boolean isLeapYear(Date date) {
 		Integer year = this.getYearOf(date);
 

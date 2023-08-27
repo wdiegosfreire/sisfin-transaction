@@ -11,15 +11,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.common.entities.BaseEntity;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "obm_objective_movement")
-@EqualsAndHashCode(callSuper = false, of = {"identity"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity")
 public class ObjectiveMovementEntity extends BaseEntity {
 	@Id
 	@Column(name = "obm_identity")
@@ -55,4 +64,7 @@ public class ObjectiveMovementEntity extends BaseEntity {
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;
+
+	@Transient
+	private boolean isInPeriod;
 }
