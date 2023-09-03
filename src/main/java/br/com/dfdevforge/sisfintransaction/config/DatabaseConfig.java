@@ -1,6 +1,5 @@
 package br.com.dfdevforge.sisfintransaction.config;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.sql.DataSource;
@@ -15,15 +14,19 @@ public class DatabaseConfig {
 
 	@Bean
 	public DataSource getDataSource() throws URISyntaxException {
+		final String BASE = System.getenv("SISFIN_DATABASE_TRANSACTION_BASE");
+		final String USER = System.getenv("SISFIN_DATABASE_TRANSACTION_USER");
+		final String PASS = System.getenv("SISFIN_DATABASE_TRANSACTION_PASS");
+		final String HOST = System.getenv("SISFIN_DATABASE_DEFAULT_HOST");
+		final String PORT = System.getenv("SISFIN_DATABASE_DEFAULT_PORT");
+
 		@SuppressWarnings("rawtypes")
 		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
 
-		URI jdbcUri = new URI(System.getenv("SISFIN_DATABASE_TRANSACTION"));
-
 		dataSourceBuilder.driverClassName(CLASS_NAME);
-		dataSourceBuilder.username(jdbcUri.getUserInfo().split(":")[0]);
-		dataSourceBuilder.password(jdbcUri.getUserInfo().split(":")[1]);
-		dataSourceBuilder.url("jdbc:mysql://" + jdbcUri.getHost() + ":" + jdbcUri.getPort() + jdbcUri.getPath());
+		dataSourceBuilder.username(USER);
+		dataSourceBuilder.password(PASS);
+		dataSourceBuilder.url("jdbc:mysql://" + HOST + ":" + PORT + "/" + BASE);
 
         return dataSourceBuilder.build();
 	}

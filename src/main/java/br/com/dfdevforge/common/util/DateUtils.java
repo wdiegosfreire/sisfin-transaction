@@ -114,10 +114,24 @@ public class DateUtils {
 	 * 
 	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de dias especificada em <i>amount</i>.
 	 */
-	public Date plusDays(Date date, Integer days) {
-		LocalDate newDate = toLocalDate(date).plusDays(days);
+	public Date plusDays(Date date, Integer amount) {
+		LocalDate newDate = toLocalDate(date).plusDays(amount);
 
 		return Date.from(newDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	/**
+	 * <p>Tem a finalidade de adicionar meses a uma determinada data.</p>
+	 * 
+	 * @param date
+	 * @param months
+	 * 
+	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de meses especificada em <i>amount</i>.
+	 */
+	public Date plusMonths(Date date, Integer amount) {
+		LocalDateTime newDate = this.toLocalDateTime(date).plusMonths(amount);
+
+		return Date.from(newDate.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	/**
@@ -128,8 +142,8 @@ public class DateUtils {
 	 * 
 	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de dias especificada em <i>amount</i>.
 	 */
-	public Date plusSeconds(Date date, Integer seconds) {
-		LocalDateTime newDate = this.toLocalDateTime(date).plusSeconds(seconds);
+	public Date plusSeconds(Date date, Integer amount) {
+		LocalDateTime newDate = this.toLocalDateTime(date).plusSeconds(amount);
 
 		return Date.from(newDate.atZone(ZoneId.systemDefault()).toInstant());
 	}
@@ -156,10 +170,25 @@ public class DateUtils {
 	 * 
 	 * @return objeto <i>Date</i> correspondente a data do ultimo dia do mes referente a data fornecida
 	 */
+	public Date getFirstDayOfMonth(Date date) {
+		LocalDate localDateAux = toLocalDate(date);
+		localDateAux = localDateAux.withDayOfMonth(1);
+
+		return Date.from(localDateAux.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	/**
+	 * <p>Tem a finalidade de recuperar o ultimo dia mo mes referente a data informada.</p>
+	 * 
+	 * @param date
+	 * @param amount
+	 * 
+	 * @return objeto <i>Date</i> correspondente a data do ultimo dia do mes referente a data fornecida
+	 */
 	public Date getLastDayOfMonth(Date date) {
 		LocalDate localDateAux = toLocalDate(date);
 		localDateAux = localDateAux.withDayOfMonth(localDateAux.getMonth().length(localDateAux.isLeapYear()));
-
+		
 		return Date.from(localDateAux.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 	}
 
@@ -191,6 +220,16 @@ public class DateUtils {
 	 */
 	public Integer getYearOf(Date date) {
 		return this.toLocalDate(date).getYear();
+	}
+
+	/**
+	 * <p>Tem a finalidade de recuperar o periodo referente a data informada.</p>
+	 * 
+	 * @param date
+	 * @return objeto <i>Integer</i> correspondente ao mes referente a data fornecida
+	 */
+	public Integer getPeriodOf(Date date) {
+		return Integer.parseInt(this.getYearOf(date).toString() + this.getMonthOf(date).toString());
 	}
 
 	public Boolean isLeapYear(Date date) {

@@ -9,15 +9,19 @@ import org.springframework.stereotype.Service;
 
 import br.com.dfdevforge.common.exceptions.BaseException;
 import br.com.dfdevforge.common.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.repositories.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.repositories.AccountRepositoryCustomized;
 
 @Service
 public class AccountExecuteRegistrationService extends AccountBaseService implements CommonService {
 	@Autowired private AccountRepository accountRepository;
+	@Autowired private AccountRepositoryCustomized accountRepositoryCustomized;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
+		this.calculateAccountLevel();
 		this.checkRequiredFields();
 		this.setDefaultValues();
 		this.saveAccount();
@@ -28,6 +32,19 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 	public Map<String, Object> returnBusinessData() {
 		this.setArtifact("accountRegistered", this.accountParam);
 		return super.returnBusinessData();
+	}
+
+	private void calculateAccountLevel() {
+		List<AccountEntity> accountList = this.accountRepositoryCustomized.searchAllWithParent(
+			this.accountParam.getAccountParent().getIdentity(),
+			this.accountParam.getUserIdentity()
+		);
+
+		int newLevel = 1;
+		if (accountList != null && !accountList.isEmpty())
+			newLevel = accountList.size() + 1;
+
+		this.accountParam.setLevel(this.accountParam.getAccountParent().getLevel() + (newLevel < 10 ? "0" : "") + newLevel + ".");
 	}
 
 	private void checkRequiredFields() throws RequiredFieldNotFoundException {
