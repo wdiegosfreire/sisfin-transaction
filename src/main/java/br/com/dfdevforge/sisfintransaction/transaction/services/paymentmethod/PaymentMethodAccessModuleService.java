@@ -1,0 +1,22 @@
+package br.com.dfdevforge.sisfintransaction.transaction.services.paymentmethod;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
+import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.PaymentMethodRepository;
+
+@Service
+public class PaymentMethodAccessModuleService extends PaymentMethodBaseService implements CommonService {
+	@Autowired private PaymentMethodRepository paymentMethodRepository;
+
+	@Override
+	public void executeBusinessRule() throws BaseException {
+		this.findAllLocations();
+	}
+
+	private void findAllLocations() {
+		this.setArtifact("paymentMethodList", this.paymentMethodRepository.findByUserIdentityOrderByNameAsc(paymentMethodParam.getUserIdentity()));
+	}
+}
