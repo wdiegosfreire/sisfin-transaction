@@ -7,11 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import br.com.dfdevforge.sisfintransaction.exceptions.ChildrenInformationFoundException;
-import br.com.dfdevforge.sisfintransaction.exceptions.DataForEditionNotFoundException;
-import br.com.dfdevforge.sisfintransaction.exceptions.DataForExclusionNotFoundException;
-import br.com.dfdevforge.sisfintransaction.exceptions.RequiredFieldNotFoundException;
-
 @ControllerAdvice
 public class ResourceHandlerException {
 	@ExceptionHandler({DataForEditionNotFoundException.class, DataForExclusionNotFoundException.class})
