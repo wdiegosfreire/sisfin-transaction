@@ -1,13 +1,27 @@
 package br.com.dfdevforge.sisfintransaction.commons.services;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
+import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
+import br.com.dfdevforge.sisfintransaction.statement.entities.BankEntity;
+import br.com.dfdevforge.sisfintransaction.statement.repositories.BankRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.PaymentMethodRepository;
 
 public abstract class BaseService implements CommonService {
 	protected String token;
 	protected Map<String, Object> resultMap = new HashMap<>();
+
+	@Autowired private BankRepository bankRepository;
+	@Autowired private AccountRepository accountRepository;
+	@Autowired private PaymentMethodRepository paymentMethodRepository;
 
 	@Override
 	public void validateUserAccess() throws BaseException {
@@ -35,5 +49,17 @@ public abstract class BaseService implements CommonService {
 	 */
 	protected void setArtifact(String artifactName, Object artifact) {
 		this.resultMap.put(artifactName, artifact);
+	}
+
+	protected List<BankEntity> findBanksByUserIdentityOrderByNameAsc(long userIdentity) throws DataForEditionNotFoundException {
+		return this.bankRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
+	protected List<AccountEntity> findAccountsByUserIdentityOrderByLevel(long userIdentity) {
+		return this.accountRepository.findByUserIdentityOrderByLevel(userIdentity);
+	}
+
+	protected List<PaymentMethodEntity> findPaymentMethodsByUserIdentityOrderByNameAsc(long userIdentity) throws DataForEditionNotFoundException {
+		return this.paymentMethodRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 }

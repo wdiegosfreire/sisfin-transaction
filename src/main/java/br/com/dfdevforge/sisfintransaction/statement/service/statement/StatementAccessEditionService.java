@@ -11,9 +11,11 @@ import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementItemRepository;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
 
 @Service
 public class StatementAccessEditionService extends StatementBaseService implements CommonService {
+	@Autowired private LocationRepository locationRepository;
 	@Autowired private StatementRepository statementRepository;
 	@Autowired private StatementItemRepository statementItemRepository;
 
@@ -23,6 +25,10 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 	public void executeBusinessRule() throws BaseException {
 		this.findByIdentity();
 		this.findItemsOfStatement();
+		this.findLocations();
+		this.findAccountsSource();
+		this.findAccountsTarget();
+		this.findPaymentMethods();
 	}
 
 	@Override
@@ -40,5 +46,21 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 
 	private void findItemsOfStatement() {
 		this.statementResult.setStatementItemList(statementItemRepository.findByStatement(this.statementParam));			
+	}
+
+	private void findLocations() throws DataForEditionNotFoundException {
+		this.setArtifact("locationListCombo", this.locationRepository.findByUserIdentityOrderByNameAscBranchAsc(this.statementParam.getUserIdentity()));
+	}
+
+	private void findAccountsSource() throws DataForEditionNotFoundException {
+		this.setArtifact("accountListComboSource", this.findAccountsByUserIdentityOrderByLevel(this.statementParam.getUserIdentity()));
+	}
+
+	private void findAccountsTarget() throws DataForEditionNotFoundException {
+		this.setArtifact("accountListComboTarget", this.findAccountsByUserIdentityOrderByLevel(this.statementParam.getUserIdentity()));
+	}
+
+	private void findPaymentMethods() throws DataForEditionNotFoundException {
+		this.setArtifact("paymentMethodListCombo", this.findPaymentMethodsByUserIdentityOrderByNameAsc(this.statementParam.getUserIdentity()));
 	}
 }

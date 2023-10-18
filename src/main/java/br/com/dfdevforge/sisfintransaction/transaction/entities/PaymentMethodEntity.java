@@ -10,13 +10,17 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "pam_payment_method")
-@EqualsAndHashCode(callSuper=false, of={"identity"})
 public class PaymentMethodEntity extends BaseEntity {
 	@Id
 	@Column(name = "pam_identity")

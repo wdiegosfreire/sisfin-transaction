@@ -142,9 +142,23 @@ public class DateUtils {
 	 * 
 	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de dias especificada em <i>amount</i>.
 	 */
+	public Date plusHours(Date date, Integer amount) {
+		LocalDateTime newDate = this.toLocalDateTime(date).plusHours(amount);
+
+		return Date.from(newDate.atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	/**
+	 * <p>Tem a finalidade de adicionar segundos a uma determinada data.</p>
+	 * 
+	 * @param date
+	 * @param seconds
+	 * 
+	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de dias especificada em <i>amount</i>.
+	 */
 	public Date plusSeconds(Date date, Integer amount) {
 		LocalDateTime newDate = this.toLocalDateTime(date).plusSeconds(amount);
-
+		
 		return Date.from(newDate.atZone(ZoneId.systemDefault()).toInstant());
 	}
 

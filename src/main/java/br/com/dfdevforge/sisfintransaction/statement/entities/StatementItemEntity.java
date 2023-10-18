@@ -11,11 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +31,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "sti_statement_item")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity", scope = StatementItemEntity.class)
 public class StatementItemEntity extends BaseEntity {
 	@Id
 	@Column(name = "sti_identity")
@@ -56,6 +60,36 @@ public class StatementItemEntity extends BaseEntity {
 	@JoinColumn(name = "sta_identity")
 	private StatementEntity statement;
 
+	@ManyToOne
+	@Transient
+	private AccountEntity accountSource;
+
+	@ManyToOne
+	@Transient
+	private AccountEntity accountTarget;
+
+	@ManyToOne
+	@Transient
+	private LocationEntity location;
+
+	@ManyToOne
+	@Transient
+	private PaymentMethodEntity paymentMethod;
+
+	@Transient
+	private String descriptionNew;
+
+	@Transient
+	private Boolean isVisible;
+
 	@Column(name = "usr_identity")
 	private Long userIdentity;
+
+	public boolean isIncoming() {
+		return this.operationType.equalsIgnoreCase("C");
+	}
+
+	public boolean isOutcoming() {
+		return this.operationType.equalsIgnoreCase("D");
+	}
 }
