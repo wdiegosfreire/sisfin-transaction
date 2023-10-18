@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -71,8 +72,15 @@ public class StatementItemEntity extends BaseEntity {
 	@Transient
 	private LocationEntity location;
 
+	@ManyToOne
+	@Transient
+	private PaymentMethodEntity paymentMethod;
+
 	@Transient
 	private String descriptionNew;
+
+	@Transient
+	private Boolean isVisible;
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;

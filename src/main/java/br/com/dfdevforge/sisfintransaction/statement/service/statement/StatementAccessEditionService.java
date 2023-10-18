@@ -28,6 +28,7 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 		this.findLocations();
 		this.findAccountsSource();
 		this.findAccountsTarget();
+		this.findPaymentMethods();
 	}
 
 	@Override
@@ -57,5 +58,9 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 
 	private void findAccountsTarget() throws DataForEditionNotFoundException {
 		this.setArtifact("accountListComboTarget", this.findAccountsByUserIdentityOrderByLevel(this.statementParam.getUserIdentity()));
+	}
+
+	private void findPaymentMethods() throws DataForEditionNotFoundException {
+		this.setArtifact("paymentMethodListCombo", this.findPaymentMethodsByUserIdentityOrderByNameAsc(this.statementParam.getUserIdentity()));
 	}
 }

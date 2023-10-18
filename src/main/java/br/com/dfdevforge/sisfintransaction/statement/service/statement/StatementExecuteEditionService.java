@@ -19,7 +19,6 @@ import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepos
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveItemEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveItemRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMovementRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRepository;
@@ -64,9 +63,6 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 	}
 
 	private void createMovementBasedOnSatementItem() {
-		PaymentMethodEntity paymentMethod = new PaymentMethodEntity();
-		paymentMethod.setIdentity(1L);
-
 		for (StatementItemEntity statementItemLoop : this.statementParam.getStatementItemList()) {
 			String description = StringUtils.isBlank(statementItemLoop.getDescriptionNew()) ? statementItemLoop.getDescription() : statementItemLoop.getDescriptionNew();
 
@@ -93,7 +89,7 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			objectiveMovement.setPaymentDate(Utils.date.plusHours(statementItemLoop.getMovementDate(), 12));
 			objectiveMovement.setValue(statementItemLoop.getMovementValue());
 			objectiveMovement.setInstallment(1);
-			objectiveMovement.setPaymentMethod(paymentMethod);
+			objectiveMovement.setPaymentMethod(statementItemLoop.getPaymentMethod());
 			objectiveMovement.setAccountSource(statementItemLoop.isOutcoming() ? this.statementParam.getStatementType().getAccountSource() : statementItemLoop.getAccountSource());
 			objectiveMovement.setUserIdentity(statementItemLoop.getUserIdentity());
 			this.objectiveMovementRepository.save(objectiveMovement);

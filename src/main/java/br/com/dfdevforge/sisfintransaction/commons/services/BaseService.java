@@ -11,7 +11,9 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotF
 import br.com.dfdevforge.sisfintransaction.statement.entities.BankEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.BankRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.PaymentMethodRepository;
 
 public abstract class BaseService implements CommonService {
 	protected String token;
@@ -19,6 +21,7 @@ public abstract class BaseService implements CommonService {
 
 	@Autowired private BankRepository bankRepository;
 	@Autowired private AccountRepository accountRepository;
+	@Autowired private PaymentMethodRepository paymentMethodRepository;
 
 	@Override
 	public void validateUserAccess() throws BaseException {
@@ -54,5 +57,9 @@ public abstract class BaseService implements CommonService {
 
 	protected List<AccountEntity> findAccountsByUserIdentityOrderByLevel(long userIdentity) {
 		return this.accountRepository.findByUserIdentityOrderByLevel(userIdentity);
+	}
+
+	protected List<PaymentMethodEntity> findPaymentMethodsByUserIdentityOrderByNameAsc(long userIdentity) throws DataForEditionNotFoundException {
+		return this.paymentMethodRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 }
