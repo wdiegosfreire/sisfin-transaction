@@ -153,7 +153,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		}
 
 		/*
-		 * Inserindo os registros da tabela sta_statement
+		 * Inserindo os registros da tabela STA_STATEMENT
 		 */
 		statementRepository.save(statement);
 
