@@ -15,7 +15,8 @@ public class LogUtils {
 	protected  LogUtils() {}
 
 	public void error(Object message) {
-		LOGGER.error(message == null ? "null" : message.toString());
+		if (message != null)
+			LOGGER.error(message.toString());
 	}
 
 	public void info(Object message) {
