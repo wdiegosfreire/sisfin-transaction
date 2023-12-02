@@ -10,20 +10,22 @@ import org.slf4j.LoggerFactory;
 import br.com.dfdevforge.sisfintransaction.commons.entities.UserEntity;
 
 public class LogUtils {
+	private static final String LOGGER_PATTERN = "Sisfin Transaction Error: {}";
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	protected  LogUtils() {}
 
 	public void error(Object message) {
-		LOGGER.error("Sisfin Transaction Error: {}", message);
+		LOGGER.error(LOGGER_PATTERN, message);
 	}
 
 	public void info(Object message) {
-		LOGGER.info("Sisfin Transaction Error: {}", message);
+		LOGGER.info(LOGGER_PATTERN, message);
 	}
 
 	public void warn(Object message) {
-		LOGGER.warn("Sisfin Transaction Error: {}", message);
+		LOGGER.warn(LOGGER_PATTERN, message);
 	}
 
 	public void stackTrace(Exception exception, UserEntity user) {
