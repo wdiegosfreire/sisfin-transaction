@@ -83,7 +83,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			outputStream.close();
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			Utils.log.stackTrace(e);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			bufferedReader.close();
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			Utils.log.stackTrace(e);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			}
 		}
 		catch (ParseException | BaseException e) {
-			e.printStackTrace();
+			Utils.log.stackTrace(e);
 		}
 	}
 
