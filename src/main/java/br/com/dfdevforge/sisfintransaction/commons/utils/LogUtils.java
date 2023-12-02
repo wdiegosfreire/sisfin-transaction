@@ -19,11 +19,11 @@ public class LogUtils {
 	}
 
 	public void info(Object message) {
-		LOGGER.info("Sisfin Transaction Error: $s", message.toString());
+		LOGGER.info("Sisfin Transaction Error: {}", message);
 	}
 
 	public void warn(Object message) {
-		LOGGER.warn(message == null ? "null" : message.toString());
+		LOGGER.warn("Sisfin Transaction Error: {}", message);
 	}
 
 	public void stackTrace(Exception exception, UserEntity user) {
