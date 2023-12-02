@@ -16,7 +16,7 @@ public class LogUtils {
 
 	public void error(Object message) {
 		if (message != null)
-			LOGGER.error(message.toString());
+			LOGGER.error("Sisfin Transaction Error: ", message);
 	}
 
 	public void info(Object message) {
