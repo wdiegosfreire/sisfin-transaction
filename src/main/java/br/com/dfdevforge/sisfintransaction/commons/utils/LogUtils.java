@@ -15,7 +15,7 @@ public class LogUtils {
 	protected  LogUtils() {}
 
 	public void error(Object message) {
-		LOGGER.error(String.format("Sisfin Transaction Error: $s", message));
+		LOGGER.error("Sisfin Transaction Error: {}", message);
 	}
 
 	public void info(Object message) {
