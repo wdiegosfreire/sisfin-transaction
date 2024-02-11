@@ -13,6 +13,7 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementAccessEditionService;
 import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementAccessRegistrationService;
 import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementExecuteEditionService;
 import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementExecuteExclusionService;
 import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementExecuteRegistrationService;
@@ -25,6 +26,8 @@ public class StatementResource {
 
 	@Autowired private StatementAccessModuleService statementAccessModuleService;
 	@Autowired private StatementAccessEditionService statementAccessEditionService;
+	@Autowired private StatementAccessRegistrationService statementAccessRegistrationService;
+	
 	@Autowired private StatementExecuteSearchService statementExecuteSearchService;
 	@Autowired private StatementExecuteEditionService statementExecuteEditionService;
 	@Autowired private StatementExecuteExclusionService statementExecuteExclusionService;
@@ -43,6 +46,14 @@ public class StatementResource {
 		this.statementAccessEditionService.setParams(statement, token);
 		this.resourceData.setMap(this.statementAccessEditionService.execute());
 
+		return ResponseEntity.ok(this.resourceData);
+	}
+
+	@PostMapping(value = "/accessRegistration")
+	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody StatementEntity statement, @RequestParam String token) throws BaseException {
+		this.statementAccessRegistrationService.setParams(statement, token);
+		this.resourceData.setMap(this.statementAccessRegistrationService.execute());
+		
 		return ResponseEntity.ok(this.resourceData);
 	}
 
