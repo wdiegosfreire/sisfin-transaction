@@ -13,7 +13,7 @@ import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeRepository;
 
 @Service
-public class StatementTypeExecuteRegistrationService extends StatementTypeService implements CommonService {
+public class StatementTypeExecuteRegistrationService extends StatementTypeBaseService implements CommonService {
 	@Autowired private StatementTypeRepository statementTypeRepository;
 
 	@Override

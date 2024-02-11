@@ -10,14 +10,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "acc_account")
-@EqualsAndHashCode(callSuper=false, of={"identity"})
 public class AccountEntity extends BaseEntity {
+	public AccountEntity(Long identity) {
+		this.identity = identity;
+	}
+
 	@Id
 	@Column(name = "acc_identity")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

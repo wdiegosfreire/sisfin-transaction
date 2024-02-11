@@ -7,7 +7,7 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotF
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 
 @Service
-public class StatementTypeAccessRegistrationService extends StatementTypeService implements CommonService {
+public class StatementTypeAccessRegistrationService extends StatementTypeBaseService implements CommonService {
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

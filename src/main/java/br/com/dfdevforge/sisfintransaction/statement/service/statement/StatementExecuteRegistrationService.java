@@ -19,9 +19,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
@@ -29,10 +31,18 @@ import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.statement.entities.BankEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementItemEntity;
+import br.com.dfdevforge.sisfintransaction.statement.entities.StatementPatternEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementItemRepository;
+import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementPatternRepository;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveItemEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveExecuteRegistrationService;
 
+@Transactional
 @Service
 public class StatementExecuteRegistrationService extends StatementBaseService implements CommonService {
 	private static final String SALDO_ANTERIOR = "Saldo Anterior";
@@ -40,10 +50,17 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 
 	@Autowired private StatementRepository statementRepository;
 	@Autowired private StatementItemRepository statementItemRepository;
+	@Autowired private StatementPatternRepository statementPatternRepository;
+
+	@Autowired private ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
 
 	private byte[] statementByteArray;
 	private String statementExtension;
 	private List<String> fileContentList = new ArrayList<>();
+
+	private List<StatementPatternEntity> statementPatternList;
+
+	private StatementEntity statement = new StatementEntity();
 
 	@SuppressWarnings("unused")
 	private String statementBank;
@@ -56,6 +73,9 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		this.createTemporaryStatementFile();
 		this.readTemporaryStatementFile();
 		this.importDataFromStatementFile();
+		this.getStatementPatterns();
+
+		this.exportIdentifiableStatementItems();
 	}
 
 	@Override
@@ -122,11 +142,64 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		}
 	}
 
+	private void getStatementPatterns() {
+		this.statementPatternList = statementPatternRepository.findByUserIdentityOrderByComparatorAsc(this.statementParam.getUserIdentity());
+	}
+
+	private void exportIdentifiableStatementItems() throws BaseException {
+		for (StatementItemEntity statementItem : this.statement.getStatementItemList()) {
+			StatementPatternEntity statementPattern = this.statementPatternList.stream().filter(x -> statementItem.getDescription().contains(x.getComparator())).findFirst().orElse(null);
+
+			if (!Objects.isNull(statementPattern)) {
+				PaymentMethodEntity paymentMethodDefault = new PaymentMethodEntity();
+				paymentMethodDefault.setIdentity(2L);
+
+				this.createAndSaveObjectiveFromStatement(statementItem, statementPattern, paymentMethodDefault);
+				this.updateStatementItemToExported(statementItem);
+				
+			}
+		}
+	}
+
 	/*
 	 * Todos os metodos a partir deste ponto devem ser refatorados para uma classe especifica.
 	 */
+	private void createAndSaveObjectiveFromStatement(StatementItemEntity statementItem, StatementPatternEntity statementPattern, PaymentMethodEntity paymentMethod) throws BaseException {
+		ObjectiveEntity objective = new ObjectiveEntity();
+		objective.setObjectiveMovementList(new ArrayList<ObjectiveMovementEntity>());
+		objective.setObjectiveItemList(new ArrayList<ObjectiveItemEntity>());
+		objective.setDescription(statementPattern.getDescription());
+		objective.setLocation(statementPattern.getLocation());
+		objective.setUserIdentity(this.statementParam.getUserIdentity());
+
+		ObjectiveMovementEntity objectiveMovement = new ObjectiveMovementEntity();
+		objectiveMovement.setDueDate(statementItem.getMovementDate());
+		objectiveMovement.setPaymentDate(statementItem.getMovementDate());
+		objectiveMovement.setValue(statementItem.getMovementValue());
+		objectiveMovement.setInstallment(1);
+		objectiveMovement.setPaymentMethod(paymentMethod);
+		objectiveMovement.setAccountSource(this.statement.getStatementType().getAccountSource());
+
+		ObjectiveItemEntity objectiveItem = new ObjectiveItemEntity();
+		objectiveItem.setDescription(statementPattern.getDescription());
+		objectiveItem.setSequential(1);
+		objectiveItem.setUnitaryValue(statementItem.getMovementValue());
+		objectiveItem.setAmount(new BigDecimal(1));
+		objectiveItem.setAccountTarget(statementPattern.getAccountTarget());
+
+		objective.getObjectiveMovementList().add(objectiveMovement);
+		objective.getObjectiveItemList().add(objectiveItem);
+
+		this.objectiveExecuteRegistrationService.setParams(objective, token);
+		this.objectiveExecuteRegistrationService.execute();
+	}
+
+	private void updateStatementItemToExported(StatementItemEntity statementItem) {
+		statementItem.setIsExported(Boolean.TRUE);
+		statementItemRepository.save(statementItem);
+	}
+
 	private void invocarRegraImportarFormatoTxt() throws ParseException, BaseException {
-		StatementEntity statement = new StatementEntity();
 		statement.setIsClosed(Boolean.FALSE);
 		statement.setUserIdentity(this.statementParam.getUserIdentity());
 		statement.setStatementType(new StatementTypeEntity());
@@ -190,26 +263,29 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		 * Identificar o tipo de extrato
 		 */
 		boolean bankStatementFound = Boolean.FALSE;
+		if (statementParam.getStatementType().getIdentity() != null) {
+			statement.getStatementType().setIdentity(statementParam.getStatementType().getIdentity());
+			statement.getStatementType().setAccountSource(statementParam.getStatementType().getAccountSource());
+
+			bankStatementFound = Boolean.TRUE;
+		}
+
 		for (String fileLine : this.fileContentList) {
 			// Detalhe: conta corrente
 			if (fileLine.indexOf("Extrato de conta corrente") != -1) {
 				this.statementType = "Extrato de conta corrente";
-				statement.getStatementType().setIdentity(1L);
-				bankStatementFound = Boolean.TRUE;
 				break;
 			}
 
 			// Detalhe: poupança
 			else if (fileLine.indexOf("Variação:") != -1) {
 				this.statementType = "Poupança";
-				bankStatementFound = Boolean.TRUE;
 				break;
 			}
 
 			// Detalhe: ourocard
 			else if (fileLine.indexOf("Fatura do Cartão de Crédito") != -1) {
 				this.statementType = "Fatura do Cartão de Crédito";
-				bankStatementFound = Boolean.TRUE;
 				break;
 			}
 		}
@@ -351,8 +427,8 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		
 		/*
 		 * Ajustando a data do movimento "Saldo Anterior". No extrato, a data deste
-		 * movimento  sempre do ltimo dia do ms anterior, assim deve ser ajustada
-		 * sempre para o primeiro dia do ms de competncia.
+		 * movimento  sempre do ultimo dia do mes anterior, assim deve ser ajustada
+		 * sempre para o primeiro dia do mes de competencia.
 		 */
 		Calendar c = new GregorianCalendar();
 		c.setTime(statement.getStatementItemList().get(0).getMovementDate());

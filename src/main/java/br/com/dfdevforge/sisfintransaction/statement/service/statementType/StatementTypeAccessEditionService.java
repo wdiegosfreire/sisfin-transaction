@@ -10,7 +10,7 @@ import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntit
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeRepository;
 
 @Service
-public class StatementTypeAccessEditionService extends StatementTypeService implements CommonService {
+public class StatementTypeAccessEditionService extends StatementTypeBaseService implements CommonService {
 	@Autowired private StatementTypeRepository statementTypeRepository;
 
 	@Override
