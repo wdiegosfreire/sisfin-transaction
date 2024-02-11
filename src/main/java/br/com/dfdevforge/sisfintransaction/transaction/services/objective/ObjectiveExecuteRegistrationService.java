@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveItemEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveItemRepository;
@@ -65,6 +66,13 @@ public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService im
 		Date now = new Date();
 		for (ObjectiveMovementEntity objectiveMovementInsert : this.objectiveParam.getObjectiveMovementList()) {
 			objectiveMovementInsert.setRegistrationDate(now);
+
+			if (objectiveMovementInsert.getDueDate() != null)
+				objectiveMovementInsert.setDueDate(Utils.date.plusHours(objectiveMovementInsert.getDueDate(), 12));
+
+			if (objectiveMovementInsert.getPaymentDate() != null)
+				objectiveMovementInsert.setPaymentDate(Utils.date.plusHours(objectiveMovementInsert.getPaymentDate(), 12));
+
 			objectiveMovementInsert.setUserIdentity(this.objectiveParam.getUserIdentity());
 			objectiveMovementInsert.setObjective(this.objectiveParam);
 			this.objectiveMovementRepository.save(objectiveMovementInsert);

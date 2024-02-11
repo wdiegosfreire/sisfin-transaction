@@ -9,7 +9,7 @@ import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeR
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeRepositoryCustomized;
 
 @Service
-public class StatementTypeExecuteSearchService extends StatementTypeService implements CommonService {
+public class StatementTypeExecuteSearchService extends StatementTypeBaseService implements CommonService {
 	@Autowired private StatementTypeRepository statementTypeRepository;
 	@Autowired private StatementTypeRepositoryCustomized statementTypeRepositoryCustomized;
 

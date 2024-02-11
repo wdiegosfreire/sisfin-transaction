@@ -10,7 +10,7 @@ import br.com.dfdevforge.sisfintransaction.commons.services.BaseService;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntity;
 import feign.FeignException;
 
-public abstract class StatementTypeService extends BaseService {
+public abstract class StatementTypeBaseService extends BaseService {
 	protected StatementTypeEntity statementTypeParam;
 
 	@Autowired private UserFeignClient userFeignClient;

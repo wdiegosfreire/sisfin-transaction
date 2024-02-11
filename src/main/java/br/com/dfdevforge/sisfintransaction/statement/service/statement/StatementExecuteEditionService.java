@@ -1,7 +1,7 @@
 package br.com.dfdevforge.sisfintransaction.statement.service.statement;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,19 +19,14 @@ import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepos
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveItemEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveItemRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMovementRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveExecuteRegistrationService;
 
 @Service
 public class StatementExecuteEditionService extends StatementBaseService implements CommonService {
 	@Autowired private StatementRepository statementRepository;
 	@Autowired private StatementItemRepository statementItemRepository;
-	@Autowired private ObjectiveRepository objectiveRepository;
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
 
-	
+	@Autowired private ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -62,39 +57,37 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 		}
 	}
 
-	private void createMovementBasedOnSatementItem() {
+	private void createMovementBasedOnSatementItem() throws BaseException {
 		for (StatementItemEntity statementItemLoop : this.statementParam.getStatementItemList()) {
 			String description = StringUtils.isBlank(statementItemLoop.getDescriptionNew()) ? statementItemLoop.getDescription() : statementItemLoop.getDescriptionNew();
 
 			ObjectiveEntity objective = new ObjectiveEntity();
+			objective.setObjectiveMovementList(new ArrayList<ObjectiveMovementEntity>());
+			objective.setObjectiveItemList(new ArrayList<ObjectiveItemEntity>());
 			objective.setDescription(description);
 			objective.setLocation(statementItemLoop.getLocation());
 			objective.setUserIdentity(statementItemLoop.getUserIdentity());
-			this.objectiveRepository.save(objective);
-
-			ObjectiveItemEntity objectiveItem = new ObjectiveItemEntity();
-			objectiveItem.setObjective(objective);
-			objectiveItem.setDescription(description);
-			objectiveItem.setSequential(1);
-			objectiveItem.setUnitaryValue(statementItemLoop.getMovementValue());
-			objectiveItem.setAmount(new BigDecimal(1));
-			objectiveItem.setAccountTarget(statementItemLoop.isIncoming() ? this.statementParam.getStatementType().getAccountSource() : statementItemLoop.getAccountTarget());
-			objectiveItem.setUserIdentity(statementItemLoop.getUserIdentity());
-			this.objectiveItemRepository.save(objectiveItem);
 
 			ObjectiveMovementEntity objectiveMovement= new ObjectiveMovementEntity();
-			objectiveMovement.setObjective(objective);
-			objectiveMovement.setRegistrationDate(new Date());
 			objectiveMovement.setDueDate(Utils.date.plusHours(statementItemLoop.getMovementDate(), 12));
 			objectiveMovement.setPaymentDate(Utils.date.plusHours(statementItemLoop.getMovementDate(), 12));
 			objectiveMovement.setValue(statementItemLoop.getMovementValue());
 			objectiveMovement.setInstallment(1);
 			objectiveMovement.setPaymentMethod(statementItemLoop.getPaymentMethod());
 			objectiveMovement.setAccountSource(statementItemLoop.isOutcoming() ? this.statementParam.getStatementType().getAccountSource() : statementItemLoop.getAccountSource());
-			objectiveMovement.setUserIdentity(statementItemLoop.getUserIdentity());
-			this.objectiveMovementRepository.save(objectiveMovement);
+			
+			ObjectiveItemEntity objectiveItem = new ObjectiveItemEntity();
+			objectiveItem.setDescription(description);
+			objectiveItem.setSequential(1);
+			objectiveItem.setUnitaryValue(statementItemLoop.getMovementValue());
+			objectiveItem.setAmount(new BigDecimal(1));
+			objectiveItem.setAccountTarget(statementItemLoop.isIncoming() ? this.statementParam.getStatementType().getAccountSource() : statementItemLoop.getAccountTarget());
 
-			System.out.println(objective);
+			objective.getObjectiveMovementList().add(objectiveMovement);
+			objective.getObjectiveItemList().add(objectiveItem);
+
+			this.objectiveExecuteRegistrationService.setParams(objective, token);
+			this.objectiveExecuteRegistrationService.execute();
 
 			statementItemLoop.setIsExported(Boolean.TRUE);
 			this.statementItemRepository.save(statementItemLoop);
