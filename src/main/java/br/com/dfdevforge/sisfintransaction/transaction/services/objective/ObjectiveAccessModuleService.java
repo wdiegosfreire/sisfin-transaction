@@ -26,8 +26,8 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 
 	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 
-	private List<ObjectiveMovementEntity> objectiveMovementListInPeriod;
-	private List<ObjectiveEntity> objectiveListResult;
+	private List<ObjectiveEntity> objectiveListResult = new ArrayList<ObjectiveEntity>();
+	private List<ObjectiveMovementEntity> objectiveMovementListInPeriod = new ArrayList<ObjectiveMovementEntity>();
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -72,7 +72,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	private void identifyMovementOfPeriod() {
 		int selectedPeriod = Utils.date.getPeriodOf(objectiveParam.getObjectiveMovementList().get(0).getPaymentDate());
 
-		for (ObjectiveEntity objective : objectiveListResult) {
+		for (ObjectiveEntity objective : this.objectiveListResult) {
 			for (ObjectiveMovementEntity objectiveMovement : objective.getObjectiveMovementList()) {
 				Date movementDate = (objectiveMovement.getPaymentDate() != null ? objectiveMovement.getPaymentDate() : objectiveMovement.getDueDate());
 				int movementPeriod = Utils.date.getPeriodOf(movementDate);
