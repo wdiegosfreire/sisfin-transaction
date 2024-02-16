@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
-import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementItemEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementItemRepository;
@@ -69,8 +68,8 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			objective.setUserIdentity(statementItemLoop.getUserIdentity());
 
 			ObjectiveMovementEntity objectiveMovement= new ObjectiveMovementEntity();
-			objectiveMovement.setDueDate(Utils.date.plusHours(statementItemLoop.getMovementDate(), 12));
-			objectiveMovement.setPaymentDate(Utils.date.plusHours(statementItemLoop.getMovementDate(), 12));
+			objectiveMovement.setDueDate(statementItemLoop.getMovementDate());
+			objectiveMovement.setPaymentDate(statementItemLoop.getMovementDate());
 			objectiveMovement.setValue(statementItemLoop.getMovementValue());
 			objectiveMovement.setInstallment(1);
 			objectiveMovement.setPaymentMethod(statementItemLoop.getPaymentMethod());
