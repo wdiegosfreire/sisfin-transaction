@@ -59,8 +59,6 @@ public class BaseException extends Exception {
 		return new Gson().toJson(jsonMessage);
 	}
 
-
-
 	@Getter
 	@Setter
 	class Message {
