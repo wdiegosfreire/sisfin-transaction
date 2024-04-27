@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.dfdevforge</groupId>
 	<artifactId>sisfin-transaction</artifactId>
-	<version>2022-06-19 1839</version>
+	<version>2024-04-27</version>
 	<packaging>jar</packaging>
 	<name>sisfin-transaction</name>
 	<description>Spring Boot project for Sisfin application, module transaction</description>

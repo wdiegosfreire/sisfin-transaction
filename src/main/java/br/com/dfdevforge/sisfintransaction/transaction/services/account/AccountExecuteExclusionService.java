@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.ChildrenInformationFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForExclusionNotFoundException;
+import br.com.dfdevforge.sisfintransaction.commons.exceptions.ForeignKeyConstraintException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepository;
@@ -16,8 +18,14 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepos
 
 @Service
 public class AccountExecuteExclusionService extends AccountBaseService implements CommonService {
-	@Autowired private AccountRepository accountRepository;
-	@Autowired private AccountRepositoryCustomized accountRepositoryCustomized;
+	private final AccountRepository accountRepository;
+	private final AccountRepositoryCustomized accountRepositoryCustomized;
+
+	@Autowired
+	public AccountExecuteExclusionService(AccountRepository accountRepository, AccountRepositoryCustomized accountRepositoryCustomized) {
+		this.accountRepository = accountRepository;
+		this.accountRepositoryCustomized = accountRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -48,7 +56,12 @@ public class AccountExecuteExclusionService extends AccountBaseService implement
 	}
 
 	private void deleteAccount() throws BaseException {
-		this.accountRepository.delete(this.accountParam);
+		try {
+			this.accountRepository.delete(this.accountParam);
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new ForeignKeyConstraintException();
+		}
 	}
 
 	private void findAllAccounts() {
