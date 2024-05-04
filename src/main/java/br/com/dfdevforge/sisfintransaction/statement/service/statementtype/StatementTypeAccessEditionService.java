@@ -1,6 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.statement.service.statementType;
-
-import java.util.Map;
+package br.com.dfdevforge.sisfintransaction.statement.service.statementtype;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,19 +10,14 @@ import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntit
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeRepository;
 
 @Service
-public class StatementTypeExecuteEditionService extends StatementTypeBaseService implements CommonService {
+public class StatementTypeAccessEditionService extends StatementTypeBaseService implements CommonService {
 	@Autowired private StatementTypeRepository statementTypeRepository;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.findByIdentity();
-		this.editStatementType();
-	}
-
-	@Override
-	public Map<String, Object> returnBusinessData() {
-		this.setArtifact("statementTypeRegistered", this.statementTypeParam);
-		return super.returnBusinessData();
+		this.findBanks();
+		this.findAccountsSource();
 	}
 
 	private void findByIdentity() throws DataForEditionNotFoundException {
@@ -32,9 +25,15 @@ public class StatementTypeExecuteEditionService extends StatementTypeBaseService
 
 		if (statementType == null)
 			throw new DataForEditionNotFoundException();
+
+		this.setArtifact("statementType", statementType);
 	}
 
-	private void editStatementType() throws BaseException {
-		this.statementTypeRepository.save(this.statementTypeParam);
+	private void findBanks() throws DataForEditionNotFoundException {
+		this.setArtifact("bankListCombo", this.findBanksByUserIdentityOrderByNameAsc(this.statementTypeParam.getUserIdentity()));
+	}
+
+	private void findAccountsSource() {
+		this.setArtifact("accountListComboSource", this.findAccountsByUserIdentityOrderByLevel(this.statementTypeParam.getUserIdentity()));
 	}
 }

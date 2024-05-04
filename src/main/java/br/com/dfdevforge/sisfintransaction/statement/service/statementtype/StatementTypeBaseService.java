@@ -1,4 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.transaction.services.account;
+package br.com.dfdevforge.sisfintransaction.statement.service.statementtype;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -7,18 +7,16 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.UserUnauthorizedException;
 import br.com.dfdevforge.sisfintransaction.commons.feignclients.UserFeignClient;
 import br.com.dfdevforge.sisfintransaction.commons.services.BaseService;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntity;
 import feign.FeignException;
 
-public abstract class AccountBaseService extends BaseService {
-	protected static final String ACCOUNT_LIST = "accountList";
-
-	protected AccountEntity accountParam;
+public abstract class StatementTypeBaseService extends BaseService {
+	protected StatementTypeEntity statementTypeParam;
 
 	@Autowired private UserFeignClient userFeignClient;
 
-	public void setParams(AccountEntity accountEntity, String token) {
-		this.accountParam = accountEntity;
+	public void setParams(StatementTypeEntity statementTypeEntity, String token) {
+		this.statementTypeParam = statementTypeEntity;
 		this.token = token;
 	}
 
@@ -29,7 +27,7 @@ public abstract class AccountBaseService extends BaseService {
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
 
-			if (!this.accountParam.getUserIdentity().equals(userValidatedByToken.getIdentity()))
+			if (this.statementTypeParam.getUserIdentity() != userValidatedByToken.getIdentity())
 				throw new UserUnauthorizedException();
 		}
 		catch (FeignException e) {

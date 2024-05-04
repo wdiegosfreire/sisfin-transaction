@@ -34,7 +34,7 @@ public class BankExecuteExclusionService extends BankBaseService implements Comm
 			throw new DataForExclusionNotFoundException();
 	}
 
-	private void deleteBank() throws BaseException {
+	private void deleteBank() {
 		this.bankRepository.delete(this.bankParam);
 	}
 }

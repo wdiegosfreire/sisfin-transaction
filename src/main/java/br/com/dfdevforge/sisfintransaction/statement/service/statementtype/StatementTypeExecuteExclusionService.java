@@ -1,4 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.statement.service.statementType;
+package br.com.dfdevforge.sisfintransaction.statement.service.statementtype;
 
 import java.util.Map;
 

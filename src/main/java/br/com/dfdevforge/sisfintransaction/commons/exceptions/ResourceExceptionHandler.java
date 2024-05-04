@@ -15,8 +15,13 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
 	}
 
-	@ExceptionHandler({RequiredFieldNotFoundException.class, ChildrenInformationFoundException.class, ForeignKeyConstraintException.class, DataIntegrityViolationException.class})
+	@ExceptionHandler({RequiredFieldNotFoundException.class, ChildrenInformationFoundException.class, ForeignKeyConstraintException.class, DataIntegrityViolationException.class, ArrayIndexOutOfBoundsException.class})
 	public ResponseEntity<String> httpInternalServerErrorExceptionHandler(HttpStatusInternalServerError exception, HttpServletRequest request) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+	}
+
+	@ExceptionHandler({UserUnauthorizedException.class})
+	public ResponseEntity<String> httpUnauthorizedExceptionHandler(HttpStatusUnauthorized exception, HttpServletRequest request) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage());
 	}
 }

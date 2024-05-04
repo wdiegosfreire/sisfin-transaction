@@ -2,7 +2,6 @@ package br.com.dfdevforge.sisfintransaction.statement.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,11 +35,11 @@ public class StatementPatternEntity extends BaseEntity {
 	@Column(name = "stp_description")
 	private String description;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "acc_identity_target")
 	private AccountEntity accountTarget;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "loc_identity")
 	private LocationEntity location;
 

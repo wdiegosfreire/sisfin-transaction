@@ -1,4 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.statement.service.statementType;
+package br.com.dfdevforge.sisfintransaction.statement.service.statementtype;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,12 @@ import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeR
 
 @Service
 public class StatementTypeAccessModuleService extends StatementTypeBaseService implements CommonService {
-	@Autowired private StatementTypeRepository statementTypeRepository;
+	private final StatementTypeRepository statementTypeRepository;
+
+	@Autowired
+	public StatementTypeAccessModuleService(StatementTypeRepository statementTypeRepository) {
+		this.statementTypeRepository = statementTypeRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

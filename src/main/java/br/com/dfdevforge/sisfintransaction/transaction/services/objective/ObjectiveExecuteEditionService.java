@@ -43,11 +43,11 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 			throw new DataForEditionNotFoundException();
 	}
 
-	private void saveObjectiveEdition() throws BaseException {
+	private void saveObjectiveEdition() {
 		this.objectiveRepository.save(this.objectiveParam);
 	}
 
-	private void saveObjectiveMovementsEdition() throws BaseException {
+	private void saveObjectiveMovementsEdition() {
 		Date now = new Date();
 		for (ObjectiveMovementEntity objectiveMovementEdited : this.objectiveParam.getObjectiveMovementList()) {
 			objectiveMovementEdited.setRegistrationDate(now);
@@ -57,7 +57,7 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		}
 	}
 
-	private void saveObjectiveItemsEdition() throws BaseException {
+	private void saveObjectiveItemsEdition() {
 		for (ObjectiveItemEntity objectiveItemEdited : this.objectiveParam.getObjectiveItemList()) {
 			objectiveItemEdited.setObjective(this.objectiveParam);
 			objectiveItemEdited.setUserIdentity(this.objectiveParam.getUserIdentity());

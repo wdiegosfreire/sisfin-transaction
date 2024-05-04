@@ -374,7 +374,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			throw new BaseException("Exceção não Identificada", "Create a PeriodStatementNotFoundException");
 	}
 
-	private void importarContaCorrente(StatementEntity statement) throws ParseException
+	private void importarContaCorrente(StatementEntity statement) throws ParseException, ArrayIndexOutOfBoundsException
 	{
 		int index = 0;
 
