@@ -14,7 +14,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepo
 
 @Service
 public class LocationExecuteRegistrationService extends LocationBaseService implements CommonService {
-	@Autowired private LocationRepository locationRepository;
+	private final LocationRepository locationRepository;
+
+	@Autowired
+	public LocationExecuteRegistrationService(LocationRepository locationRepository) {
+		this.locationRepository = locationRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -41,11 +46,11 @@ public class LocationExecuteRegistrationService extends LocationBaseService impl
 		if (this.locationParam.getUserIdentity() == null)
 			errorList.add("Please, the location need to be associated with a user.");
 
-		if (errorList != null && !errorList.isEmpty())
+		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
-	private void saveLocation() throws BaseException {
+	private void saveLocation() {
 		this.locationRepository.save(this.locationParam);
 	}
 

@@ -35,7 +35,7 @@ public class LocationExecuteExclusionService extends LocationBaseService impleme
 			throw new DataForExclusionNotFoundException();
 	}
 
-	private void deleteLocation() throws BaseException {
+	private void deleteLocation() {
 		this.locationRepository.delete(this.locationParam);
 	}
 

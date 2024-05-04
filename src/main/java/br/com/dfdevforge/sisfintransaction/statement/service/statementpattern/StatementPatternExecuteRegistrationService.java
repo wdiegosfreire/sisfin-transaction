@@ -1,4 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.statement.service.statementType;
+package br.com.dfdevforge.sisfintransaction.statement.service.statementpattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,37 +10,42 @@ import org.springframework.stereotype.Service;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
-import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeRepository;
+import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementPatternRepository;
 
 @Service
-public class StatementTypeExecuteRegistrationService extends StatementTypeBaseService implements CommonService {
-	@Autowired private StatementTypeRepository statementTypeRepository;
+public class StatementPatternExecuteRegistrationService extends StatementPatternBaseService implements CommonService {
+	private final StatementPatternRepository statementPatternRepository;
+
+	@Autowired
+	public StatementPatternExecuteRegistrationService(StatementPatternRepository statementPatternRepository) {
+		this.statementPatternRepository = statementPatternRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();
-		this.saveStatementType();
+		this.saveStatementPattern();
 	}
 
 	@Override
 	public Map<String, Object> returnBusinessData() {
-		this.setArtifact("statementTypeRegistered", this.statementTypeParam);
+		this.setArtifact("statementPatternRegistered", this.statementPatternParam);
 		return super.returnBusinessData();
 	}
 
 	private void checkRequiredFields() throws RequiredFieldNotFoundException {
 		List<String> errorList = new ArrayList<>();
 
-		if (this.statementTypeParam.getName() == null || this.statementTypeParam.getName().equals(""))
+		if (this.statementPatternParam.getComparator() == null || this.statementPatternParam.getComparator().equals(""))
 			errorList.add("Please, enter name.");
-		if (this.statementTypeParam.getUserIdentity() == null)
+		if (this.statementPatternParam.getUserIdentity() == null)
 			errorList.add("Please, the bank need to be associated with a user.");
 
-		if (errorList != null && !errorList.isEmpty())
+		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
-	private void saveStatementType() throws BaseException {
-		this.statementTypeRepository.save(this.statementTypeParam);
+	private void saveStatementPattern() {
+		this.statementPatternRepository.save(this.statementPatternParam);
 	}
 }

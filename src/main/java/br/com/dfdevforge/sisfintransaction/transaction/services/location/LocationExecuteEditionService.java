@@ -35,7 +35,7 @@ public class LocationExecuteEditionService extends LocationBaseService implement
 			throw new DataForEditionNotFoundException();
 	}
 
-	private void editLocation() throws BaseException {
+	private void editLocation() {
 		this.locationRepository.save(this.locationParam);
 	}
 

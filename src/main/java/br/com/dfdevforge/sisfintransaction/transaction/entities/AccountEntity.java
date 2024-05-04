@@ -1,5 +1,7 @@
 package br.com.dfdevforge.sisfintransaction.transaction.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import lombok.EqualsAndHashCode;
@@ -49,6 +52,9 @@ public class AccountEntity extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "acc_identity_parent")
 	private AccountEntity accountParent;
+
+	@Transient
+	private List<AccountEntity> accountListChild;
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;

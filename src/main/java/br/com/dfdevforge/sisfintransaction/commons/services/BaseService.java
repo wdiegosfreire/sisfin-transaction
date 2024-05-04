@@ -7,12 +7,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.statement.entities.BankEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.BankRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.PaymentMethodRepository;
 
 public abstract class BaseService implements CommonService {
@@ -21,6 +22,7 @@ public abstract class BaseService implements CommonService {
 
 	@Autowired private BankRepository bankRepository;
 	@Autowired private AccountRepository accountRepository;
+	@Autowired private LocationRepository locationRepository;
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
 
 	@Override
@@ -51,7 +53,7 @@ public abstract class BaseService implements CommonService {
 		this.resultMap.put(artifactName, artifact);
 	}
 
-	protected List<BankEntity> findBanksByUserIdentityOrderByNameAsc(long userIdentity) throws DataForEditionNotFoundException {
+	protected List<BankEntity> findBanksByUserIdentityOrderByNameAsc(long userIdentity) {
 		return this.bankRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 
@@ -59,7 +61,11 @@ public abstract class BaseService implements CommonService {
 		return this.accountRepository.findByUserIdentityOrderByLevel(userIdentity);
 	}
 
-	protected List<PaymentMethodEntity> findPaymentMethodsByUserIdentityOrderByNameAsc(long userIdentity) throws DataForEditionNotFoundException {
+	protected List<LocationEntity> findLocationsByUserIdentityOrderByNameAscBranchAsc(long userIdentity) {
+		return this.locationRepository.findByUserIdentityOrderByNameAscBranchAsc(userIdentity);
+	}
+
+	protected List<PaymentMethodEntity> findPaymentMethodsByUserIdentityOrderByNameAsc(long userIdentity) {
 		return this.paymentMethodRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 }

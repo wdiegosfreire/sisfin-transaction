@@ -26,8 +26,8 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 
 	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 
-	private List<ObjectiveEntity> objectiveListResult = new ArrayList<ObjectiveEntity>();
-	private List<ObjectiveMovementEntity> objectiveMovementListInPeriod = new ArrayList<ObjectiveMovementEntity>();
+	private List<ObjectiveEntity> objectiveListResult = new ArrayList<>();
+	private List<ObjectiveMovementEntity> objectiveMovementListInPeriod = new ArrayList<>();
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -49,7 +49,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	}
 
 	private void findObjectivesRelatedToMovementsInPeriod() {
-		List<Long> objectiveIdentityList = new ArrayList<Long>();
+		List<Long> objectiveIdentityList = new ArrayList<>();
 		this.objectiveMovementListInPeriod.forEach(objectiveMovement -> {
 			objectiveIdentityList.add(objectiveMovement.getObjective().getIdentity());
 		});

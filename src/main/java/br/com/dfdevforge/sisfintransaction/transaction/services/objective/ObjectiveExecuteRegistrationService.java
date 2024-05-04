@@ -21,9 +21,16 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRep
 
 @Service
 public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService implements CommonService {
-	@Autowired private ObjectiveRepository objectiveRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveRepository objectiveRepository;
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+
+	@Autowired
+	public ObjectiveExecuteRegistrationService(ObjectiveRepository objectiveRepository, ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository) {
+		this.objectiveRepository = objectiveRepository;
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -45,24 +52,24 @@ public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService im
 		if (this.objectiveParam.getDescription() == null || this.objectiveParam.getDescription().equals(""))
 			errorList.add("Please, enter the name.");
 
-		if (this.objectiveParam.getLocation() == null || this.objectiveParam.getLocation().getIdentity() == null)
-			errorList.add("Please, enter the location.");
-
 		if (CollectionUtils.isEmpty(this.objectiveParam.getObjectiveMovementList()))
 			errorList.add("Please, enter at least one movement.");
 
 		if (CollectionUtils.isEmpty(this.objectiveParam.getObjectiveItemList()))
 			errorList.add("Please, enter at least one item.");
 
-		if (errorList != null && !errorList.isEmpty())
+		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
-	private void saveObjective() throws BaseException {
+	private void saveObjective() {
+		if (this.objectiveParam.getLocation() != null && this.objectiveParam.getLocation().getIdentity() == null)
+			this.objectiveParam.setLocation(null);
+
 		this.objectiveRepository.save(this.objectiveParam);
 	}
 
-	private void saveObjectiveMovements() throws BaseException {
+	private void saveObjectiveMovements() {
 		Date now = new Date();
 		for (ObjectiveMovementEntity objectiveMovementInsert : this.objectiveParam.getObjectiveMovementList()) {
 			objectiveMovementInsert.setRegistrationDate(now);
@@ -79,7 +86,7 @@ public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService im
 		}
 	}
 
-	private void saveObjectiveItems() throws BaseException {
+	private void saveObjectiveItems() {
 		for (ObjectiveItemEntity objectiveItemInsert : this.objectiveParam.getObjectiveItemList()) {
 			objectiveItemInsert.setObjective(this.objectiveParam);
 			objectiveItemInsert.setUserIdentity(this.objectiveParam.getUserIdentity());

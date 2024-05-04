@@ -9,7 +9,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepos
 
 @Service
 public class AccountAccessModuleService extends AccountBaseService implements CommonService {
-	@Autowired private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
+
+	@Autowired
+	public AccountAccessModuleService(AccountRepository accountRepository) {
+		this.accountRepository = accountRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
