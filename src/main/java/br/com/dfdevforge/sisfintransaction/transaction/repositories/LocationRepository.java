@@ -9,5 +9,5 @@ import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
 
 public interface LocationRepository extends JpaRepository<LocationEntity, Long>, JpaSpecificationExecutor<LocationEntity> {
 	public LocationEntity findByIdentity(Long identity);
-	public List<LocationEntity> findByUserIdentityOrderByNameAscBranchAsc(Long userIdentity);
+	public List<LocationEntity> findByUserIdentityOrderByNameAsc(Long userIdentity);
 }

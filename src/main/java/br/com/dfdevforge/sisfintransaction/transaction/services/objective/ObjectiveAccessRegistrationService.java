@@ -30,7 +30,7 @@ public class ObjectiveAccessRegistrationService extends ObjectiveBaseService imp
 	}
 
 	private void findLocations() throws DataForEditionNotFoundException {
-		List<LocationEntity> locationListCombo = this.locationRepository.findByUserIdentityOrderByNameAscBranchAsc(this.objectiveParam.getUserIdentity());
+		List<LocationEntity> locationListCombo = this.locationRepository.findByUserIdentityOrderByNameAsc(this.objectiveParam.getUserIdentity());
 		
 		if (locationListCombo == null)
 			throw new DataForEditionNotFoundException();
