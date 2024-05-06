@@ -36,11 +36,11 @@ public class StatementTypeExecuteRegistrationService extends StatementTypeBaseSe
 		if (this.statementTypeParam.getUserIdentity() == null)
 			errorList.add("Please, the bank need to be associated with a user.");
 
-		if (errorList != null && !errorList.isEmpty())
+		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
-	private void saveStatementType() throws BaseException {
+	private void saveStatementType() {
 		this.statementTypeRepository.save(this.statementTypeParam);
 	}
 }

@@ -34,7 +34,7 @@ public class StatementTypeExecuteExclusionService extends StatementTypeBaseServi
 			throw new DataForExclusionNotFoundException();
 	}
 
-	private void deleteStatementType() throws BaseException {
+	private void deleteStatementType() {
 		this.statementTypeRepository.delete(this.statementTypeParam);
 	}
 }

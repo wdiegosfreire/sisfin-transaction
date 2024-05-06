@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeRepository;
 
@@ -20,11 +19,11 @@ public class StatementAccessRegistrationService extends StatementBaseService imp
 			this.findStatementTypes();
 	}
 
-	private void findBanks() throws DataForEditionNotFoundException {
+	private void findBanks() {
 		this.setArtifact("bankListCombo", this.findBanksByUserIdentityOrderByNameAsc(this.statementParam.getUserIdentity()));
 	}
 
-	private void findStatementTypes() throws DataForEditionNotFoundException {
+	private void findStatementTypes() {
 		this.setArtifact("statementTypeListCombo", this.statementTypeRepository.findByUserIdentityAndBankOrderByNameAsc(
 			this.statementParam.getUserIdentity(),
 			this.statementParam.getStatementType().getBank()

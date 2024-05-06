@@ -35,7 +35,7 @@ public class PaymentMethodExecuteEditionService extends PaymentMethodBaseService
 			throw new DataForEditionNotFoundException();
 	}
 
-	private void editPaymentMethod() throws BaseException {
+	private void editPaymentMethod() {
 		this.paymentMethodRepository.save(this.paymentMethodParam);
 	}
 

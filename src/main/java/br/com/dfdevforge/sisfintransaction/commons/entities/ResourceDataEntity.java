@@ -10,5 +10,5 @@ import lombok.Setter;
 @Setter
 public class ResourceDataEntity {
 	private String token;
-	private Map<String, Object> map = new HashMap<String, Object>();
+	private Map<String, Object> map = new HashMap<>();
 }

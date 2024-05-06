@@ -10,8 +10,14 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepo
 
 @Service
 public class LocationExecuteSearchService extends LocationBaseService implements CommonService {
-	@Autowired private LocationRepository locationRepository;
-	@Autowired private LocationRepositoryCustomized locationRepositoryCustomized;
+	private final LocationRepository locationRepository;
+	private final LocationRepositoryCustomized locationRepositoryCustomized;
+
+	@Autowired
+	public LocationExecuteSearchService(LocationRepository locationRepository, LocationRepositoryCustomized locationRepositoryCustomized) {
+		this.locationRepository = locationRepository;
+		this.locationRepositoryCustomized = locationRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

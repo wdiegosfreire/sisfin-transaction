@@ -69,11 +69,11 @@ public class ObjectiveMovementExecuteRegistrationService extends ObjectiveMoveme
 		if (this.objectiveMovementParam.getUserIdentity() == null)
 			errorList.add("Please, the movement need to be associated with a user.");
 
-		if (errorList != null && !errorList.isEmpty())
+		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
-	private void saveObjective() throws BaseException {
+	private void saveObjective() {
 		this.objectiveRepository.save(this.objectiveMovementParam.getObjective());
 	}
 
@@ -95,7 +95,7 @@ public class ObjectiveMovementExecuteRegistrationService extends ObjectiveMoveme
 		}
 	}
 
-	private void saveObjectiveMovement() throws BaseException {
+	private void saveObjectiveMovement() {
 		for (int i = 0; i < this.objectiveMovementParam.getInstallment(); i++) {
 			ObjectiveMovementEntity objectiveMovementNew = new ObjectiveMovementEntity();
 			objectiveMovementNew.setRegistrationDate(this.objectiveMovementParam.getRegistrationDate());
@@ -118,7 +118,7 @@ public class ObjectiveMovementExecuteRegistrationService extends ObjectiveMoveme
 		}
 	}
 
-	private void saveObjectiveItem() throws BaseException {
+	private void saveObjectiveItem() {
 		for (ObjectiveItemEntity objectiveItemLoop : this.objectiveMovementParam.getObjective().getObjectiveItemList()) {
 			ObjectiveItemEntity objectiveItemNew = new ObjectiveItemEntity();
 			objectiveItemNew.setDescription(objectiveItemLoop.getDescription());

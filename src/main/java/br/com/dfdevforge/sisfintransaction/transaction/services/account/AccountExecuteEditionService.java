@@ -13,7 +13,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepos
 
 @Service
 public class AccountExecuteEditionService extends AccountBaseService implements CommonService {
-	@Autowired private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
+
+	@Autowired
+	public AccountExecuteEditionService(AccountRepository accountRepository) {
+		this.accountRepository = accountRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -35,7 +40,7 @@ public class AccountExecuteEditionService extends AccountBaseService implements 
 			throw new DataForEditionNotFoundException();
 	}
 
-	private void editAccount() throws BaseException {
+	private void editAccount() {
 		this.accountRepository.save(this.accountParam);
 	}
 

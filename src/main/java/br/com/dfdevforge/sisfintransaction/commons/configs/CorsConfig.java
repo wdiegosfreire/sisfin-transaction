@@ -21,14 +21,14 @@ public class CorsConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
-		final String[] CORS_ORIGINS = System.getenv("SISFIN_BACKEND_CORS_ORIGINS").split(SEPARATOR);
-		final String[] CORS_METHODS = System.getenv("SISFIN_BACKEND_CORS_METHODS").split(SEPARATOR);
-		final String[] CORS_HEADERS = System.getenv("SISFIN_BACKEND_CORS_HEADERS").split(SEPARATOR);
+		final String[] corsOrigins = System.getenv("SISFIN_BACKEND_CORS_ORIGINS").split(SEPARATOR);
+		final String[] corsMethods = System.getenv("SISFIN_BACKEND_CORS_METHODS").split(SEPARATOR);
+		final String[] corsHeaders = System.getenv("SISFIN_BACKEND_CORS_HEADERS").split(SEPARATOR);
 
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList(CORS_ORIGINS));
-		configuration.setAllowedMethods(Arrays.asList(CORS_METHODS));
-		configuration.setAllowedHeaders(Arrays.asList(CORS_HEADERS));
+		configuration.setAllowedOrigins(Arrays.asList(corsOrigins));
+		configuration.setAllowedMethods(Arrays.asList(corsMethods));
+		configuration.setAllowedHeaders(Arrays.asList(corsHeaders));
 		configuration.setAllowCredentials(false);
 
 		UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();

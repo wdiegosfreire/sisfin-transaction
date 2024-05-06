@@ -9,7 +9,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepo
 
 @Service
 public class LocationAccessModuleService extends LocationBaseService implements CommonService {
-	@Autowired private LocationRepository locationRepository;
+	private final LocationRepository locationRepository;
+
+	@Autowired
+	public LocationAccessModuleService(LocationRepository locationRepository) {
+		this.locationRepository = locationRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

@@ -35,7 +35,7 @@ public class PaymentMethodExecuteExclusionService extends PaymentMethodBaseServi
 			throw new DataForExclusionNotFoundException();
 	}
 
-	private void deletePaymentMethod() throws BaseException {
+	private void deletePaymentMethod() {
 		this.paymentMethodRepository.delete(this.paymentMethodParam);
 	}
 

@@ -29,7 +29,7 @@ public class StatementTypeAccessEditionService extends StatementTypeBaseService 
 		this.setArtifact("statementType", statementType);
 	}
 
-	private void findBanks() throws DataForEditionNotFoundException {
+	private void findBanks() {
 		this.setArtifact("bankListCombo", this.findBanksByUserIdentityOrderByNameAsc(this.statementTypeParam.getUserIdentity()));
 	}
 
