@@ -24,4 +24,9 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<String> httpUnauthorizedExceptionHandler(HttpStatusUnauthorized exception, HttpServletRequest request) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage());
 	}
+
+	@ExceptionHandler({UniqueConstraintException.class})
+	public ResponseEntity<String> httpBadRequestExceptionHandler(HttpStatusBadRequest exception, HttpServletRequest request) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+	}
 }

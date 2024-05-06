@@ -1,6 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.commons.exceptions;
 
-public class UniqueConstraintException extends BaseException implements HttpStatusInternalServerError {
+public class UniqueConstraintException extends BaseException implements HttpStatusBadRequest {
 	private static final long serialVersionUID = 1L;
 
 	public UniqueConstraintException() {

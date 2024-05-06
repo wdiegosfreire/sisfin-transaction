@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
+import br.com.dfdevforge.sisfintransaction.commons.exceptions.UniqueConstraintException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
 
@@ -37,12 +39,8 @@ public class LocationExecuteRegistrationService extends LocationBaseService impl
 	private void checkRequiredFields() throws RequiredFieldNotFoundException {
 		List<String> errorList = new ArrayList<>();
 
-		if (this.locationParam.getCnpj() == null || this.locationParam.getCnpj().equals(""))
-			errorList.add("Please, enter CNPJ.");
 		if (this.locationParam.getName() == null || this.locationParam.getName().equals(""))
 			errorList.add("Please, enter name.");
-		if (this.locationParam.getBranch() == null || this.locationParam.getBranch().equals(""))
-			errorList.add("Please, enter branch name.");
 		if (this.locationParam.getUserIdentity() == null)
 			errorList.add("Please, the location need to be associated with a user.");
 
@@ -50,11 +48,16 @@ public class LocationExecuteRegistrationService extends LocationBaseService impl
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
-	private void saveLocation() {
-		this.locationRepository.save(this.locationParam);
+	private void saveLocation() throws UniqueConstraintException {
+		try {
+			this.locationRepository.save(this.locationParam);
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new UniqueConstraintException();
+		}
 	}
 
 	private void findAllLocations() {
-		this.setArtifact("locationList", this.locationRepository.findByUserIdentityOrderByNameAscBranchAsc(locationParam.getUserIdentity()));
+		this.setArtifact("locationList", this.locationRepository.findByUserIdentityOrderByNameAsc(locationParam.getUserIdentity()));
 	}
 }

@@ -20,7 +20,7 @@ public class LocationExecuteSearchService extends LocationBaseService implements
 
 	private void findAllLocations() {
 		if (this.locationParam.getFilter() == null || this.locationParam.getFilter().contentEquals(""))
-			this.setArtifact("locationList", this.locationRepository.findByUserIdentityOrderByNameAscBranchAsc(locationParam.getUserIdentity()));
+			this.setArtifact("locationList", this.locationRepository.findByUserIdentityOrderByNameAsc(locationParam.getUserIdentity()));
 		else
 			this.setArtifact("locationList", this.locationRepositoryCustomized.searchInAllProperties(this.locationParam));
 	}

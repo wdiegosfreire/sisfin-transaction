@@ -15,7 +15,7 @@ public class StatementPatternAccessRegistrationService extends StatementPatternB
 	}
 
 	private void findLocations() {
-		this.setArtifact("locationListCombo", this.findLocationsByUserIdentityOrderByNameAscBranchAsc(this.statementPatternParam.getUserIdentity()));
+		this.setArtifact("locationListCombo", this.findLocationsByUserIdentityOrderByNameAsc(this.statementPatternParam.getUserIdentity()));
 	}
 
 	private void findAccountsTarget() {

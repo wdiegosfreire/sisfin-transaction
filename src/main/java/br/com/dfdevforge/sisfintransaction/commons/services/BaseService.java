@@ -61,8 +61,8 @@ public abstract class BaseService implements CommonService {
 		return this.accountRepository.findByUserIdentityOrderByLevel(userIdentity);
 	}
 
-	protected List<LocationEntity> findLocationsByUserIdentityOrderByNameAscBranchAsc(long userIdentity) {
-		return this.locationRepository.findByUserIdentityOrderByNameAscBranchAsc(userIdentity);
+	protected List<LocationEntity> findLocationsByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.locationRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 
 	protected List<PaymentMethodEntity> findPaymentMethodsByUserIdentityOrderByNameAsc(long userIdentity) {

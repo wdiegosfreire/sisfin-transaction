@@ -21,14 +21,8 @@ public class LocationEntity extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long identity;
 
-	@Column(name = "loc_cnpj")
-	private String cnpj;
-
 	@Column(name = "loc_name")
 	private String name;
-
-	@Column(name = "loc_branch")
-	private String branch;
 
 	@Column(name = "loc_note")
 	private String note;

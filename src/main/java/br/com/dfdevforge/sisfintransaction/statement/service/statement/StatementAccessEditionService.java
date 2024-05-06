@@ -48,19 +48,19 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 		this.statementResult.setStatementItemList(statementItemRepository.findByStatement(this.statementParam));			
 	}
 
-	private void findLocations() throws DataForEditionNotFoundException {
-		this.setArtifact("locationListCombo", this.locationRepository.findByUserIdentityOrderByNameAscBranchAsc(this.statementParam.getUserIdentity()));
+	private void findLocations() {
+		this.setArtifact("locationListCombo", this.locationRepository.findByUserIdentityOrderByNameAsc(this.statementParam.getUserIdentity()));
 	}
 
-	private void findAccountsSource() throws DataForEditionNotFoundException {
+	private void findAccountsSource() {
 		this.setArtifact("accountListComboSource", this.findAccountsByUserIdentityOrderByLevel(this.statementParam.getUserIdentity()));
 	}
 
-	private void findAccountsTarget() throws DataForEditionNotFoundException {
+	private void findAccountsTarget() {
 		this.setArtifact("accountListComboTarget", this.findAccountsByUserIdentityOrderByLevel(this.statementParam.getUserIdentity()));
 	}
 
-	private void findPaymentMethods() throws DataForEditionNotFoundException {
+	private void findPaymentMethods() {
 		this.setArtifact("paymentMethodListCombo", this.findPaymentMethodsByUserIdentityOrderByNameAsc(this.statementParam.getUserIdentity()));
 	}
 }
