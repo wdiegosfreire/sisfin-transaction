@@ -35,7 +35,7 @@ public class ObjectiveMovementExecuteEditionService extends ObjectiveMovementBas
 			throw new DataForEditionNotFoundException();
 	}
 
-	private void editObjectiveMovement() throws BaseException {
+	private void editObjectiveMovement() {
 		this.objectiveMovementRepository.save(this.objectiveMovementParam);
 	}
 

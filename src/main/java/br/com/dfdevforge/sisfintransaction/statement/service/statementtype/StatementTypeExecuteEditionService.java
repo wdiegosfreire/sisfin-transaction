@@ -34,7 +34,7 @@ public class StatementTypeExecuteEditionService extends StatementTypeBaseService
 			throw new DataForEditionNotFoundException();
 	}
 
-	private void editStatementType() throws BaseException {
+	private void editStatementType() {
 		this.statementTypeRepository.save(this.statementTypeParam);
 	}
 }

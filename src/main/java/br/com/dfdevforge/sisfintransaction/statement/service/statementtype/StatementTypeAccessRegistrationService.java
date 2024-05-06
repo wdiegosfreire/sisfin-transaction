@@ -3,7 +3,6 @@ package br.com.dfdevforge.sisfintransaction.statement.service.statementtype;
 import org.springframework.stereotype.Service;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 
 @Service
@@ -15,7 +14,7 @@ public class StatementTypeAccessRegistrationService extends StatementTypeBaseSer
 		this.findAccountsSource();
 	}
 
-	private void findBanks() throws DataForEditionNotFoundException {
+	private void findBanks() {
 		this.setArtifact("bankListCombo", this.findBanksByUserIdentityOrderByNameAsc(this.statementTypeParam.getUserIdentity()));
 	}
 

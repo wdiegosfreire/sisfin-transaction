@@ -23,13 +23,22 @@ import br.com.dfdevforge.sisfintransaction.transaction.services.location.Locatio
 public class LocationResource {
 	private ResourceDataEntity resourceData = new ResourceDataEntity();
 
-	@Autowired private LocationAccessModuleService locationAccessModuleService;
-	@Autowired private LocationAccessEditionService locationAccessEditionService;
-	@Autowired private LocationExecuteSearchService locationExecuteSearchService;
-	@Autowired private LocationExecuteEditionService locationExecuteEditionService;
-	@Autowired private LocationExecuteExclusionService locationExecuteExclusionService;
-	@Autowired private LocationExecuteRegistrationService locationExecuteRegistrationService;
+	private final LocationAccessModuleService locationAccessModuleService;
+	private final LocationAccessEditionService locationAccessEditionService;
+	private final LocationExecuteSearchService locationExecuteSearchService;
+	private final LocationExecuteEditionService locationExecuteEditionService;
+	private final LocationExecuteExclusionService locationExecuteExclusionService;
+	private final LocationExecuteRegistrationService locationExecuteRegistrationService;
 
+	@Autowired
+	public LocationResource(LocationAccessModuleService locationAccessModuleService, LocationAccessEditionService locationAccessEditionService, LocationExecuteSearchService locationExecuteSearchService, LocationExecuteEditionService locationExecuteEditionService, LocationExecuteExclusionService locationExecuteExclusionService, LocationExecuteRegistrationService locationExecuteRegistrationService) {
+		this.locationAccessModuleService = locationAccessModuleService;
+		this.locationAccessEditionService = locationAccessEditionService;
+		this.locationExecuteSearchService = locationExecuteSearchService;
+		this.locationExecuteEditionService = locationExecuteEditionService;
+		this.locationExecuteExclusionService = locationExecuteExclusionService;
+		this.locationExecuteRegistrationService = locationExecuteRegistrationService;
+	}
 
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody LocationEntity location, @RequestParam String token) throws BaseException {

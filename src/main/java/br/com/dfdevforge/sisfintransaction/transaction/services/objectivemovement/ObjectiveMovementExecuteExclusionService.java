@@ -42,11 +42,11 @@ public class ObjectiveMovementExecuteExclusionService extends ObjectiveMovementB
 			throw new DataForExclusionNotFoundException();
 	}
 
-	private void deleteAllItemsByObjective() throws BaseException {
+	private void deleteAllItemsByObjective() {
 		this.objectiveItemRepository.deleteByObjective(this.objectiveMovementExclusion.getObjective());
 	}
 
-	private void deleteAllMovementsByObjective() throws BaseException {
+	private void deleteAllMovementsByObjective() {
 		this.objectiveMovementRepository.deleteByObjective(this.objectiveMovementExclusion.getObjective());
 	}
 

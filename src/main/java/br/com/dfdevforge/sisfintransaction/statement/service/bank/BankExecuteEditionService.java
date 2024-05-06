@@ -13,7 +13,12 @@ import br.com.dfdevforge.sisfintransaction.statement.repositories.BankRepository
 
 @Service
 public class BankExecuteEditionService extends BankBaseService implements CommonService {
-	@Autowired private BankRepository bankRepository;
+	private final BankRepository bankRepository;
+
+	@Autowired
+	public BankExecuteEditionService(BankRepository bankRepository) {
+		this.bankRepository = bankRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -34,7 +39,7 @@ public class BankExecuteEditionService extends BankBaseService implements Common
 			throw new DataForEditionNotFoundException();
 	}
 
-	private void editBank() throws BaseException {
+	private void editBank() {
 		this.bankRepository.save(this.bankParam);
 	}
 }

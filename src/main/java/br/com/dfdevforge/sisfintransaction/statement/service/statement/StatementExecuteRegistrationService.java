@@ -166,8 +166,8 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 	 */
 	private void createAndSaveObjectiveFromStatement(StatementItemEntity statementItem, StatementPatternEntity statementPattern, PaymentMethodEntity paymentMethod) throws BaseException {
 		ObjectiveEntity objective = new ObjectiveEntity();
-		objective.setObjectiveMovementList(new ArrayList<ObjectiveMovementEntity>());
-		objective.setObjectiveItemList(new ArrayList<ObjectiveItemEntity>());
+		objective.setObjectiveMovementList(new ArrayList<>());
+		objective.setObjectiveItemList(new ArrayList<>());
 		objective.setDescription(statementPattern.getDescription());
 		objective.setLocation(statementPattern.getLocation());
 		objective.setUserIdentity(this.statementParam.getUserIdentity());

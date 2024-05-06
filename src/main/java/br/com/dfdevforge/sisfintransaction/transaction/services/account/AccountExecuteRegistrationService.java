@@ -16,8 +16,14 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepos
 
 @Service
 public class AccountExecuteRegistrationService extends AccountBaseService implements CommonService {
-	@Autowired private AccountRepository accountRepository;
-	@Autowired private AccountRepositoryCustomized accountRepositoryCustomized;
+	private final AccountRepository accountRepository;
+	private final AccountRepositoryCustomized accountRepositoryCustomized;
+
+	@Autowired
+	public AccountExecuteRegistrationService(AccountRepository accountRepository, AccountRepositoryCustomized accountRepositoryCustomized) {
+		this.accountRepository = accountRepository;
+		this.accountRepositoryCustomized = accountRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -59,7 +65,7 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 		if (this.accountParam.getUserIdentity() == null)
 			errorList.add("Please, the account need to be associated with a user.");
 
-		if (errorList != null && !errorList.isEmpty())
+		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
@@ -70,7 +76,7 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 			this.accountParam.setIcon("fa-font-awesome");
 	}
 
-	private void saveAccount() throws BaseException {
+	private void saveAccount() {
 		this.accountRepository.save(this.accountParam);
 	}
 

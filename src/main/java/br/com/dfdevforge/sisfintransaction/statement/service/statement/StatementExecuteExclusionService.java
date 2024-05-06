@@ -34,7 +34,7 @@ public class StatementExecuteExclusionService extends StatementBaseService imple
 			throw new DataForExclusionNotFoundException();
 	}
 
-	private void deleteStatement() throws BaseException {
+	private void deleteStatement() {
 		this.statementRepository.delete(this.statementParam);
 	}
 }

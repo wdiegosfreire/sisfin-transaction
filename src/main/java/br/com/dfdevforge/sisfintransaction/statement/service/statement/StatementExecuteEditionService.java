@@ -61,8 +61,8 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			String description = StringUtils.isBlank(statementItemLoop.getDescriptionNew()) ? statementItemLoop.getDescription() : statementItemLoop.getDescriptionNew();
 
 			ObjectiveEntity objective = new ObjectiveEntity();
-			objective.setObjectiveMovementList(new ArrayList<ObjectiveMovementEntity>());
-			objective.setObjectiveItemList(new ArrayList<ObjectiveItemEntity>());
+			objective.setObjectiveMovementList(new ArrayList<>());
+			objective.setObjectiveItemList(new ArrayList<>());
 			objective.setDescription(description);
 			objective.setLocation(statementItemLoop.getLocation());
 			objective.setUserIdentity(statementItemLoop.getUserIdentity());
@@ -93,7 +93,7 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 		}
 	}
 
-	private void editStatement() throws BaseException {
+	private void editStatement() {
 		this.statementRepository.save(this.statementParam);
 	}
 }

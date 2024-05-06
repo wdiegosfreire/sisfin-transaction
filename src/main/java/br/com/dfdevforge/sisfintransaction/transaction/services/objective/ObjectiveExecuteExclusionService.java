@@ -56,7 +56,7 @@ public class ObjectiveExecuteExclusionService extends ObjectiveBaseService imple
 			this.objectiveItemRepository.delete(objectiveItemDelete);
 	}
 
-	private void deleteObjective() throws BaseException {
+	private void deleteObjective() {
 		this.objectiveRepository.delete(this.objectiveDelete);
 	}
 }

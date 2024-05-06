@@ -55,9 +55,7 @@ public class ImRunning {
 			}
 			
 			Collections.sort(envList);
-			envList.forEach(env -> {
-				statusMessage.append(env);
-			});
+			envList.forEach(statusMessage::append);
 		}
 
 		return statusMessage.toString();

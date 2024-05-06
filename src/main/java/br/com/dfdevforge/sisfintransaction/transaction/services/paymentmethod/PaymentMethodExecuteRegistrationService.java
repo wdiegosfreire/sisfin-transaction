@@ -43,7 +43,7 @@ public class PaymentMethodExecuteRegistrationService extends PaymentMethodBaseSe
 		if (this.paymentMethodParam.getUserIdentity() == null)
 			errorList.add("Please, the payment method need to be associated with a user.");
 
-		if (errorList != null && !errorList.isEmpty())
+		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
@@ -51,13 +51,9 @@ public class PaymentMethodExecuteRegistrationService extends PaymentMethodBaseSe
 		try {
 			this.paymentMethodRepository.save(this.paymentMethodParam);
 		}
-		catch (DataIntegrityViolationException e) {
+		catch (DataIntegrityViolationException | ConstraintViolationException e) {
 			throw new RequiredFieldNotFoundException();
 		}
-		catch (ConstraintViolationException e) {
-			throw new RequiredFieldNotFoundException();
-		}
-		
 	}
 
 	private void findAllPaymentMethods() {

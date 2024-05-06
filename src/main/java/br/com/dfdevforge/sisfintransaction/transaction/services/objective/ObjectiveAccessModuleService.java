@@ -23,7 +23,6 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	@Autowired private ObjectiveRepository objectiveRepository;
 	@Autowired private ObjectiveItemRepository objectiveItemRepository;
 	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
-
 	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 
 	private List<ObjectiveEntity> objectiveListResult = new ArrayList<>();
@@ -58,15 +57,11 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	}
 
 	private void findItemsOfEachObjective() {
-		this.objectiveListResult.forEach(objective -> {
-			objective.setObjectiveItemList(objectiveItemRepository.findByObjective(objective));			
-		});
+		this.objectiveListResult.forEach(objective -> objective.setObjectiveItemList(objectiveItemRepository.findByObjective(objective)));
 	}
 
 	private void findMovementsOfEachObjective() {
-		this.objectiveListResult.forEach(objective -> {
-			objective.setObjectiveMovementList(objectiveMovementRepository.findByObjective(objective));
-		});
+		this.objectiveListResult.forEach(objective -> objective.setObjectiveMovementList(objectiveMovementRepository.findByObjective(objective)));
 	}
 
 	private void identifyMovementOfPeriod() {
