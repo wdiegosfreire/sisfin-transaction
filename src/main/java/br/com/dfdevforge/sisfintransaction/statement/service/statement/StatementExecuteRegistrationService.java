@@ -1,13 +1,10 @@
 package br.com.dfdevforge.sisfintransaction.statement.service.statement;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -24,6 +21,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
@@ -42,17 +40,27 @@ import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovemen
 import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveExecuteRegistrationService;
 
-@Transactional
 @Service
+@RequestScope
+@Transactional
 public class StatementExecuteRegistrationService extends StatementBaseService implements CommonService {
+	private static final String EXTRATO_CONTA_CORRENTE = "Extrato de conta corrente";
+	private static final String FATURA_CARTAO_CREDITO = "Fatura do Cartão de Crédito";
 	private static final String SALDO_ANTERIOR = "Saldo Anterior";
 	private static final String DD_MM_YYYY = "dd/MM/yyyy";
 
-	@Autowired private StatementRepository statementRepository;
-	@Autowired private StatementItemRepository statementItemRepository;
-	@Autowired private StatementPatternRepository statementPatternRepository;
+	private final StatementRepository statementRepository;
+	private final StatementItemRepository statementItemRepository;
+	private final StatementPatternRepository statementPatternRepository;
+	private final ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
 
-	@Autowired private ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
+	@Autowired
+	public StatementExecuteRegistrationService(StatementRepository statementRepository, StatementItemRepository statementItemRepository, StatementPatternRepository statementPatternRepository, ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService) {
+		this.statementRepository = statementRepository;
+		this.statementItemRepository = statementItemRepository;
+		this.statementPatternRepository = statementPatternRepository;
+		this.objectiveExecuteRegistrationService = objectiveExecuteRegistrationService;
+	}
 
 	private byte[] statementByteArray;
 	private String statementExtension;
@@ -70,8 +78,11 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 	public void executeBusinessRule() throws BaseException {
 		this.getFileByteArrayFromBase64();
 		this.getFileExtensionFromBase64();
-		this.createTemporaryStatementFile();
-		this.readTemporaryStatementFile();
+
+//		this.createTemporaryStatementFile()
+//		this.readTemporaryStatementFile()
+		this.createBufferedReaderFromFileByteArray();
+
 		this.importDataFromStatementFile();
 		this.getStatementPatterns();
 
@@ -94,39 +105,88 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			this.statementExtension = ".json";
 	}
 
-	private void createTemporaryStatementFile() {
-		OutputStream outputStream = null;
+	// -----------------------------
+	private void createBufferedReaderFromFileByteArray() {
+		BufferedReader bufferedReader = null;
+		InputStream inputStream = null;
 
 		try {
-			outputStream = new FileOutputStream(new File("target/temp" + this.statementExtension));
-			outputStream.write(this.statementByteArray);
-			outputStream.close();
-		}
-		catch (IOException e) {
-			Utils.log.stackTrace(e);
-		}
-	}
-
-	private void readTemporaryStatementFile() {
-		InputStream inputStream;
-		this.fileContentList.clear();
-
-		try {
-			inputStream = new FileInputStream(new File("target/temp" + this.statementExtension));
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
+			inputStream = new ByteArrayInputStream(this.statementByteArray);
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
 
 			String line = bufferedReader.readLine();
 			while (line != null) {
 				this.fileContentList.add(line);
 				line = bufferedReader.readLine();
 			}
-
-			bufferedReader.close();
 		}
 		catch (IOException e) {
 			Utils.log.stackTrace(e);
 		}
+		finally {
+			try {
+				inputStream.close();
+				bufferedReader.close();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
+	// -----------------------------
+
+//	private void createTemporaryStatementFile() {
+//		OutputStream outputStream = null;
+//
+//		try {
+//			outputStream = new FileOutputStream(new File("target/temp" + this.statementExtension));
+//			outputStream.write(this.statementByteArray);
+//		}
+//		catch (IOException e) {
+//			Utils.log.stackTrace(e);
+//		}
+//		finally {
+//			try {
+//				if (outputStream != null)
+//					outputStream.close();
+//			}
+//			catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
+
+//	private void readTemporaryStatementFile() {
+//		InputStream inputStream = null;
+//		BufferedReader bufferedReader = null;
+//
+//		this.fileContentList.clear();
+//
+//		try {
+//			inputStream = new FileInputStream(new File("target/temp" + this.statementExtension));
+//			bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
+//
+//			String line = bufferedReader.readLine();
+//			while (line != null) {
+//				this.fileContentList.add(line);
+//				line = bufferedReader.readLine();
+//			}
+//		}
+//		catch (IOException e) {
+//			Utils.log.stackTrace(e);
+//		}
+//		finally {
+//			try {
+//				if (inputStream != null)
+//					inputStream.close();
+//				if (bufferedReader != null)
+//					bufferedReader.close();
+//			}
+//			catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 
 	private void importDataFromStatementFile() {
 		try {
@@ -134,7 +194,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 				this.invocarRegraImportarFormatoTxt();
 			}
 			else if (this.statementExtension.equalsIgnoreCase(".csv")) {
-//				new NgcExtratoImportarFormatoCsv(this.statement, this.connectionManager).execute();
+//				new NgcExtratoImportarFormatoCsv(this.statement, this.connectionManager).execute()
 			}
 		}
 		catch (ParseException | BaseException e) {
@@ -210,7 +270,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		 */
 		this.identificarCabecalhoDoExtrato(statement);
 
-		if (this.statementType.equals("Extrato de conta corrente")) {
+		if (this.statementType.equals(EXTRATO_CONTA_CORRENTE)) {
 			this.importarContaCorrente(statement);
 		}
 		else if (this.statementType.equals("Poupança")) {
@@ -221,7 +281,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 				this.importarPoupancaModelTwo(statement);
 			}
 		}
-		else if (this.statementType.equals("Fatura do Cartão de Crédito")) {
+		else if (this.statementType.equals(FATURA_CARTAO_CREDITO)) {
 			this.importarExtratoDoCartaoDeCredito(statement);
 		}
 
@@ -272,8 +332,8 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 
 		for (String fileLine : this.fileContentList) {
 			// Detalhe: conta corrente
-			if (fileLine.indexOf("Extrato de conta corrente") != -1) {
-				this.statementType = "Extrato de conta corrente";
+			if (fileLine.indexOf(EXTRATO_CONTA_CORRENTE) != -1) {
+				this.statementType = EXTRATO_CONTA_CORRENTE;
 				break;
 			}
 
@@ -284,8 +344,8 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			}
 
 			// Detalhe: ourocard
-			else if (fileLine.indexOf("Fatura do Cartão de Crédito") != -1) {
-				this.statementType = "Fatura do Cartão de Crédito";
+			else if (fileLine.indexOf(FATURA_CARTAO_CREDITO) != -1) {
+				this.statementType = FATURA_CARTAO_CREDITO;
 				break;
 			}
 		}
@@ -299,7 +359,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		boolean periodStatementFound = Boolean.FALSE;
 
 		// Detalhe: se o tipo do extrato for a conta corrente
-		if (this.statementType.equals("Extrato de conta corrente")) {
+		if (this.statementType.equals(EXTRATO_CONTA_CORRENTE)) {
 			for (String fileLine : this.fileContentList) {
 				if (fileLine.toUpperCase().indexOf(SALDO_ANTERIOR.toUpperCase()) != -1) {
 					// Detalhe: criar um Calendar para executar as operaes com data
@@ -349,7 +409,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		}
 
 		// Detalhe: se o tipo do extrato for a fatura ourocard
-		else if (this.statementType.equals("Fatura do Cartão de Crédito")) {
+		else if (this.statementType.equals(FATURA_CARTAO_CREDITO)) {
 			for (String fileLine : this.fileContentList) {
 				if (fileLine.indexOf("Vencimento") != -1) {
 					// Detalhe: criar um Calendar para executar as operaes com data
@@ -701,7 +761,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 	private BigDecimal toUsaNumberFormat(String valor) {
 		boolean isBraFormat = false;
 
-		String temp[] = valor.split("");
+		String[] temp = valor.split("");
 		for (int i = 0; i < temp.length; i++)
 		{
 			if (temp[i].equals(","))
