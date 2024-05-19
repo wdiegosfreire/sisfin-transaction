@@ -23,9 +23,7 @@ public class LocationRepositoryCustomized {
 		whereClause.append(" loc.userIdentity = :userIdentity ");
 
 		whereClause.append(" and ( ");
-		whereClause.append("   loc.cnpj like :filter ");
-		whereClause.append("   or loc.name like :filter ");
-		whereClause.append("   or loc.branch like :filter ");
+		whereClause.append("   loc.name like :filter ");
 		whereClause.append("   or loc.note like :filter ");
 		whereClause.append(" ) ");
 
