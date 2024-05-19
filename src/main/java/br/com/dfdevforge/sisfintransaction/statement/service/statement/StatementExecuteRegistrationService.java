@@ -44,10 +44,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.services.objective.Object
 @RequestScope
 @Transactional
 public class StatementExecuteRegistrationService extends StatementBaseService implements CommonService {
+	private static final String EXECECAO_NAO_IDENTIFICADA = "Exceção não Identificada";
 	private static final String EXTRATO_CONTA_CORRENTE = "Extrato de conta corrente";
 	private static final String FATURA_CARTAO_CREDITO = "Fatura do Cartão de Crédito";
 	private static final String SALDO_ANTERIOR = "Saldo Anterior";
 	private static final String DD_MM_YYYY = "dd/MM/yyyy";
+	private static final String POUPANCA = "Poupança";
 
 	private final StatementRepository statementRepository;
 	private final StatementItemRepository statementItemRepository;
@@ -78,11 +80,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 	public void executeBusinessRule() throws BaseException {
 		this.getFileByteArrayFromBase64();
 		this.getFileExtensionFromBase64();
-
-//		this.createTemporaryStatementFile()
-//		this.readTemporaryStatementFile()
 		this.createBufferedReaderFromFileByteArray();
-
 		this.importDataFromStatementFile();
 		this.getStatementPatterns();
 
@@ -129,64 +127,10 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 				bufferedReader.close();
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				Utils.log.stackTrace(e);
 			}
 		}
 	}
-	// -----------------------------
-
-//	private void createTemporaryStatementFile() {
-//		OutputStream outputStream = null;
-//
-//		try {
-//			outputStream = new FileOutputStream(new File("target/temp" + this.statementExtension));
-//			outputStream.write(this.statementByteArray);
-//		}
-//		catch (IOException e) {
-//			Utils.log.stackTrace(e);
-//		}
-//		finally {
-//			try {
-//				if (outputStream != null)
-//					outputStream.close();
-//			}
-//			catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-
-//	private void readTemporaryStatementFile() {
-//		InputStream inputStream = null;
-//		BufferedReader bufferedReader = null;
-//
-//		this.fileContentList.clear();
-//
-//		try {
-//			inputStream = new FileInputStream(new File("target/temp" + this.statementExtension));
-//			bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
-//
-//			String line = bufferedReader.readLine();
-//			while (line != null) {
-//				this.fileContentList.add(line);
-//				line = bufferedReader.readLine();
-//			}
-//		}
-//		catch (IOException e) {
-//			Utils.log.stackTrace(e);
-//		}
-//		finally {
-//			try {
-//				if (inputStream != null)
-//					inputStream.close();
-//				if (bufferedReader != null)
-//					bufferedReader.close();
-//			}
-//			catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
 
 	private void importDataFromStatementFile() {
 		try {
@@ -273,7 +217,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		if (this.statementType.equals(EXTRATO_CONTA_CORRENTE)) {
 			this.importarContaCorrente(statement);
 		}
-		else if (this.statementType.equals("Poupança")) {
+		else if (this.statementType.equals(POUPANCA)) {
 			try {
 				this.importarPoupancaModelOne(statement);
 			}
@@ -317,7 +261,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		}
 
 		if (!bankTypeFound)
-			throw new BaseException("Exceção não Identificada", "Create a BankTypeNotFoundException");
+			throw new BaseException(EXECECAO_NAO_IDENTIFICADA, "Create a BankTypeNotFoundException");
 
 		/* Regra:
 		 * Identificar o tipo de extrato
@@ -339,7 +283,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 
 			// Detalhe: poupança
 			else if (fileLine.indexOf("Variação:") != -1) {
-				this.statementType = "Poupança";
+				this.statementType = POUPANCA;
 				break;
 			}
 
@@ -351,7 +295,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		}
 
 		if (!bankStatementFound)
-			throw new BaseException("Exceção não Identificada", "Create a BankStatementNotFoundException");
+			throw new BaseException(EXECECAO_NAO_IDENTIFICADA, "Create a BankStatementNotFoundException");
 
 		/* Regra:
 		 * Identificar a competencia
@@ -384,7 +328,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		}
 
 		// Detalhe: se o tipo do extrato for a poupança
-		else if (this.statementType.equals("Poupança")) {
+		else if (this.statementType.equals(POUPANCA)) {
 			for (String fileLine : this.fileContentList) {
 				if (fileLine.toUpperCase().indexOf(SALDO_ANTERIOR.toUpperCase()) != -1) {
 					// Detalhe: criar um Calendar para executar as operaes com data
@@ -431,7 +375,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		}
 
 		if (!periodStatementFound)
-			throw new BaseException("Exceção não Identificada", "Create a PeriodStatementNotFoundException");
+			throw new BaseException(EXECECAO_NAO_IDENTIFICADA, "Create a PeriodStatementNotFoundException");
 	}
 
 	private void importarContaCorrente(StatementEntity statement) throws ParseException, ArrayIndexOutOfBoundsException
