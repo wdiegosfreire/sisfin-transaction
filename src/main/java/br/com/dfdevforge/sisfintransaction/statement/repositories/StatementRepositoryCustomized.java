@@ -38,7 +38,7 @@ public class StatementRepositoryCustomized {
 
 		StringBuilder jpql = new StringBuilder();
 
-		jpql.append("select sta from StatementEntity as sta where " + whereClause);
+		jpql.append("select sta from StatementEntity as sta where " + whereClause + " order by sta.year, sta.month");
 
 		var query = this.entityManager.createQuery(jpql.toString(), StatementEntity.class);
 

@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -19,11 +20,14 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
+import br.com.dfdevforge.sisfintransaction.commons.exceptions.DebugException;
+import br.com.dfdevforge.sisfintransaction.commons.exceptions.UniqueConstraintException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.statement.entities.BankEntity;
@@ -78,13 +82,22 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
-		this.getFileByteArrayFromBase64();
-		this.getFileExtensionFromBase64();
-		this.createBufferedReaderFromFileByteArray();
-		this.importDataFromStatementFile();
-		this.getStatementPatterns();
-
-		this.exportIdentifiableStatementItems();
+		try {
+			this.getFileByteArrayFromBase64();
+			this.getFileExtensionFromBase64();
+			this.createBufferedReaderFromFileByteArray();
+			this.importDataFromStatementFile();
+			this.getStatementPatterns();
+			this.exportIdentifiableStatementItems();
+		}
+		catch (ParseException | IOException e) {
+			Utils.log.stackTrace(e);
+			throw new DebugException(e.getClass().toString(), Arrays.toString(e.getStackTrace()));
+		}
+		catch (DataIntegrityViolationException e) {
+			Utils.log.stackTrace(e);
+			throw new UniqueConstraintException();
+		}
 	}
 
 	@Override
@@ -103,46 +116,29 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			this.statementExtension = ".json";
 	}
 
-	// -----------------------------
-	private void createBufferedReaderFromFileByteArray() {
+	private void createBufferedReaderFromFileByteArray() throws IOException {
 		BufferedReader bufferedReader = null;
 		InputStream inputStream = null;
 
-		try {
-			inputStream = new ByteArrayInputStream(this.statementByteArray);
-			bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
+		inputStream = new ByteArrayInputStream(this.statementByteArray);
+		bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
 
-			String line = bufferedReader.readLine();
-			while (line != null) {
-				this.fileContentList.add(line);
-				line = bufferedReader.readLine();
-			}
+		String line = bufferedReader.readLine();
+		while (line != null) {
+			this.fileContentList.add(line);
+			line = bufferedReader.readLine();
 		}
-		catch (IOException e) {
-			Utils.log.stackTrace(e);
-		}
-		finally {
-			try {
-				inputStream.close();
-				bufferedReader.close();
-			}
-			catch (IOException e) {
-				Utils.log.stackTrace(e);
-			}
-		}
+
+		inputStream.close();
+		bufferedReader.close();
 	}
 
-	private void importDataFromStatementFile() {
-		try {
-			if (this.statementExtension.equalsIgnoreCase(".txt")) {
-				this.invocarRegraImportarFormatoTxt();
-			}
-			else if (this.statementExtension.equalsIgnoreCase(".csv")) {
-//				new NgcExtratoImportarFormatoCsv(this.statement, this.connectionManager).execute()
-			}
+	private void importDataFromStatementFile() throws ParseException, BaseException {
+		if (this.statementExtension.equalsIgnoreCase(".txt")) {
+			this.invocarRegraImportarFormatoTxt();
 		}
-		catch (ParseException | BaseException e) {
-			Utils.log.stackTrace(e);
+		else if (this.statementExtension.equalsIgnoreCase(".csv")) {
+//				new NgcExtratoImportarFormatoCsv(this.statement, this.connectionManager).execute()
 		}
 	}
 
