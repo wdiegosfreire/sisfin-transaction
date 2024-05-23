@@ -96,7 +96,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		}
 		catch (DataIntegrityViolationException e) {
 			Utils.log.stackTrace(e);
-			throw new UniqueConstraintException();
+			throw new DebugException(e.getClass().toString(), Arrays.toString(e.getStackTrace()));
 		}
 	}
 
