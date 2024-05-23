@@ -27,7 +27,6 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DebugException;
-import br.com.dfdevforge.sisfintransaction.commons.exceptions.UniqueConstraintException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.statement.entities.BankEntity;

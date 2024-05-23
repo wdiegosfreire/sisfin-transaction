@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
@@ -20,6 +21,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMov
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRepository;
 
 @Service
+@RequestScope
 public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService implements CommonService {
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveItemRepository objectiveItemRepository;
