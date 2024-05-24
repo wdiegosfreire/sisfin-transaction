@@ -2,6 +2,8 @@ package br.com.dfdevforge.sisfintransaction.transaction.services.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
@@ -9,6 +11,8 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepos
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepositoryCustomized;
 
 @Service
+@RequestScope
+@Transactional
 public class AccountExecuteSearchService extends AccountBaseService implements CommonService {
 	@Autowired private AccountRepository accountRepository;
 	@Autowired private AccountRepositoryCustomized accountRepositoryCustomized;

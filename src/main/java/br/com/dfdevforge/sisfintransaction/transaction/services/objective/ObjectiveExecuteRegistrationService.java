@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -22,6 +23,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRep
 
 @Service
 @RequestScope
+@Transactional
 public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService implements CommonService {
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveItemRepository objectiveItemRepository;

@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
@@ -12,6 +14,8 @@ import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntit
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementTypeRepository;
 
 @Service
+@RequestScope
+@Transactional
 public class StatementTypeExecuteEditionService extends StatementTypeBaseService implements CommonService {
 	@Autowired private StatementTypeRepository statementTypeRepository;
 

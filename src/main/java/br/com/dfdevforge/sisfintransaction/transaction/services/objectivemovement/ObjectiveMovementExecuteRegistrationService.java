@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
@@ -22,6 +24,8 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMov
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRepository;
 
 @Service
+@RequestScope
+@Transactional
 public class ObjectiveMovementExecuteRegistrationService extends ObjectiveMovementBaseService implements CommonService {
 	private BigDecimal installmentValue;
 	private BigDecimal installmentDiference;
