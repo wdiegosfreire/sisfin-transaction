@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
@@ -93,10 +92,6 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			Utils.log.stackTrace(e);
 			throw new DebugException(e.getClass().toString(), Arrays.toString(e.getStackTrace()));
 		}
-		catch (DataIntegrityViolationException e) {
-			Utils.log.stackTrace(e);
-			throw new DebugException(e.getClass().toString(), Arrays.toString(e.getStackTrace()));
-		}
 	}
 
 	@Override
@@ -137,7 +132,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			this.invocarRegraImportarFormatoTxt();
 		}
 		else if (this.statementExtension.equalsIgnoreCase(".csv")) {
-//				new NgcExtratoImportarFormatoCsv(this.statement, this.connectionManager).execute()
+//			new NgcExtratoImportarFormatoCsv(this.statement, this.connectionManager).execute()
 		}
 	}
 
