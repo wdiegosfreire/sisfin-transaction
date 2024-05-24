@@ -7,6 +7,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
@@ -21,6 +23,8 @@ import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovemen
 import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveExecuteRegistrationService;
 
 @Service
+@RequestScope
+@Transactional
 public class StatementExecuteEditionService extends StatementBaseService implements CommonService {
 	@Autowired private StatementRepository statementRepository;
 	@Autowired private StatementItemRepository statementItemRepository;

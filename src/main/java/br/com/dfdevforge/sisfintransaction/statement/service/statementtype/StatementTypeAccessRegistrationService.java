@@ -1,11 +1,15 @@
 package br.com.dfdevforge.sisfintransaction.statement.service.statementtype;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 
 @Service
+@RequestScope
+@Transactional
 public class StatementTypeAccessRegistrationService extends StatementTypeBaseService implements CommonService {
 
 	@Override
