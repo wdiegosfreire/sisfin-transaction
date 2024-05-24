@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
-import br.com.dfdevforge.sisfintransaction.commons.exceptions.UniqueConstraintException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
 
@@ -52,13 +50,8 @@ public class LocationExecuteRegistrationService extends LocationBaseService impl
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
-	private void saveLocation() throws UniqueConstraintException {
-		try {
-			this.locationRepository.save(this.locationParam);
-		}
-		catch (DataIntegrityViolationException e) {
-			throw new UniqueConstraintException();
-		}
+	private void saveLocation() {
+		this.locationRepository.save(this.locationParam);
 	}
 
 	private void findAllLocations() {

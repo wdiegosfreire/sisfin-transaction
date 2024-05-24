@@ -26,7 +26,7 @@ public class LogUtils {
 		LOGGER.warn(LOGGER_PATTERN, message);
 	}
 
-	public void stackTrace(Exception exception) {
+	public String stackTrace(Exception exception) {
 		final String TAB = "\t";
 		final String BREAK = "\n";
 		Date now = new Date();
@@ -42,5 +42,7 @@ public class LogUtils {
 
 		this.error("Inicio log " + now.getTime() + BREAK + BREAK + stackTrace.toString());
 		this.error("Fim log " + now.getTime() + BREAK);
+
+		return stackTrace.toString();
 	}
 }
