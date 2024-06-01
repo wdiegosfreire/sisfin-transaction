@@ -1,9 +1,11 @@
 package br.com.dfdevforge.sisfintransaction.transaction.services.objective;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,10 +26,18 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRep
 @RequestScope
 @Transactional
 public class ObjectiveAccessModuleService extends ObjectiveBaseService implements CommonService {
-	@Autowired private ObjectiveRepository objectiveRepository;
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
-	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+	private final ObjectiveRepository objectiveRepository;
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+	private final ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+
+	@Autowired
+	public ObjectiveAccessModuleService(ObjectiveRepository objectiveRepository, ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized) {
+		this.objectiveRepository = objectiveRepository;
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+		this.objectiveMovementRepositoryCustomized = objectiveMovementRepositoryCustomized;
+	}
 
 	private List<ObjectiveEntity> objectiveListResult = new ArrayList<>();
 	private List<ObjectiveMovementEntity> objectiveMovementListInPeriod = new ArrayList<>();
@@ -39,6 +49,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 		this.findItemsOfEachObjective();
 		this.findMovementsOfEachObjective();
 		this.identifyMovementOfPeriod();
+		this.sortObjectivesBySortDate();
 	}
 
 	@Override
@@ -53,9 +64,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 
 	private void findObjectivesRelatedToMovementsInPeriod() {
 		List<Long> objectiveIdentityList = new ArrayList<>();
-		this.objectiveMovementListInPeriod.forEach(objectiveMovement -> {
-			objectiveIdentityList.add(objectiveMovement.getObjective().getIdentity());
-		});
+		this.objectiveMovementListInPeriod.forEach(objectiveMovement -> objectiveIdentityList.add(objectiveMovement.getObjective().getIdentity()));
 
 		this.objectiveListResult = objectiveRepository.findByIdentityIn(objectiveIdentityList);
 	}
@@ -69,16 +78,22 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	}
 
 	private void identifyMovementOfPeriod() {
-		int selectedPeriod = Utils.date.getPeriodOf(objectiveParam.getObjectiveMovementList().get(0).getPaymentDate());
+		int selectedPeriod = Utils.date.getPeriodOf(this.objectiveParam.getObjectiveMovementList().get(0).getPaymentDate());
 
 		for (ObjectiveEntity objective : this.objectiveListResult) {
 			for (ObjectiveMovementEntity objectiveMovement : objective.getObjectiveMovementList()) {
 				Date movementDate = (objectiveMovement.getPaymentDate() != null ? objectiveMovement.getPaymentDate() : objectiveMovement.getDueDate());
 				int movementPeriod = Utils.date.getPeriodOf(movementDate);
 
-				if (movementPeriod == selectedPeriod)
+				if (movementPeriod == selectedPeriod) {
 					objectiveMovement.setInPeriod(true);
+					objective.setSortDate(movementDate);
+				}
 			}
 		}
+	}
+
+	private void sortObjectivesBySortDate() {
+		this.objectiveListResult = this.objectiveListResult.stream().sorted(Comparator.comparing(ObjectiveEntity::getSortDate)).collect(Collectors.toList());
 	}
 }
