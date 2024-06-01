@@ -1,5 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.transaction.entities;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -52,4 +53,7 @@ public class ObjectiveEntity extends BaseEntity {
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;
+
+	@Transient
+	private Date sortDate;
 }
