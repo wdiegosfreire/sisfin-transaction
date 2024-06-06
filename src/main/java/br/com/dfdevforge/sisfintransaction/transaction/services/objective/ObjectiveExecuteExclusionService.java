@@ -21,9 +21,16 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRep
 @RequestScope
 @Transactional
 public class ObjectiveExecuteExclusionService extends ObjectiveBaseService implements CommonService {
-	@Autowired private ObjectiveRepository objectiveRepository;
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
+	private final ObjectiveRepository objectiveRepository;
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+
+	@Autowired
+	public ObjectiveExecuteExclusionService(ObjectiveRepository objectiveRepository, ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository) {
+		this.objectiveRepository = objectiveRepository;
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+	}
 
 	private ObjectiveEntity objectiveDelete;
 
@@ -46,15 +53,18 @@ public class ObjectiveExecuteExclusionService extends ObjectiveBaseService imple
 
 		if (this.objectiveDelete == null)
 			throw new DataForExclusionNotFoundException();
+
+		this.objectiveDelete.setObjectiveMovementList(this.objectiveMovementRepository.findByObjective(this.objectiveDelete));
+		this.objectiveDelete.setObjectiveItemList(this.objectiveItemRepository.findByObjective(this.objectiveDelete));
 	}
 
 	private void deleteAllMovementsByObjective() {
-		for (ObjectiveMovementEntity objectiveMovementDelete : this.objectiveParam.getObjectiveMovementList())
+		for (ObjectiveMovementEntity objectiveMovementDelete : this.objectiveDelete.getObjectiveMovementList())
 			this.objectiveMovementRepository.delete(objectiveMovementDelete);
 	}
 
 	private void deleteAllItemsByObjective() {
-		for (ObjectiveItemEntity objectiveItemDelete : this.objectiveParam.getObjectiveItemList())
+		for (ObjectiveItemEntity objectiveItemDelete : this.objectiveDelete.getObjectiveItemList())
 			this.objectiveItemRepository.delete(objectiveItemDelete);
 	}
 
