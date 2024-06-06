@@ -27,7 +27,7 @@ public abstract class LocationBaseService extends BaseService {
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
 
-			if (this.locationParam.getUserIdentity() != userValidatedByToken.getIdentity())
+			if (!this.locationParam.getUserIdentity().equals(userValidatedByToken.getIdentity()))
 				throw new UserUnauthorizedException();
 		}
 		catch (FeignException e) {

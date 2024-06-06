@@ -28,28 +28,30 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
 	}
 
-	@ExceptionHandler({UserUnauthorizedException.class})
-	public ResponseEntity<String> httpUnauthorizedExceptionHandler(Exception exception, HttpServletRequest request) {
-		Utils.log.stackTrace(exception);
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(this.handleExceptionMessage(exception));
-	}
-
 	@ExceptionHandler({UniqueConstraintException.class, DataIntegrityViolationException.class})
-	public ResponseEntity<String> httpBadRequestExceptionHandler(Exception exception, HttpServletRequest request) {
+	public ResponseEntity<String> exceptionHandler(Exception exception, HttpServletRequest request) {
 		Utils.log.stackTrace(exception);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(this.handleExceptionMessage(exception));
+		return this.handleExceptionMessage(exception);
 	}
 
-	private String handleExceptionMessage(Exception exception) {
-		String message = "";
+	private ResponseEntity<String> handleExceptionMessage(Exception exception) {
+		ResponseEntity<String> responseEntity = null;
+		
+		exception.getCause().getCause().getMessage();
 
-		if (exception instanceof DataIntegrityViolationException && exception.getMessage().contains("constraint") && exception.getMessage().contains("un_"))
-			message = new UniqueConstraintException().getMessage();
-		else if (exception instanceof UserUnauthorizedException)
-			message = exception.getMessage();
-		else
-			message = Utils.log.stackTrace(exception);
+		if (exception instanceof DataIntegrityViolationException) {
+			if (exception.getCause().getCause().getMessage().contains("Duplicate entry"))
+				responseEntity = new ResponseEntity<>(new UniqueConstraintException().getMessage(), HttpStatus.BAD_REQUEST);
+			else if (exception.getCause().getCause().getMessage().contains("Cannot delete or update a parent row"))
+				responseEntity = new ResponseEntity<>(new ForeignKeyConstraintException().getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		else if (exception instanceof UserUnauthorizedException) {
+			responseEntity = new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+		}
+		else {
+			responseEntity = new ResponseEntity<>(Utils.log.stackTrace(exception), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-		return message;
+		return responseEntity;
 	}
 }

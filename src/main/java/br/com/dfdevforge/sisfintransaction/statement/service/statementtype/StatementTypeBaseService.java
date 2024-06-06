@@ -27,7 +27,7 @@ public abstract class StatementTypeBaseService extends BaseService {
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
 
-			if (this.statementTypeParam.getUserIdentity() != userValidatedByToken.getIdentity())
+			if (!this.statementTypeParam.getUserIdentity().equals(userValidatedByToken.getIdentity()))
 				throw new UserUnauthorizedException();
 		}
 		catch (FeignException e) {
