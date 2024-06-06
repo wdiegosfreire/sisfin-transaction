@@ -33,9 +33,9 @@ import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementItemEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementPatternEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntity;
-import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementItemRepository;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementPatternRepository;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepository;
+import br.com.dfdevforge.sisfintransaction.statement.service.statementitem.StatementItemExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveItemEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
@@ -54,16 +54,16 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 	private static final String POUPANCA = "Poupança";
 
 	private final StatementRepository statementRepository;
-	private final StatementItemRepository statementItemRepository;
 	private final StatementPatternRepository statementPatternRepository;
 	private final ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
+	private final StatementItemExecuteRegistrationService statementItemExecuteRegistrationService;
 
 	@Autowired
-	public StatementExecuteRegistrationService(StatementRepository statementRepository, StatementItemRepository statementItemRepository, StatementPatternRepository statementPatternRepository, ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService) {
+	public StatementExecuteRegistrationService(StatementRepository statementRepository, StatementPatternRepository statementPatternRepository, ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService, StatementItemExecuteRegistrationService statementItemExecuteRegistrationService) {
 		this.statementRepository = statementRepository;
-		this.statementItemRepository = statementItemRepository;
 		this.statementPatternRepository = statementPatternRepository;
 		this.objectiveExecuteRegistrationService = objectiveExecuteRegistrationService;
+		this.statementItemExecuteRegistrationService = statementItemExecuteRegistrationService;
 	}
 
 	private byte[] statementByteArray;
@@ -150,7 +150,6 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 
 				this.createAndSaveObjectiveFromStatement(statementItem, statementPattern, paymentMethodDefault);
 				this.updateStatementItemToExported(statementItem);
-				
 			}
 		}
 	}
@@ -188,9 +187,11 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		this.objectiveExecuteRegistrationService.execute();
 	}
 
-	private void updateStatementItemToExported(StatementItemEntity statementItem) {
+	private void updateStatementItemToExported(StatementItemEntity statementItem) throws BaseException {
 		statementItem.setIsExported(Boolean.TRUE);
-		statementItemRepository.save(statementItem);
+
+		this.statementItemExecuteRegistrationService.setParams(statementItem, token);
+		this.statementItemExecuteRegistrationService.execute();
 	}
 
 	private void invocarRegraImportarFormatoTxt() throws ParseException, BaseException {
@@ -232,7 +233,8 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			statementItemLoop.setUserIdentity(statement.getUserIdentity());
 			statementItemLoop.setIsExported(Boolean.FALSE);
 
-			statementItemRepository.save(statementItemLoop);
+			this.statementItemExecuteRegistrationService.setParams(statementItemLoop, token);
+			this.statementItemExecuteRegistrationService.execute();
 		}
 	}
 
@@ -424,11 +426,11 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		 * movimento  sempre do ultimo dia do mes anterior, assim deve ser ajustada
 		 * sempre para o primeiro dia do mes de competencia.
 		 */
-		Calendar c = new GregorianCalendar();
-		c.setTime(statement.getStatementItemList().get(0).getMovementDate());
-		c.add(Calendar.MONTH, 1);
-		c.set(Calendar.DAY_OF_MONTH, 1);
-		statement.getStatementItemList().get(0).setMovementDate(c.getTime());
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(statement.getStatementItemList().get(0).getMovementDate());
+		calendar.add(Calendar.MONTH, 1);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		statement.getStatementItemList().get(0).setMovementDate(calendar.getTime());
 	}
 
 	private void importarPoupancaModelOne(StatementEntity statement) throws ParseException

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,8 +56,8 @@ public class StatementEntity extends BaseEntity {
 	@JoinColumn(name = "stt_identity")
 	private StatementTypeEntity statementType;
 
-	@Transient
-	@OneToMany
+//	@Transient
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "statement")
 	private List<StatementItemEntity> statementItemList;
 
 	@Column(name = "usr_identity")

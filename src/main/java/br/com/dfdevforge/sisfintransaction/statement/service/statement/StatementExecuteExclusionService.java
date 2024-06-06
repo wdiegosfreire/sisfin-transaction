@@ -11,17 +11,29 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForExclusionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
+import br.com.dfdevforge.sisfintransaction.statement.entities.StatementItemEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepository;
+import br.com.dfdevforge.sisfintransaction.statement.service.statementitem.StatementItemExecuteExclusionService;
 
 @Service
 @RequestScope
 @Transactional
 public class StatementExecuteExclusionService extends StatementBaseService implements CommonService {
-	@Autowired private StatementRepository statementRepository;
+	private final StatementRepository statementRepository;
+	private final StatementItemExecuteExclusionService statementItemExecuteExclusionService;
+
+	private StatementEntity statementDelete;
+
+	@Autowired
+	public StatementExecuteExclusionService(StatementRepository statementRepository, StatementItemExecuteExclusionService statementItemExecuteExclusionService) {
+		this.statementRepository = statementRepository;
+		this.statementItemExecuteExclusionService = statementItemExecuteExclusionService;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
-		this.findById();
+		this.findByIdentity();
+		this.deleteAllItemsByStatement();
 		this.deleteStatement();
 	}
 
@@ -31,14 +43,21 @@ public class StatementExecuteExclusionService extends StatementBaseService imple
 		return super.returnBusinessData();
 	}
 
-	private void findById() throws DataForExclusionNotFoundException {
-		StatementEntity statement = this.statementRepository.findByIdentity(this.statementParam.getIdentity());
+	private void findByIdentity() throws DataForExclusionNotFoundException {
+		this.statementDelete = this.statementRepository.findByIdentity(this.statementParam.getIdentity());
 
-		if (statement == null)
+		if (this.statementDelete == null)
 			throw new DataForExclusionNotFoundException();
 	}
 
+	private void deleteAllItemsByStatement() throws BaseException {
+		for (StatementItemEntity statementItemDelete : this.statementDelete.getStatementItemList()) {
+			this.statementItemExecuteExclusionService.setParams(statementItemDelete, this.token);
+			this.statementItemExecuteExclusionService.execute();
+		}
+	}
+
 	private void deleteStatement() {
-		this.statementRepository.delete(this.statementParam);
+		this.statementRepository.delete(this.statementDelete);
 	}
 }
