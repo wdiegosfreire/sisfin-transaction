@@ -24,14 +24,24 @@ import br.com.dfdevforge.sisfintransaction.transaction.services.objective.Object
 public class ObjectiveResource {
 	private ResourceDataEntity resourceData = new ResourceDataEntity();
 
-	@Autowired private ObjectiveAccessModuleService objectiveAccessModuleService;
-	@Autowired private ObjectiveAccessEditionService objectiveAccessEditionService;
-	@Autowired private ObjectiveAccessRegistrationService objectiveAccessRegistrationService;
+	private final ObjectiveAccessModuleService objectiveAccessModuleService;
+	private final ObjectiveAccessEditionService objectiveAccessEditionService;
+	private final ObjectiveAccessRegistrationService objectiveAccessRegistrationService;
+	private final ObjectiveExecuteSearchService objectiveExecuteSearchService;
+	private final ObjectiveExecuteEditionService objectiveExecuteEditionService;
+	private final ObjectiveExecuteExclusionService objectiveExecuteExclusionService;
+	private final ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
 
-	@Autowired private ObjectiveExecuteSearchService objectiveExecuteSearchService;
-	@Autowired private ObjectiveExecuteEditionService objectiveExecuteEditionService;
-	@Autowired private ObjectiveExecuteExclusionService objectiveExecuteExclusionService;
-	@Autowired private ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
+	@Autowired
+	public ObjectiveResource(ObjectiveAccessModuleService objectiveAccessModuleService, ObjectiveAccessEditionService objectiveAccessEditionService, ObjectiveAccessRegistrationService objectiveAccessRegistrationService, ObjectiveExecuteSearchService objectiveExecuteSearchService, ObjectiveExecuteEditionService objectiveExecuteEditionService, ObjectiveExecuteExclusionService objectiveExecuteExclusionService, ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService) {
+		this.objectiveAccessModuleService = objectiveAccessModuleService;
+		this.objectiveAccessEditionService = objectiveAccessEditionService;
+		this.objectiveAccessRegistrationService = objectiveAccessRegistrationService;
+		this.objectiveExecuteSearchService = objectiveExecuteSearchService;
+		this.objectiveExecuteEditionService = objectiveExecuteEditionService;
+		this.objectiveExecuteExclusionService = objectiveExecuteExclusionService;
+		this.objectiveExecuteRegistrationService = objectiveExecuteRegistrationService;
+	}
 
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody ObjectiveEntity objective, @RequestParam String token) throws BaseException {

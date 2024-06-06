@@ -17,18 +17,7 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
 	}
 
-	@ExceptionHandler({
-		DebugException.class,
-		ForeignKeyConstraintException.class,
-		ArrayIndexOutOfBoundsException.class,
-		RequiredFieldNotFoundException.class,
-		ChildrenInformationFoundException.class
-	})
-	public ResponseEntity<String> httpInternalServerErrorExceptionHandler(HttpStatusInternalServerError exception, HttpServletRequest request) {
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
-	}
-
-	@ExceptionHandler({UniqueConstraintException.class, DataIntegrityViolationException.class})
+	@ExceptionHandler({Exception.class})
 	public ResponseEntity<String> exceptionHandler(Exception exception, HttpServletRequest request) {
 		Utils.log.stackTrace(exception);
 		return this.handleExceptionMessage(exception);
@@ -36,8 +25,6 @@ public class ResourceExceptionHandler {
 
 	private ResponseEntity<String> handleExceptionMessage(Exception exception) {
 		ResponseEntity<String> responseEntity = null;
-		
-		exception.getCause().getCause().getMessage();
 
 		if (exception instanceof DataIntegrityViolationException) {
 			if (exception.getCause().getCause().getMessage().contains("Duplicate entry"))
