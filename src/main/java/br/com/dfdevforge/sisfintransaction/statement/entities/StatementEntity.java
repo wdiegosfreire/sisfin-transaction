@@ -56,7 +56,6 @@ public class StatementEntity extends BaseEntity {
 	@JoinColumn(name = "stt_identity")
 	private StatementTypeEntity statementType;
 
-//	@Transient
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "statement")
 	private List<StatementItemEntity> statementItemList;
 
