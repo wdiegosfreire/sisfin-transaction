@@ -27,7 +27,7 @@ public abstract class PaymentMethodBaseService extends BaseService {
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
 
-			if (this.paymentMethodParam.getUserIdentity() != userValidatedByToken.getIdentity())
+			if (!this.paymentMethodParam.getUserIdentity().equals(userValidatedByToken.getIdentity()))
 				throw new UserUnauthorizedException();
 		}
 		catch (FeignException e) {

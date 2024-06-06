@@ -27,7 +27,7 @@ public abstract class ObjectiveMovementBaseService extends BaseService {
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
 
-			if (this.objectiveMovementParam.getUserIdentity() != userValidatedByToken.getIdentity())
+			if (!this.objectiveMovementParam.getUserIdentity().equals(userValidatedByToken.getIdentity()))
 				throw new UserUnauthorizedException();
 		}
 		catch (FeignException e) {

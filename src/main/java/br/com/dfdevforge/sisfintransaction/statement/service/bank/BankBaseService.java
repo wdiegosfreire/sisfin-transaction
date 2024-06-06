@@ -27,7 +27,7 @@ public abstract class BankBaseService extends BaseService {
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
 
-			if (this.bankParam.getUserIdentity() != userValidatedByToken.getIdentity())
+			if (!this.bankParam.getUserIdentity().equals(userValidatedByToken.getIdentity()))
 				throw new UserUnauthorizedException();
 		}
 		catch (FeignException e) {

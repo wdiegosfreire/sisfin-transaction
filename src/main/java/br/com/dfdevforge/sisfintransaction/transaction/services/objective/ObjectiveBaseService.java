@@ -29,7 +29,7 @@ public abstract class ObjectiveBaseService extends BaseService {
 		try {
 			userValidatedByToken = this.userFeignClient.validateToken(this.token);
 
-			if (this.objectiveParam.getUserIdentity() != userValidatedByToken.getIdentity())
+			if (!this.objectiveParam.getUserIdentity().equals(userValidatedByToken.getIdentity()))
 				throw new UserUnauthorizedException();
 		}
 		catch (FeignException e) {
