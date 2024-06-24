@@ -138,6 +138,6 @@ public class ObjectiveMovementExecuteRegistrationService extends ObjectiveMoveme
 	}
 
 	private void findAllObjectiveMovements() {
-		this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam));
+		this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam.getPaymentDate(), this.objectiveMovementParam.getUserIdentity()));
 	}
 }
