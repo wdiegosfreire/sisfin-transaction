@@ -107,6 +107,32 @@ public class DateUtils {
 	}
 
 	/**
+	 * <p>Tem a finalidade de converter o valor de um <i>java.util.Date</i> para uma String formatada, de acordo com as regras descritas a seguir:</p>
+	 * 
+	 * <ul>
+	 *   <li>Se a data a ser convertida for nula, entao retorna <i>null</i>;</li>
+	 *   <li>Se o enum de padroes de data for nulo, entao a conversao sera no padrao <i>dd/MM/yyyy</i>;</li>
+	 *   <li>Metodo <i>null safe</i>.</li>
+	 * </ul>
+	 * 
+	 * @param dateString data armazenada em String a ser convertida
+	 * @param datePatternEnum enum de padroes de data
+	 * 
+	 * @return objeto <i>Date</i> convertido a partir da <i>String</i> fornecida
+	 */
+	public String toStringFromDate(Date dateObject, DatePatternEnum datePatternEnum) {
+		if (dateObject == null)
+			return null;
+
+		if (datePatternEnum == null)
+			datePatternEnum = DatePatternEnum.PT_BR_BARS_DIA_MES_ANO;
+
+		DateFormat dateFormat = new SimpleDateFormat(datePatternEnum.getPattern());
+
+		return dateFormat.format(dateObject);
+	}
+
+	/**
 	 * <p>Tem a finalidade de adicionar dias a uma determinada data.</p>
 	 * 
 	 * @param date
@@ -174,6 +200,20 @@ public class DateUtils {
 		LocalDate newDate = toLocalDate(date).minusDays(amount);
 		
 		return Date.from(newDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	/**
+	 * <p>Tem a finalidade de sutrair meses a uma determinada data.</p>
+	 * 
+	 * @param date
+	 * @param months
+	 * 
+	 * @return objeto <i>Date</i> correspondente a data informada acrescida da quantidade de meses especificada em <i>amount</i>.
+	 */
+	public Date minusMonths(Date date, Integer amount) {
+		LocalDateTime newDate = this.toLocalDateTime(date).minusMonths(amount);
+
+		return Date.from(newDate.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	/**

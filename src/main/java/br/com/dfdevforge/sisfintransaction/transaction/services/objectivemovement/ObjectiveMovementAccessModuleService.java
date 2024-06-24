@@ -3,9 +3,6 @@ package br.com.dfdevforge.sisfintransaction.transaction.services.objectivemoveme
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +22,16 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMov
 @RequestScope
 @Transactional
 public class ObjectiveMovementAccessModuleService extends ObjectiveMovementBaseService implements CommonService {
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
-	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+	private final ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 
-	@PersistenceContext
-    private EntityManager entityManager;
+	@Autowired
+	public ObjectiveMovementAccessModuleService(ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized) {
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+		this.objectiveMovementRepositoryCustomized = objectiveMovementRepositoryCustomized;
+	}
 
 	private List<ObjectiveMovementEntity> objectiveMovementListResult;
 
@@ -43,12 +44,12 @@ public class ObjectiveMovementAccessModuleService extends ObjectiveMovementBaseS
 
 	@Override
 	public Map<String, Object> returnBusinessData() {
-		this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(objectiveMovementParam));
+		this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam.getPaymentDate(), this.objectiveMovementParam.getUserIdentity()));
 		return super.returnBusinessData();
 	}
 
 	private void findObjectiveMovementsByUserAndPeriod() {
-		this.objectiveMovementListResult = this.objectiveMovementRepositoryCustomized.searchByPeriod(objectiveMovementParam);
+		this.objectiveMovementListResult = this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam.getPaymentDate(), this.objectiveMovementParam.getUserIdentity());
 	}
 
 	private void findItemsListByObjective() throws DataForEditionNotFoundException {

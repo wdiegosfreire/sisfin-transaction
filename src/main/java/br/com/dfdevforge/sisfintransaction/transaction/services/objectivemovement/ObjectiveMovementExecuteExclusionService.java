@@ -19,9 +19,16 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMov
 @RequestScope
 @Transactional
 public class ObjectiveMovementExecuteExclusionService extends ObjectiveMovementBaseService implements CommonService {
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
-	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+	private final ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+
+	@Autowired
+	public ObjectiveMovementExecuteExclusionService(ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized) {
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+		this.objectiveMovementRepositoryCustomized = objectiveMovementRepositoryCustomized;
+	}
 
 	private ObjectiveMovementEntity objectiveMovementExclusion;
 
@@ -55,6 +62,6 @@ public class ObjectiveMovementExecuteExclusionService extends ObjectiveMovementB
 	}
 
 	private void findAllObjectiveMovements() {
-		this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam));
+		this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam.getPaymentDate(), this.objectiveMovementParam.getUserIdentity()));
 	}
 }

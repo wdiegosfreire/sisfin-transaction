@@ -13,7 +13,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMov
 @RequestScope
 @Transactional
 public class ObjectiveMovementExecuteSearchService extends ObjectiveMovementBaseService implements CommonService {
-	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+	private final ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+
+	@Autowired
+	public ObjectiveMovementExecuteSearchService(ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized) {
+		this.objectiveMovementRepositoryCustomized = objectiveMovementRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -22,7 +27,7 @@ public class ObjectiveMovementExecuteSearchService extends ObjectiveMovementBase
 
 	private void findAllObjectiveMovements() {
 		if (this.objectiveMovementParam.getFilter() == null || this.objectiveMovementParam.getFilter().contentEquals(""))
-			this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam));
+			this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveMovementParam.getPaymentDate(), this.objectiveMovementParam.getUserIdentity()));
 		else
 			this.setArtifact("objectiveMovementList", this.objectiveMovementRepositoryCustomized.searchInAllPropertiesByPeriod(this.objectiveMovementParam));
 	}
