@@ -59,7 +59,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	}
 
 	private void findMovementsByUserAndPeriod() {
-		this.objectiveMovementListInPeriod = this.objectiveMovementRepositoryCustomized.searchByPeriod(objectiveParam.getObjectiveMovementList().get(0));
+		this.objectiveMovementListInPeriod = this.objectiveMovementRepositoryCustomized.searchByPeriod(this.objectiveParam.getObjectiveMovementList().get(0).getPaymentDate(), this.objectiveParam.getUserIdentity());
 	}
 
 	private void findObjectivesRelatedToMovementsInPeriod() {

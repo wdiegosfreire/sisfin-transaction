@@ -11,6 +11,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
 
 @Repository
 public class AccountRepositoryCustomized {
+	private static final String SELECT_DEFAULT_PREFIX = "select acc from AccountEntity as acc ";
+	private static final String WHERE = "where ";
+	private static final String USER_IDENTITY_CRITERIA = "  acc.userIdentity = :userIdentity ";
+
+	private static final String USER_IDENTITY = "userIdentity";
+
 	private final EntityManager entityManager;
 
 	public AccountRepositoryCustomized(EntityManager entityManager) {
@@ -37,7 +43,7 @@ public class AccountRepositoryCustomized {
 
 		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
 
-		query.setParameter("userIdentity", account.getUserIdentity());
+		query.setParameter(USER_IDENTITY, account.getUserIdentity());
 		query.setParameter("filter", "%" + account.getFilter() + "%");
 		
 		return query.getResultList();
@@ -53,14 +59,14 @@ public class AccountRepositoryCustomized {
 
 		StringBuilder jpql = new StringBuilder();
 
-		jpql.append("select acc from AccountEntity as acc ");
-		jpql.append("where ");
-		jpql.append("  acc.userIdentity = :userIdentity ");
+		jpql.append(SELECT_DEFAULT_PREFIX);
+		jpql.append(WHERE);
+		jpql.append(   USER_IDENTITY_CRITERIA);
 		jpql.append("  and length(acc.level) = :level ");
 
 		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
 
-		query.setParameter("userIdentity", userIdentity);
+		query.setParameter(USER_IDENTITY, userIdentity);
 		query.setParameter("level", level);
 
 		return query.getResultList();
@@ -69,12 +75,14 @@ public class AccountRepositoryCustomized {
 	public List<AccountEntity> searchAllWithParent(long accountIdentityParent, long userIdentity) {
 		StringBuilder jpql = new StringBuilder();
 
-		jpql.append("select acc from AccountEntity as acc ");
-		jpql.append("where ");
-		jpql.append("  acc.accountParent.identity = :accountIdentityParent ");
+		jpql.append(SELECT_DEFAULT_PREFIX);
+		jpql.append(WHERE);
+		jpql.append(   USER_IDENTITY_CRITERIA);
+		jpql.append("  and acc.accountParent.identity = :accountIdentityParent ");
 
 		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
 
+		query.setParameter(USER_IDENTITY, userIdentity);
 		query.setParameter("accountIdentityParent", accountIdentityParent);
 
 		return query.getResultList();
