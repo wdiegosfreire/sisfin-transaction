@@ -13,9 +13,9 @@ import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.PaymentMethodRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.account.AccountRepository;
 
 @Service
 @RequestScope

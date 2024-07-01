@@ -12,9 +12,9 @@ import br.com.dfdevforge.sisfintransaction.statement.repositories.BankRepository
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.PaymentMethodRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.account.AccountRepository;
 
 public abstract class BaseService implements CommonService {
 	protected String token;
