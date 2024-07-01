@@ -13,8 +13,8 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepositoryCustomized;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.account.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.account.AccountRepositoryCustomized;
 
 @Service
 @RequestScope

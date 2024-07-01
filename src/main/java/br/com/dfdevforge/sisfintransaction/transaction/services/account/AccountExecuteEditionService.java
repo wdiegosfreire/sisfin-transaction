@@ -11,7 +11,7 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.account.AccountRepository;
 
 @Service
 @RequestScope

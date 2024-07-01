@@ -1,4 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.transaction.repositories;
+package br.com.dfdevforge.sisfintransaction.transaction.repositories.account;
 
 import java.util.List;
 

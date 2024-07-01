@@ -1,4 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.transaction.repositories;
+package br.com.dfdevforge.sisfintransaction.transaction.repositories.account;
 
 import java.util.List;
 
@@ -84,6 +84,22 @@ public class AccountRepositoryCustomized {
 
 		query.setParameter(USER_IDENTITY, userIdentity);
 		query.setParameter("accountIdentityParent", accountIdentityParent);
+
+		return query.getResultList();
+	}
+
+	public List<AccountEntity> searchAllTypeBalance(long userIdentity) {
+		StringBuilder jpql = new StringBuilder();
+
+		jpql.append(SELECT_DEFAULT_PREFIX);
+		jpql.append(WHERE);
+		jpql.append(   USER_IDENTITY_CRITERIA);
+		jpql.append("  and acc.level like '01%' ");
+		jpql.append("  and length(acc.level) = 9 ");
+
+		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
+
+		query.setParameter(USER_IDENTITY, userIdentity);
 
 		return query.getResultList();
 	}
