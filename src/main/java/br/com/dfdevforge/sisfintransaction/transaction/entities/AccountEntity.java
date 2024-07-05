@@ -58,4 +58,16 @@ public class AccountEntity extends BaseEntity {
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;
+
+	public boolean isLevelOne() {
+		return this.level.length() == 3;
+	}
+
+	public boolean isLevelTwo() {
+		return this.level.length() == 6;
+	}
+
+	public boolean isLevelThree() {
+		return this.level.length() == 9;
+	}
 }
