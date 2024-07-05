@@ -35,7 +35,6 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 		this.checkRequiredFields();
 		this.setDefaultValues();
 		this.saveAccount();
-		this.findAllAccounts();
 	}
 
 	@Override
@@ -82,9 +81,5 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 
 	private void saveAccount() {
 		this.accountRepository.save(this.accountParam);
-	}
-
-	private void findAllAccounts() {
-		this.setArtifact(ACCOUNT_LIST, this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
 	}
 }

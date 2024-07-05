@@ -36,7 +36,6 @@ public class AccountExecuteExclusionService extends AccountBaseService implement
 		this.findById();
 		this.checkIfAccountHaveChildren();
 		this.deleteAccount();
-		this.findAllAccounts();
 	}
 
 	@Override
@@ -66,9 +65,5 @@ public class AccountExecuteExclusionService extends AccountBaseService implement
 		catch (DataIntegrityViolationException e) {
 			throw new ForeignKeyConstraintException();
 		}
-	}
-
-	private void findAllAccounts() {
-		this.setArtifact(ACCOUNT_LIST, this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
 	}
 }
