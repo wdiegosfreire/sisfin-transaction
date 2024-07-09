@@ -72,18 +72,26 @@ public class AccountRepositoryCustomized {
 		return query.getResultList();
 	}
 
-	public List<AccountEntity> searchAllWithParent(long accountIdentityParent, long userIdentity) {
+	public List<AccountEntity> searchAllWithParent(Long accountIdentityParent, long userIdentity) {
 		StringBuilder jpql = new StringBuilder();
+
+		String accountCondiction = "is null ";
+		if (accountIdentityParent != null && accountIdentityParent > 0)
+			accountCondiction = "= :accountIdentityParent ";
 
 		jpql.append(SELECT_DEFAULT_PREFIX);
 		jpql.append(WHERE);
 		jpql.append(   USER_IDENTITY_CRITERIA);
-		jpql.append("  and acc.accountParent.identity = :accountIdentityParent ");
+		jpql.append("  and acc.accountParent.identity " + accountCondiction);
+		jpql.append("order by ");
+		jpql.append("  acc.level ");
 
 		var query = this.entityManager.createQuery(jpql.toString(), AccountEntity.class);
 
 		query.setParameter(USER_IDENTITY, userIdentity);
-		query.setParameter("accountIdentityParent", accountIdentityParent);
+
+		if (accountIdentityParent != null && accountIdentityParent > 0)
+			query.setParameter("accountIdentityParent", accountIdentityParent);
 
 		return query.getResultList();
 	}
