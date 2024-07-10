@@ -35,7 +35,9 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 		this.checkRequiredFields();
 		this.setDefaultValues();
 		this.saveAccount();
-		this.findAllAccounts();
+
+		if (this.accountParam.isLevelTwo())
+			this.createDefaultChild();
 	}
 
 	@Override
@@ -51,8 +53,13 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 		);
 
 		int newLevel = 1;
-		if (accountList != null && !accountList.isEmpty())
+		if (accountList != null && !accountList.isEmpty()) {
+			AccountEntity accountDefault = accountList.stream().filter(account -> account.getLevel().contains("99")).findAny().orElse(null);
+
 			newLevel = accountList.size() + 1;
+			if (accountDefault != null)
+				newLevel = accountList.size();
+		}
 
 		this.accountParam.setLevel(this.accountParam.getAccountParent().getLevel() + (newLevel < 10 ? "0" : "") + newLevel + ".");
 	}
@@ -84,7 +91,17 @@ public class AccountExecuteRegistrationService extends AccountBaseService implem
 		this.accountRepository.save(this.accountParam);
 	}
 
-	private void findAllAccounts() {
-		this.setArtifact(ACCOUNT_LIST, this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
+	private void createDefaultChild() {
+		AccountEntity acountOther = new AccountEntity();
+
+		acountOther.setName("Other");
+		acountOther.setIsInactive(Boolean.FALSE);
+		acountOther.setIcon("fa-font-awesome");
+		acountOther.setLevel(this.accountParam.getLevel() + "99.");
+
+		acountOther.setAccountParent(this.accountParam);
+		acountOther.setUserIdentity(this.accountParam.getUserIdentity());
+
+		this.accountRepository.save(acountOther);
 	}
 }

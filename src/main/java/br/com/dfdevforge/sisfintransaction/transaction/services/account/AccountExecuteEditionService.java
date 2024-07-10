@@ -28,7 +28,6 @@ public class AccountExecuteEditionService extends AccountBaseService implements 
 	public void executeBusinessRule() throws BaseException {
 		this.findById();
 		this.editAccount();
-		this.findAllAccounts();
 	}
 
 	@Override
@@ -46,9 +45,5 @@ public class AccountExecuteEditionService extends AccountBaseService implements 
 
 	private void editAccount() {
 		this.accountRepository.save(this.accountParam);
-	}
-
-	private void findAllAccounts() {
-		this.setArtifact(ACCOUNT_LIST, this.accountRepository.findByUserIdentityOrderByLevel(this.accountParam.getUserIdentity()));
 	}
 }
