@@ -79,10 +79,10 @@ public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService im
 			objectiveMovementInsert.setRegistrationDate(now);
 
 			if (objectiveMovementInsert.getDueDate() != null)
-				objectiveMovementInsert.setDueDate(Utils.date.plusHours(objectiveMovementInsert.getDueDate(), 12));
+				objectiveMovementInsert.setDueDate(Utils.date.setTime(objectiveMovementInsert.getDueDate(), 12, 0, 0));
 
 			if (objectiveMovementInsert.getPaymentDate() != null)
-				objectiveMovementInsert.setPaymentDate(Utils.date.plusHours(objectiveMovementInsert.getPaymentDate(), 12));
+				objectiveMovementInsert.setPaymentDate(Utils.date.setTime(objectiveMovementInsert.getPaymentDate(), 12, 0, 0));
 
 			objectiveMovementInsert.setUserIdentity(this.objectiveParam.getUserIdentity());
 			objectiveMovementInsert.setObjective(this.objectiveParam);

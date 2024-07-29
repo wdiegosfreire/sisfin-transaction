@@ -14,7 +14,7 @@ import java.util.Date;
 import br.com.dfdevforge.sisfintransaction.commons.enums.DatePatternEnum;
 
 public class DateUtils {
-	protected  DateUtils() {}
+	protected DateUtils() {}
 
 	private LocalDate toLocalDate(Date dateToConvert) {
 		Instant instant = Instant.ofEpochMilli(dateToConvert.getTime());
@@ -186,6 +186,22 @@ public class DateUtils {
 		LocalDateTime newDate = this.toLocalDateTime(date).plusSeconds(amount);
 		
 		return Date.from(newDate.atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	/**
+	 * <p>Tem a finalidade de atribuir uma exata hora, minuto e segundo a uma determinada data.</p>
+	 * 
+	 * @param date
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * 
+	 * @return objeto <i>Date</i> correspondente a data informada atribuida a exata hora, minuto e segundo especificados em <i>hour</i>, <i>minute</i> and <i>second</i>.
+	 */
+	public Date setTime(Date date, Integer hour, Integer minute, Integer second) {
+		LocalDateTime newDateTime = this.toLocalDate(date).atTime(hour, minute, second);
+
+		return Date.from(newDateTime.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	/**
