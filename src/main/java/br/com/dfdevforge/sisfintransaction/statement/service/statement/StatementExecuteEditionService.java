@@ -26,17 +26,25 @@ import br.com.dfdevforge.sisfintransaction.transaction.services.objective.Object
 @RequestScope
 @Transactional
 public class StatementExecuteEditionService extends StatementBaseService implements CommonService {
-	@Autowired private StatementRepository statementRepository;
-	@Autowired private StatementItemRepository statementItemRepository;
+	private final StatementRepository statementRepository;
+	private final StatementItemRepository statementItemRepository;
+	private final ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
 
-	@Autowired private ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
+	@Autowired
+	public StatementExecuteEditionService(StatementRepository statementRepository, StatementItemRepository statementItemRepository, ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService) {
+		this.statementRepository = statementRepository;
+		this.statementItemRepository = statementItemRepository;
+		this.objectiveExecuteRegistrationService = objectiveExecuteRegistrationService;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.findByIdentity();
-		
-		this.createMovementBasedOnSatementItem();
-		
+
+		if (this.statementParam.getIsCreateMovement().booleanValue())
+			this.createMovementBasedOnSatementItem();
+
+		this.setStatementItemAsExported();
 		this.editStatement();
 	}
 
@@ -91,7 +99,11 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 
 			this.objectiveExecuteRegistrationService.setParams(objective, token);
 			this.objectiveExecuteRegistrationService.execute();
+		}
+	}
 
+	private void setStatementItemAsExported() {
+		for (StatementItemEntity statementItemLoop : this.statementParam.getStatementItemList()) {
 			statementItemLoop.setIsExported(Boolean.TRUE);
 			this.statementItemRepository.save(statementItemLoop);
 		}
