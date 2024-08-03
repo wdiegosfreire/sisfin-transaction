@@ -29,6 +29,7 @@ public class StatementItemExecuteRegistrationService extends StatementItemBaseSe
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();
+		this.setDefaultTime();
 		this.saveStatementItem();
 	}
 
@@ -56,6 +57,10 @@ public class StatementItemExecuteRegistrationService extends StatementItemBaseSe
 
 		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
+	}
+
+	private void setDefaultTime() {
+		this.statementItemParam.setMovementDate(Utils.date.setTime(this.statementItemParam.getMovementDate(), 12, 0, 0));
 	}
 
 	private void saveStatementItem() {
