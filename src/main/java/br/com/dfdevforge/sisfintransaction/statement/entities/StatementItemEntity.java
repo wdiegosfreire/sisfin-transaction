@@ -20,6 +20,8 @@ import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
