@@ -15,6 +15,6 @@ public class DataSet {
 	private List<BigDecimal> data;
 
 	public DataSet() {
-		this.data = new ArrayList<BigDecimal>();
+		this.data = new ArrayList<>();
 	}
 }
