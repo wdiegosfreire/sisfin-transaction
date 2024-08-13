@@ -259,6 +259,19 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		this.statement.setStatementItemList(new ArrayList<>());
 		this.statement.setUserIdentity(this.statementParam.getUserIdentity());
 
+		// Identificar saldo anterior (positivo ou negativo) e gerar o primeiro movimento da competencia atual
+		this.statement.getStatementItemList().add(StatementItemEntity.builder()
+			.movementDate(Utils.date.getFirstDayOfMonth(yamlStatementEntity.getItemList().get(0).getDateObject()))
+			.description("Previous Balance")
+			.documentNumber("0")
+			.movementValue(yamlStatementEntity.getOpeningBalanceInBigDecimal().abs())
+			.operationType(yamlStatementEntity.getOpeningBalanceInBigDecimal().compareTo(new BigDecimal(0)) >= 0 ? "C" : "D")
+			.isExported(Boolean.FALSE)
+			.statement(this.statement)
+			.userIdentity(this.statementParam.getUserIdentity())
+			.build()
+		);
+
 		yamlStatementEntity.getItemList().forEach(item -> {
 			StatementItemEntity statementItemTemp = StatementItemEntity.builder()
 				.movementDate(item.getDateObject())
