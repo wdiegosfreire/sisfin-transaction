@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DebugException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
@@ -33,6 +36,7 @@ import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementItemEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementPatternEntity;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntity;
+import br.com.dfdevforge.sisfintransaction.statement.entities.YamlStatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementPatternRepository;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepository;
 import br.com.dfdevforge.sisfintransaction.statement.service.statementitem.StatementItemExecuteRegistrationService;
@@ -106,8 +110,8 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 
 	private void getFileExtensionFromBase64() {
 		this.statementExtension = ".txt";
-		if (this.statementParam.getStatementFile().indexOf("json") != -1)
-			this.statementExtension = ".json";
+		if (this.statementParam.getStatementFile().indexOf("application/octet-stream") != -1)
+			this.statementExtension = ".yaml";
 	}
 
 	private void createBufferedReaderFromFileByteArray() throws IOException {
@@ -127,12 +131,15 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		bufferedReader.close();
 	}
 
-	private void importDataFromStatementFile() throws ParseException, BaseException {
+	private void importDataFromStatementFile() throws ParseException, BaseException, IOException {
 		if (this.statementExtension.equalsIgnoreCase(".txt")) {
 			this.invocarRegraImportarFormatoTxt();
 		}
 		else if (this.statementExtension.equalsIgnoreCase(".csv")) {
 //			new NgcExtratoImportarFormatoCsv(this.statement, this.connectionManager).execute()
+		}
+		else if (this.statementExtension.equalsIgnoreCase(".yaml")) {
+			this.invocarRegraImportarFormatoYaml();
 		}
 	}
 
@@ -195,44 +202,94 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 	}
 
 	private void invocarRegraImportarFormatoTxt() throws ParseException, BaseException {
-		statement.setIsClosed(Boolean.FALSE);
-		statement.setUserIdentity(this.statementParam.getUserIdentity());
-		statement.setStatementType(new StatementTypeEntity());
-		statement.getStatementType().setBank(new BankEntity());
+		this.statement.setIsClosed(Boolean.FALSE);
+		this.statement.setUserIdentity(this.statementParam.getUserIdentity());
+		this.statement.setStatementType(new StatementTypeEntity());
+		this.statement.getStatementType().setBank(new BankEntity());
 
 		/* Regra:
 		 * Executar o metodo responsavel por identificar as informacoes do cabecalho do extrato
 		 */
-		this.identificarCabecalhoDoExtrato(statement);
+		this.identificarCabecalhoDoExtrato(this.statement);
 
 		if (this.statementType.equals(EXTRATO_CONTA_CORRENTE)) {
-			this.importarContaCorrente(statement);
+			this.importarContaCorrente(this.statement);
 		}
 		else if (this.statementType.equals(POUPANCA)) {
 			try {
-				this.importarPoupancaModelOne(statement);
+				this.importarPoupancaModelOne(this.statement);
 			}
 			catch (Exception e) {
-				this.importarPoupancaModelTwo(statement);
+				this.importarPoupancaModelTwo(this.statement);
 			}
 		}
 		else if (this.statementType.equals(FATURA_CARTAO_CREDITO)) {
-			this.importarExtratoDoCartaoDeCredito(statement);
+			this.importarExtratoDoCartaoDeCredito(this.statement);
 		}
 
 		/*
 		 * Inserindo os registros da tabela STA_STATEMENT
 		 */
-		statementRepository.save(statement);
+		this.statementRepository.save(this.statement);
 
 		/*
 		 * Inserindo os registros da tabela ITE_ITEM_EXTRATO
 		 */
-		for (StatementItemEntity statementItemLoop : statement.getStatementItemList()) {
-			statementItemLoop.setStatement(statement);
-			statementItemLoop.setUserIdentity(statement.getUserIdentity());
+		for (StatementItemEntity statementItemLoop : this.statement.getStatementItemList()) {
+			statementItemLoop.setStatement(this.statement);
+			statementItemLoop.setUserIdentity(this.statement.getUserIdentity());
 			statementItemLoop.setIsExported(Boolean.FALSE);
 
+			this.statementItemExecuteRegistrationService.setParams(statementItemLoop, token);
+			this.statementItemExecuteRegistrationService.execute();
+		}
+	}
+
+	private void invocarRegraImportarFormatoYaml() throws IOException, BaseException {
+		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+		mapper.findAndRegisterModules();
+		YamlStatementEntity yamlStatementEntity = mapper.readValue(this.statementByteArray, YamlStatementEntity.class);
+
+		this.statement.setYear(yamlStatementEntity.getYear());
+		this.statement.setMonth(yamlStatementEntity.getMonth());
+		this.statement.setIsClosed(Boolean.FALSE);
+		this.statement.setStatementType(this.statementParam.getStatementType());
+		this.statement.setOpeningBalance(yamlStatementEntity.getOpeningBalanceInBigDecimal());
+		this.statement.setClosingBalance(yamlStatementEntity.getClosingBalanceInBigDecimal());
+		this.statement.setStatementItemList(new ArrayList<>());
+		this.statement.setUserIdentity(this.statementParam.getUserIdentity());
+
+		// Identificar saldo anterior (positivo ou negativo) e gerar o primeiro movimento da competencia atual
+		this.statement.getStatementItemList().add(StatementItemEntity.builder()
+			.movementDate(Utils.date.getFirstDayOfMonth(yamlStatementEntity.getItemList().get(0).getDateObject()))
+			.description("Previous Balance")
+			.documentNumber("0")
+			.movementValue(yamlStatementEntity.getOpeningBalanceInBigDecimal().abs())
+			.operationType(yamlStatementEntity.getOpeningBalanceInBigDecimal().compareTo(new BigDecimal(0)) >= 0 ? "C" : "D")
+			.isExported(Boolean.FALSE)
+			.statement(this.statement)
+			.userIdentity(this.statementParam.getUserIdentity())
+			.build()
+		);
+
+		yamlStatementEntity.getItemList().forEach(item -> {
+			StatementItemEntity statementItemTemp = StatementItemEntity.builder()
+				.movementDate(item.getDateObject())
+				.description(item.getDescription())
+				.documentNumber("0")
+				.movementValue(item.getValueInBigDecimal().abs())
+				.operationType(item.getValueInBigDecimal().compareTo(new BigDecimal(0)) >= 0 ? "C" : "D")
+				.isExported(Boolean.FALSE)
+				.statement(this.statement)
+				.userIdentity(this.statementParam.getUserIdentity())
+				.build()
+			;
+
+			this.statement.getStatementItemList().add(statementItemTemp);
+		});
+
+		this.statementRepository.save(this.statement);
+		for (StatementItemEntity statementItemLoop : this.statement.getStatementItemList()) {
 			this.statementItemExecuteRegistrationService.setParams(statementItemLoop, token);
 			this.statementItemExecuteRegistrationService.execute();
 		}
@@ -537,6 +594,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 				valorAux = valorAux.replace(".", "");
 				valorAux = valorAux.replace(",", ".");
 				statementItem.setMovementValue(new BigDecimal(valorAux));
+				statementItem.setDocumentNumber("0");
 
 				// Recuperando o valor do saldo atual da linha para identificar se o movimento  crdito ou dbito
 				String saldoLinha = this.fileContentList.get(index).substring(89, 102).trim();

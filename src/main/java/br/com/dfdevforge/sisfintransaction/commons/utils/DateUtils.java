@@ -233,12 +233,12 @@ public class DateUtils {
 	}
 
 	/**
-	 * <p>Tem a finalidade de recuperar o ultimo dia mo mes referente a data informada.</p>
+	 * <p>Tem a finalidade de recuperar o primeiro dia mo mes referente a data informada.</p>
 	 * 
 	 * @param date
 	 * @param amount
 	 * 
-	 * @return objeto <i>Date</i> correspondente a data do ultimo dia do mes referente a data fornecida
+	 * @return objeto <i>Date</i> correspondente a data do primeiro dia do mes referente a data fornecida
 	 */
 	public Date getFirstDayOfMonth(Date date) {
 		LocalDate localDateAux = toLocalDate(date);

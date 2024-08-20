@@ -19,9 +19,16 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepo
 @RequestScope
 @Transactional
 public class StatementAccessEditionService extends StatementBaseService implements CommonService {
-	@Autowired private LocationRepository locationRepository;
-	@Autowired private StatementRepository statementRepository;
-	@Autowired private StatementItemRepository statementItemRepository;
+	private final LocationRepository locationRepository;
+	private final StatementRepository statementRepository;
+	private final StatementItemRepository statementItemRepository;
+
+	@Autowired
+	public StatementAccessEditionService(LocationRepository locationRepository, StatementRepository statementRepository, StatementItemRepository statementItemRepository) {
+		this.locationRepository = locationRepository;
+		this.statementRepository = statementRepository;
+		this.statementItemRepository = statementItemRepository;
+	}
 
 	private StatementEntity statementResult;
 
@@ -49,7 +56,7 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 	}
 
 	private void findItemsOfStatement() {
-		this.statementResult.setStatementItemList(statementItemRepository.findByStatement(this.statementParam));			
+		this.statementResult.setStatementItemList(statementItemRepository.findByStatementOrderByMovementDateAscIdentityAsc(this.statementParam));			
 	}
 
 	private void findLocations() {

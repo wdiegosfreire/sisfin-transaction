@@ -11,7 +11,7 @@ import br.com.dfdevforge.sisfintransaction.statement.entities.StatementItemEntit
 public interface StatementItemRepository extends JpaRepository<StatementItemEntity, Long>, JpaSpecificationExecutor<StatementItemEntity> {
 	public StatementItemEntity findByIdentity(Long identity);
 	public List<StatementItemEntity> findByUserIdentityOrderByMovementDateAsc(Long userIdentity);
-	public List<StatementItemEntity> findByStatement(StatementEntity statement);
+	public List<StatementItemEntity> findByStatementOrderByMovementDateAscIdentityAsc(StatementEntity statement);
 
 	public void deleteByStatement(StatementEntity statement);
 }
