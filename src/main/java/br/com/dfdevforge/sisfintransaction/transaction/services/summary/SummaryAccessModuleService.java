@@ -17,22 +17,26 @@ import br.com.dfdevforge.sisfintransaction.transaction.charts.BarChartData;
 import br.com.dfdevforge.sisfintransaction.transaction.charts.DataSet;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.account.AccountRepositoryCustomized;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.summary.SummaryRepositorySelectTotalIncommingByBalanceAccount;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.summary.SummaryRepositorySelectTotalIncomingByBalanceAccount;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.summary.SummaryRepositorySelectTotalOutcomingByBalanceAccount;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.summary.SummaryRepositorySelectTotalPreviousByBalanceAccount;
 
 @Service
 @RequestScope
 @Transactional
 public class SummaryAccessModuleService extends SummaryBaseService implements CommonService {
 	private final AccountRepositoryCustomized accountRepositoryCustomized;
-	private final SummaryRepositorySelectTotalIncommingByBalanceAccount summaryRepositorySelectTotalIncommingByBalanceAccount;
+
+	private final SummaryRepositorySelectTotalIncomingByBalanceAccount summaryRepositorySelectTotalIncomingByBalanceAccount;
 	private final SummaryRepositorySelectTotalOutcomingByBalanceAccount summaryRepositorySelectTotalOutcomingByBalanceAccount;
+	private final SummaryRepositorySelectTotalPreviousByBalanceAccount summaryRepositorySelectTotalPreviousByBalanceAccount;
 
 	@Autowired
-	public SummaryAccessModuleService(AccountRepositoryCustomized accountRepositoryCustomized, SummaryRepositorySelectTotalIncommingByBalanceAccount summaryRepositorySelectTotalIncommingByBalanceAccount, SummaryRepositorySelectTotalOutcomingByBalanceAccount summaryRepositorySelectTotalOutcomingByBalanceAccount) {
+	public SummaryAccessModuleService(AccountRepositoryCustomized accountRepositoryCustomized, SummaryRepositorySelectTotalIncomingByBalanceAccount summaryRepositorySelectTotalIncomingByBalanceAccount, SummaryRepositorySelectTotalOutcomingByBalanceAccount summaryRepositorySelectTotalOutcomingByBalanceAccount, SummaryRepositorySelectTotalPreviousByBalanceAccount summaryRepositorySelectTotalPreviousByBalanceAccount) {
 		this.accountRepositoryCustomized = accountRepositoryCustomized;
-		this.summaryRepositorySelectTotalIncommingByBalanceAccount = summaryRepositorySelectTotalIncommingByBalanceAccount;
+		this.summaryRepositorySelectTotalIncomingByBalanceAccount = summaryRepositorySelectTotalIncomingByBalanceAccount;
 		this.summaryRepositorySelectTotalOutcomingByBalanceAccount = summaryRepositorySelectTotalOutcomingByBalanceAccount;
+		this.summaryRepositorySelectTotalPreviousByBalanceAccount  = summaryRepositorySelectTotalPreviousByBalanceAccount;
 	}
 
 	private List<AccountEntity> accountListBalanceCombo;
@@ -41,7 +45,7 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 	public void executeBusinessRule() throws BaseException {
 		this.findBalanceAccounts();
 		this.setDefaultBalanceAccount();
-		this.getIncomingOutcomingChartData();
+		this.getSummaryPanelData();
 	}
 
 	private void findBalanceAccounts() {
@@ -54,14 +58,18 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 			this.summaryParam.setIncomingOutcomingChartAccountIdentity(this.accountListBalanceCombo.get(0).getIdentity());
 	}
 
-	private void getIncomingOutcomingChartData() {
+	private void getSummaryPanelData() {
 		BarChartData barChartData = new BarChartData();
 		barChartData.setUserIdentity(this.summaryParam.getUserIdentity());
 
-		for (int i = 5; i >= 0; i --) {
+		for (int i = this.summaryParam.getIncomingOutcomingChartPeriodRangeValue() - 1; i >= 0; i --) {
 			Date period = Utils.date.minusMonths(this.summaryParam.getPeriodDate(), i);
 			barChartData.getLabels().add(Utils.date.toStringFromDate(period, DatePatternEnum.PT_BR_BARS_MES_ANO));
 		}
+
+		DataSet dataSetPrevious = new DataSet();
+		dataSetPrevious.setLabel("Previous");
+		dataSetPrevious.setBackgroundColor("orange");
 
 		DataSet dataSetIncoming = new DataSet();
 		dataSetIncoming.setLabel("Incoming");
@@ -75,17 +83,20 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 		dataSetBalance.setLabel("Balance");
 		dataSetBalance.setBackgroundColor("blue");
 
+		barChartData.getDatasets().add(dataSetPrevious);
 		barChartData.getDatasets().add(dataSetIncoming);
 		barChartData.getDatasets().add(dataSetOutcoming);
 		barChartData.getDatasets().add(dataSetBalance);
 
-		for (int i = 5; i >= 0; i --) {
+		for (int i = this.summaryParam.getIncomingOutcomingChartPeriodRangeValue() - 1; i >= 0; i--) {
 			Date period = Utils.date.minusMonths(this.summaryParam.getPeriodDate(), i);
 
-			BigDecimal incoming = this.summaryRepositorySelectTotalIncommingByBalanceAccount.execute(period, this.summaryParam.getIncomingOutcomingChartAccountIdentity(), this.summaryParam.getUserIdentity());
+			BigDecimal previous = this.summaryRepositorySelectTotalPreviousByBalanceAccount.execute(period, this.summaryParam.getIncomingOutcomingChartAccountIdentity(), this.summaryParam.getUserIdentity());
+			BigDecimal incoming = this.summaryRepositorySelectTotalIncomingByBalanceAccount.execute(period, this.summaryParam.getIncomingOutcomingChartAccountIdentity(), this.summaryParam.getUserIdentity());
 			BigDecimal outcoming = this.summaryRepositorySelectTotalOutcomingByBalanceAccount.execute(period, this.summaryParam.getIncomingOutcomingChartAccountIdentity(), this.summaryParam.getUserIdentity());
-			BigDecimal balance = incoming.subtract(outcoming);
+			BigDecimal balance = previous.add(incoming).subtract(outcoming);
 
+			dataSetPrevious.getData().add(previous);
 			dataSetIncoming.getData().add(incoming);
 			dataSetOutcoming.getData().add(outcoming);
 			dataSetBalance.getData().add(balance);
@@ -94,20 +105,3 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 		this.setArtifact("barChartData", barChartData);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 import br.com.dfdevforge.sisfintransaction.commons.persistences.BasePersistence;
 
 @Repository
-public class SummaryRepositorySelectTotalIncommingByBalanceAccount extends BasePersistence {
+public class SummaryRepositorySelectTotalIncomingByBalanceAccount extends BasePersistence {
 	private final EntityManager entityManager;
 
-	public SummaryRepositorySelectTotalIncommingByBalanceAccount(EntityManager entityManager) {
+	public SummaryRepositorySelectTotalIncomingByBalanceAccount(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
@@ -29,6 +29,7 @@ public class SummaryRepositorySelectTotalIncommingByBalanceAccount extends BaseP
 		jpql.append("where ");
 		jpql.append("  obi.usr_identity = :userIdentity ");
 		jpql.append("  and obi.acc_identity_target = :accountIdentity ");
+		jpql.append("  and obm.acc_identity_source <> obi.acc_identity_target ");
 		jpql.append("  and ( ");
 		jpql.append("    (obm.obm_payment_date is not null and obm.obm_payment_date between :startDate and :endDate) or ");
 		jpql.append("    (obm.obm_payment_date is null and obm.obm_due_date between :startDate and :endDate) ");
