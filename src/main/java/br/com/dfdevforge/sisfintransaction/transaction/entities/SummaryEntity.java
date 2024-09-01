@@ -11,5 +11,6 @@ import lombok.Setter;
 public class SummaryEntity extends BaseEntity {
 	private Date periodDate;
 	private Long incomingOutcomingChartAccountIdentity;
+	private Integer incomingOutcomingChartPeriodRangeValue;
 	private Long userIdentity;
 }

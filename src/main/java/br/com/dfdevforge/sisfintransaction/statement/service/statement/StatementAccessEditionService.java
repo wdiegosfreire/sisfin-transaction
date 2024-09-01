@@ -40,6 +40,7 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 		this.findAccountsSource();
 		this.findAccountsTarget();
 		this.findPaymentMethods();
+		this.setStatementStatus();
 	}
 
 	@Override
@@ -73,5 +74,10 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 
 	private void findPaymentMethods() {
 		this.setArtifact("paymentMethodListCombo", this.findPaymentMethodsByUserIdentityOrderByNameAsc(this.statementParam.getUserIdentity()));
+	}
+
+	private void setStatementStatus() {
+		long statementItemsNotExportedCount = this.statementResult.getStatementItemList().stream().filter(statementItem -> statementItem.getIsExported() == Boolean.FALSE).count();
+		this.statementResult.setIsClosed(statementItemsNotExportedCount == 0);
 	}
 }
