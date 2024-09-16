@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.statement.entitiescomplement.StatementItemComplement;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
@@ -85,6 +86,10 @@ public class StatementItemEntity extends BaseEntity {
 
 	@Transient
 	private Boolean isVisible;
+
+	@Transient
+	@Builder.Default
+	private StatementItemComplement complement = new StatementItemComplement();
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;

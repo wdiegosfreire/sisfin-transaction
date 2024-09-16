@@ -7,7 +7,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMovementRepositoryCustomized;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.objectivemovement.ObjectiveMovementRepositoryCustomized;
 
 @Service
 @RequestScope

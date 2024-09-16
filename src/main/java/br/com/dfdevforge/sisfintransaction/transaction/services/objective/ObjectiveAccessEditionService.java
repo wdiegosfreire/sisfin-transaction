@@ -17,10 +17,10 @@ import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveItemRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMovementRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.PaymentMethodRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.account.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.objectivemovement.ObjectiveMovementRepository;
 
 @Service
 @RequestScope
