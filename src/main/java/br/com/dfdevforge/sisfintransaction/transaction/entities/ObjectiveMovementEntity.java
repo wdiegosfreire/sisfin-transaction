@@ -67,4 +67,7 @@ public class ObjectiveMovementEntity extends BaseEntity {
 
 	@Transient
 	private boolean isInPeriod;
+
+	@Transient
+	private ObjectiveMovementEntityProps props = new ObjectiveMovementEntityProps();
 }

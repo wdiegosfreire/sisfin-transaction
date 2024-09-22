@@ -15,8 +15,8 @@ import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveItemEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveItemRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMovementRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMovementRepositoryCustomized;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.objectivemovement.ObjectiveMovementRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.objectivemovement.ObjectiveMovementRepositoryCustomized;
 
 @Service
 @RequestScope

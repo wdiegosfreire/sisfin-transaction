@@ -14,6 +14,7 @@ import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementItemRepository;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.objectivemovement.ObjectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue;
 
 @Service
 @RequestScope
@@ -22,12 +23,15 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 	private final LocationRepository locationRepository;
 	private final StatementRepository statementRepository;
 	private final StatementItemRepository statementItemRepository;
+	private final ObjectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue;
+	
 
 	@Autowired
-	public StatementAccessEditionService(LocationRepository locationRepository, StatementRepository statementRepository, StatementItemRepository statementItemRepository) {
+	public StatementAccessEditionService(LocationRepository locationRepository, StatementRepository statementRepository, StatementItemRepository statementItemRepository, ObjectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue) {
 		this.locationRepository = locationRepository;
 		this.statementRepository = statementRepository;
 		this.statementItemRepository = statementItemRepository;
+		this.objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue = objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue;
 	}
 
 	private StatementEntity statementResult;
@@ -41,6 +45,7 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 		this.findAccountsTarget();
 		this.findPaymentMethods();
 		this.setStatementStatus();
+		this.findSimilarMovements();
 	}
 
 	@Override
@@ -79,5 +84,13 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 	private void setStatementStatus() {
 		long statementItemsNotExportedCount = this.statementResult.getStatementItemList().stream().filter(statementItem -> statementItem.getIsExported() == Boolean.FALSE).count();
 		this.statementResult.setIsClosed(statementItemsNotExportedCount == 0);
+	}
+
+	private void findSimilarMovements() {
+		this.statementResult.getStatementItemList().forEach(statementItem ->
+			statementItem.getComplement().setObjectiveMovementList(
+				objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue.execute(statementItem.getMovementDate(), statementItem.getMovementValue(), this.statementParam.getUserIdentity())
+			)
+		);
 	}
 }

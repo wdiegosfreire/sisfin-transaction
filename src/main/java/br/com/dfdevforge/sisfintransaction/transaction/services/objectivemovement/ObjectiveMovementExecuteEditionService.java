@@ -11,7 +11,7 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.ObjectiveMovementRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.repositories.objectivemovement.ObjectiveMovementRepository;
 
 @Service
 @RequestScope

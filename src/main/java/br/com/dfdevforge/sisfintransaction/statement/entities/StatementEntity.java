@@ -67,4 +67,7 @@ public class StatementEntity extends BaseEntity {
 
 	@Transient
 	private Boolean isCreateMovement;
+
+	@Transient
+	private StatementEntityProps props = new StatementEntityProps();
 }

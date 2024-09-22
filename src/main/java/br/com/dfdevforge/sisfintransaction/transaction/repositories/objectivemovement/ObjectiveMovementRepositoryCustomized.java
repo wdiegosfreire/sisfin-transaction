@@ -1,4 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.transaction.repositories;
+package br.com.dfdevforge.sisfintransaction.transaction.repositories.objectivemovement;
 
 import java.util.Calendar;
 import java.util.Date;
