@@ -1,4 +1,4 @@
-package br.com.dfdevforge.sisfintransaction.statement.entitiescomplement;
+package br.com.dfdevforge.sisfintransaction.statement.entities;
 
 import java.util.List;
 
@@ -8,6 +8,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StatementItemComplement {
+public class StatementItemEntityProps {
 	private List<ObjectiveMovementEntity> objectiveMovementList;
 }

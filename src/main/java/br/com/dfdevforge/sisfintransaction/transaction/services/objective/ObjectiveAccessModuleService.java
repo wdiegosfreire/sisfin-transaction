@@ -50,6 +50,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 		this.findMovementsOfEachObjective();
 		this.identifyMovementOfPeriod();
 		this.sortObjectivesBySortDate();
+		this.identifyNewHeaderGroup();
 	}
 
 	@Override
@@ -95,5 +96,22 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 
 	private void sortObjectivesBySortDate() {
 		this.objectiveListResult = this.objectiveListResult.stream().sorted(Comparator.comparing(ObjectiveEntity::getSortDate)).collect(Collectors.toList());
+	}
+
+	private void identifyNewHeaderGroup() {
+		String headerDate = "";
+		
+		for (ObjectiveEntity objective : this.objectiveListResult) {
+			for (ObjectiveMovementEntity objectiveMovement : objective.getObjectiveMovementList()) {
+				Date checkDate = objectiveMovement.getPaymentDate();
+				if (checkDate == null)
+					checkDate = objectiveMovement.getDueDate();
+
+				if (!headerDate.equals(checkDate.toString())) {
+					headerDate = checkDate.toString();
+					objectiveMovement.getProps().setIsNewHeader(Boolean.TRUE);
+				}
+			}
+		}
 	}
 }

@@ -69,18 +69,26 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 
 		DataSet dataSetPrevious = new DataSet();
 		dataSetPrevious.setLabel("Previous");
+		dataSetPrevious.setIcon("fa-arrow-rotate-left");
+		dataSetPrevious.setIdentifier("A");
 		dataSetPrevious.setBackgroundColor("orange");
 
 		DataSet dataSetIncoming = new DataSet();
 		dataSetIncoming.setLabel("Incoming");
+		dataSetIncoming.setIcon("fa-arrow-trend-up");
+		dataSetIncoming.setIdentifier("B");
 		dataSetIncoming.setBackgroundColor("green");
 
 		DataSet dataSetOutcoming = new DataSet();
 		dataSetOutcoming.setLabel("Outcoming");
+		dataSetOutcoming.setIcon("fa-arrow-trend-down");
+		dataSetOutcoming.setIdentifier("C");
 		dataSetOutcoming.setBackgroundColor("red");
 
 		DataSet dataSetBalance = new DataSet();
 		dataSetBalance.setLabel("Balance");
+		dataSetBalance.setIcon("fa-hand-holding-dollar");
+		dataSetBalance.setIdentifier("D");
 		dataSetBalance.setBackgroundColor("blue");
 
 		barChartData.getDatasets().add(dataSetPrevious);

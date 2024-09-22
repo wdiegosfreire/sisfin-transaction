@@ -10,7 +10,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DataSet {
+	private String icon;
 	private String label;
+	private String identifier;
 	private String backgroundColor;
 	private List<BigDecimal> data;
 

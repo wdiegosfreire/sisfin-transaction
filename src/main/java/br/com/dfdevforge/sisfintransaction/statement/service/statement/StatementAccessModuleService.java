@@ -31,6 +31,7 @@ public class StatementAccessModuleService extends StatementBaseService implement
 	public void executeBusinessRule() throws BaseException {
 		this.findAllStatements();
 		this.setStatementStatus();
+		this.identifyNewHeaderGroup();
 	}
 
 	@Override
@@ -48,5 +49,18 @@ public class StatementAccessModuleService extends StatementBaseService implement
 			long statementItemsNotExportedCount = statementLoop.getStatementItemList().stream().filter(statementItem -> statementItem.getIsExported() == Boolean.FALSE).count();
 			statementLoop.setIsClosed(statementItemsNotExportedCount == 0);
 		});
+	}
+
+	private void identifyNewHeaderGroup() {
+		String headerPeriod = "";
+		
+		for (StatementEntity statement : this.statementListResult) {
+			String checkPeriod = statement.getYear().toString() + statement.getMonth().toString();
+
+			if (!headerPeriod.equals(checkPeriod)) {
+				headerPeriod = checkPeriod;
+				statement.getProps().setIsNewHeader(Boolean.TRUE);
+			}
+		}
 	}
 }
