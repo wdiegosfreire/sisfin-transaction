@@ -87,10 +87,12 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 	}
 
 	private void findSimilarMovements() {
-		this.statementResult.getStatementItemList().forEach(statementItem ->
-			statementItem.getComplement().setObjectiveMovementList(
-				objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue.execute(statementItem.getMovementDate(), statementItem.getMovementValue(), this.statementParam.getUserIdentity())
-			)
-		);
+		this.statementResult.getStatementItemList().forEach(statementItem -> {
+			if (!statementItem.getIsExported().booleanValue()) {
+				statementItem.getComplement().setObjectiveMovementList(
+					objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue.execute(statementItem.getMovementDate(), statementItem.getMovementValue(), this.statementParam.getUserIdentity())
+				);
+			}
+		});
 	}
 }
