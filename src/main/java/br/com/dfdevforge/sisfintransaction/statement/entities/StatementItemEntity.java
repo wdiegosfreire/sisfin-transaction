@@ -86,12 +86,11 @@ public class StatementItemEntity extends BaseEntity {
 	@Transient
 	private Boolean isVisible;
 
-	@Transient
-	@Builder.Default
-	private StatementItemEntityProps complement = new StatementItemEntityProps();
-
 	@Column(name = "usr_identity")
 	private Long userIdentity;
+
+	@Transient
+	public final StatementItemEntityProps props = new StatementItemEntityProps();
 
 	public boolean isIncoming() {
 		return this.operationType.equalsIgnoreCase("C");

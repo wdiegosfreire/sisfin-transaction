@@ -1,5 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.statement.service.statement;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,12 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementItemRepository;
 import br.com.dfdevforge.sisfintransaction.statement.repositories.StatementRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.repositories.objectivemovement.ObjectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue;
 
@@ -89,10 +93,23 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 	private void findSimilarMovements() {
 		this.statementResult.getStatementItemList().forEach(statementItem -> {
 			if (!statementItem.getIsExported().booleanValue()) {
-				statementItem.getComplement().setObjectiveMovementList(
-					objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue.execute(statementItem.getMovementDate(), statementItem.getMovementValue(), this.statementParam.getUserIdentity())
-				);
+				List<ObjectiveMovementEntity> objectiveMovementList = objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue.execute(statementItem.getMovementDate(), statementItem.getMovementValue(), this.statementParam.getUserIdentity());
+
+				final String separator = " | ";
+				objectiveMovementList.forEach(objectiveMovementLoop -> {
+					statementItem.props.getSimilarMovementList().add(
+						objectiveMovementLoop.getIdentity() + separator +
+						this.traceAccount(objectiveMovementLoop.getAccountSource()) + separator +
+						objectiveMovementLoop.getObjective().getDescription() + separator +
+						Utils.date.toStringFromDate(objectiveMovementLoop.getPaymentDate(), null) + separator +
+						objectiveMovementLoop.getValue()
+					);
+				});
 			}
 		});
+	}
+
+	private String traceAccount(AccountEntity account) {
+		return account.getAccountParent().getAccountParent().getName() + " :: " + account.getAccountParent().getName() + " :: " + account.getName();
 	}
 }
