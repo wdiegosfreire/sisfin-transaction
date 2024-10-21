@@ -75,7 +75,7 @@ public class DateUtils {
 	 * 
 	 * @return objeto <i>Date</i> convertido a partir da <i>String</i> fornecida
 	 */
-	public Date toDateFromString(String dateString, DatePatternEnum datePatternEnum) throws ParseException {
+	public Date toDateFromString(String dateString, DatePatternEnum datePatternEnum) {
 		if (dateString == null)
 			return null;
 
@@ -84,7 +84,15 @@ public class DateUtils {
 
 		DateFormat dateFormat = new SimpleDateFormat(datePatternEnum.getPattern());
 
-		return dateFormat.parse(dateString);
+		Date date = null;
+		try {
+			date = dateFormat.parse(dateString);
+		}
+		catch (ParseException e) {
+			Utils.log.stackTrace(e);
+		}
+
+		return date;
 	}
 
 	/**

@@ -10,7 +10,9 @@ import lombok.Setter;
 @Setter
 public class SummaryEntity extends BaseEntity {
 	private Date periodDate;
-	private Long incomingOutcomingChartAccountIdentity;
-	private Integer incomingOutcomingChartPeriodRangeValue;
+	private Integer periodRange;
 	private Long userIdentity;
+	
+	private Long balanceAccountIdentity;
+	private String outcomingAccountLevel;
 }
