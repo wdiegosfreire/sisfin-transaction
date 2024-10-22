@@ -153,7 +153,7 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 		ColorEnum[] colorEnum = ColorEnum.values();
 
 		List<LineChartData.DataSet> dataSetList = new ArrayList<>();
-		List<Tuple> resultSetAccounts = this.totalOutcomingAccountMap.values().stream().toList().get(0);
+		List<Tuple> resultSetAccounts = this.totalOutcomingAccountMap.get(this.periodList.get(0));
 
 		for (int i = 0; i < resultSetAccounts.size(); i++) {
 			Tuple tuple = resultSetAccounts.get(i);
