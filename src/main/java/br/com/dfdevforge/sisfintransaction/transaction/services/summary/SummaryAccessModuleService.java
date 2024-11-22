@@ -37,6 +37,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.repositories.summary.Summ
 @RequestScope
 @Transactional
 public class SummaryAccessModuleService extends SummaryBaseService implements CommonService {
+	private static final String COL_ACC_NAME = "acc_name"; 
 	private final AccountRepositoryCustomized accountRepositoryCustomized;
 	private final AccountRepositorySearchAllTypeOutcoming accountRepositorySearchAllTypeOutcoming;
 	private final SummaryRepositorySelectTotalByOutcomingAccount summaryRepositorySelectTotalByOutcomingAccount;
@@ -159,7 +160,7 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 			Tuple tuple = resultSetAccounts.get(i);
 
 			LineChartData.DataSet dataSet = new LineChartData().new DataSet();
-			dataSet.setLabel(tuple.get("acc_name", String.class));
+			dataSet.setLabel(tuple.get(COL_ACC_NAME, String.class));
 			dataSet.setBackgroundColor(colorEnum[i].getCode());
 			dataSet.setData(new ArrayList<>());
 
@@ -169,7 +170,7 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 		outcomingSummaryLineChart.getLabels().forEach(label -> {
 			List<Tuple> resultSet = this.totalOutcomingAccountMap.get(label);
 			resultSet.forEach(result -> {
-				String itemName = result.get("acc_name", String.class);
+				String itemName = result.get(COL_ACC_NAME, String.class);
 				
 				LineChartData.DataSet dataSetTemp = dataSetList.stream().filter(dataSet -> dataSet.getLabel().equals(itemName)).findFirst().get();
 				dataSetTemp.getData().add(result.get("obi_total_value", BigDecimal.class));
@@ -195,7 +196,7 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 			for (int i = 0; i < result.size(); i++) {
 				Tuple tuple = result.get(i);
 
-				outcomingSummaryPieChart.getLabels().add(tuple.get("acc_name", String.class));
+				outcomingSummaryPieChart.getLabels().add(tuple.get(COL_ACC_NAME, String.class));
 
 				dataSet.getData().add(tuple.get("obi_total_value", BigDecimal.class));
 				dataSet.getBackgroundColor().add(colorEnum[i].getCode());
