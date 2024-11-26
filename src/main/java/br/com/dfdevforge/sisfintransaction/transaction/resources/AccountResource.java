@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.services.account.AccountAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.account.AccountAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.account.AccountAccessRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.account.AccountExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.account.AccountExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.account.AccountExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.account.AccountExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.AccountAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.AccountAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.AccountAccessRegistrationService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.AccountExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.AccountExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.AccountExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.AccountExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/account")

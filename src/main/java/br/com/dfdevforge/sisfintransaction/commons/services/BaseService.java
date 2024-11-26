@@ -7,14 +7,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.statement.entities.BankEntity;
-import br.com.dfdevforge.sisfintransaction.statement.repositories.BankRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.AccountEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.LocationRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.PaymentMethodRepository;
-import br.com.dfdevforge.sisfintransaction.transaction.repositories.account.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.entities.BankEntity;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.repositories.BankRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositories.AccountRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.repositories.LocationRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.entities.PaymentMethodEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repositories.PaymentMethodRepository;
 
 public abstract class BaseService implements CommonService {
 	protected String token;
@@ -29,9 +29,6 @@ public abstract class BaseService implements CommonService {
 	public void validateUserAccess() throws BaseException {
 		
 	}
-
-	@Override
-	public abstract void executeBusinessRule() throws BaseException;
 
 	@Override
 	public void configureUserActions() {

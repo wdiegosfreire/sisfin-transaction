@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveAccessRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objective.ObjectiveExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveAccessRegistrationService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/objective")

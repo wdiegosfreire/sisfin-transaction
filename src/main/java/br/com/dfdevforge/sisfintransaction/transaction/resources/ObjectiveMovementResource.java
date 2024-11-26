@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.ObjectiveMovementEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objectivemovement.ObjectiveMovementAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objectivemovement.ObjectiveMovementAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objectivemovement.ObjectiveMovementAccessRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objectivemovement.ObjectiveMovementExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objectivemovement.ObjectiveMovementExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objectivemovement.ObjectiveMovementExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.objectivemovement.ObjectiveMovementExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.entities.ObjectiveMovementEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.services.ObjectiveMovementAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.services.ObjectiveMovementAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.services.ObjectiveMovementAccessRegistrationService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.services.ObjectiveMovementExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.services.ObjectiveMovementExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.services.ObjectiveMovementExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.services.ObjectiveMovementExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/objectiveMovement")

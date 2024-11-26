@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.SummaryEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.services.summary.SummaryAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.summary.entities.SummaryEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.summary.services.SummaryAccessModuleService;
 
 @RestController
 @RequestMapping(value = "/summary")

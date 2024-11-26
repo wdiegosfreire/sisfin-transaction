@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.statement.entities.StatementTypeEntity;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementtype.StatementTypeAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementtype.StatementTypeAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementtype.StatementTypeAccessRegistrationService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementtype.StatementTypeExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementtype.StatementTypeExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementtype.StatementTypeExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementtype.StatementTypeExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.entities.StatementTypeEntity;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.services.StatementTypeAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.services.StatementTypeAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.services.StatementTypeAccessRegistrationService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.services.StatementTypeExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.services.StatementTypeExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.services.StatementTypeExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.services.StatementTypeExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/statementType")

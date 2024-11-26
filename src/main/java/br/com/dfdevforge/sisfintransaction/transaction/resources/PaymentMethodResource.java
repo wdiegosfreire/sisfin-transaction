@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.PaymentMethodEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.services.paymentmethod.PaymentMethodAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.paymentmethod.PaymentMethodAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.paymentmethod.PaymentMethodExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.paymentmethod.PaymentMethodExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.paymentmethod.PaymentMethodExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.paymentmethod.PaymentMethodExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.entities.PaymentMethodEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.services.PaymentMethodAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.services.PaymentMethodAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.services.PaymentMethodExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.services.PaymentMethodExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.services.PaymentMethodExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.services.PaymentMethodExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/paymentMethod")
