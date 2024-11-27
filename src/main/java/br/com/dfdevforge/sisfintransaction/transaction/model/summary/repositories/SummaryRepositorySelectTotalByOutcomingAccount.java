@@ -18,6 +18,7 @@ public class SummaryRepositorySelectTotalByOutcomingAccount extends BasePersiste
 		this.entityManager = entityManager;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Tuple> execute(Date periodDate, String accountLevel, Long userIdentity) {
 		StringBuilder jpql = new StringBuilder();
 
