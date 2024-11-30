@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.statement.entities.BankEntity;
-import br.com.dfdevforge.sisfintransaction.statement.service.bank.BankAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.bank.BankAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.statement.service.bank.BankExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.bank.BankExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.bank.BankExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.statement.service.bank.BankExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.entities.BankEntity;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.services.BankAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.services.BankAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.services.BankExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.services.BankExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.services.BankExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.statement.model.bank.services.BankExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/bank")

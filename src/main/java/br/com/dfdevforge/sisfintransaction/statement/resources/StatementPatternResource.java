@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.statement.entities.StatementPatternEntity;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementpattern.StatementPatternAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementpattern.StatementPatternAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementpattern.StatementPatternAccessRegistrationService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementpattern.StatementPatternExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementpattern.StatementPatternExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementpattern.StatementPatternExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statementpattern.StatementPatternExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.entities.StatementPatternEntity;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.services.StatementPatternAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.services.StatementPatternAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.services.StatementPatternAccessRegistrationService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.services.StatementPatternExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.services.StatementPatternExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.services.StatementPatternExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.services.StatementPatternExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/statementPattern")

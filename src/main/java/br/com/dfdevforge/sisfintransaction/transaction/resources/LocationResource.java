@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.transaction.entities.LocationEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.services.location.LocationAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.location.LocationAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.location.LocationExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.location.LocationExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.location.LocationExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.services.location.LocationExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.services.LocationAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.services.LocationAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.services.LocationExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.services.LocationExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.services.LocationExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.transaction.model.location.services.LocationExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/location")

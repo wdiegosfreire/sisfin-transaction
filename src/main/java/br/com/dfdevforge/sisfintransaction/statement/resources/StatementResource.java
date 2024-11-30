@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.statement.entities.StatementEntity;
-import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementAccessEditionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementAccessModuleService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementAccessRegistrationService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementExecuteEditionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementExecuteExclusionService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.statement.service.statement.StatementExecuteSearchService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statement.entities.StatementEntity;
+import br.com.dfdevforge.sisfintransaction.statement.model.statement.services.StatementAccessEditionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statement.services.StatementAccessModuleService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statement.services.StatementAccessRegistrationService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statement.services.StatementExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statement.services.StatementExecuteExclusionService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statement.services.StatementExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.statement.model.statement.services.StatementExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/statement")
