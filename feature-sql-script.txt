@@ -1,0 +1,8 @@
+alter table sisfin_transaction.stt_statement_type 
+	add pam_identity int not null after acc_identity_source;
+
+update sisfin_transaction.stt_statement_type set pam_identity = 2 where pam_identity = 0;
+commit;
+
+alter table sisfin_transaction.stt_statement_type 
+	add constraint fk_pam_payment_method_stt foreign key(pam_identity) references sisfin_transaction.pam_payment_method(pam_identity);

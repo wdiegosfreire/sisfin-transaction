@@ -152,8 +152,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			StatementPatternEntity statementPattern = this.statementPatternList.stream().filter(x -> statementItem.getDescription().contains(x.getComparator())).findFirst().orElse(null);
 
 			if (!Objects.isNull(statementPattern)) {
-				PaymentMethodEntity paymentMethodDefault = new PaymentMethodEntity();
-				paymentMethodDefault.setIdentity(2L);
+				PaymentMethodEntity paymentMethodDefault = this.statementParam.getStatementType().getPaymentMethod();
 
 				this.createAndSaveObjectiveFromStatement(statementItem, statementPattern, paymentMethodDefault);
 				this.updateStatementItemToExported(statementItem);
@@ -319,6 +318,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		if (statementParam.getStatementType().getIdentity() != null) {
 			statement.getStatementType().setIdentity(statementParam.getStatementType().getIdentity());
 			statement.getStatementType().setAccountSource(statementParam.getStatementType().getAccountSource());
+			statement.getStatementType().setPaymentMethod(statementParam.getStatementType().getPaymentMethod());
 
 			bankStatementFound = Boolean.TRUE;
 		}
