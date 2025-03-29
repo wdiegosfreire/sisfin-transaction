@@ -15,6 +15,8 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositories.AccountRepositoryCustomized;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.repositories.ObjectiveRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.repositories.ObjectiveItemRepository;
@@ -29,16 +31,20 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveItemRepository objectiveItemRepository;
 	private final ObjectiveMovementRepository objectiveMovementRepository;
+
+	private final AccountRepositoryCustomized accountRepositoryCustomized;
 	private final ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 
 	@Autowired
-	public ObjectiveAccessModuleService(ObjectiveRepository objectiveRepository, ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized) {
+	public ObjectiveAccessModuleService(ObjectiveRepository objectiveRepository, ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository, AccountRepositoryCustomized accountRepositoryCustomized, ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized) {
 		this.objectiveRepository = objectiveRepository;
 		this.objectiveItemRepository = objectiveItemRepository;
 		this.objectiveMovementRepository = objectiveMovementRepository;
+		this.accountRepositoryCustomized = accountRepositoryCustomized;
 		this.objectiveMovementRepositoryCustomized = objectiveMovementRepositoryCustomized;
 	}
 
+	private List<AccountEntity> accountListBalanceCombo = new ArrayList<>();
 	private List<ObjectiveEntity> objectiveListResult = new ArrayList<>();
 	private List<ObjectiveMovementEntity> objectiveMovementListInPeriod = new ArrayList<>();
 
@@ -51,11 +57,14 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 		this.identifyMovementOfPeriod();
 		this.sortObjectivesBySortDate();
 		this.identifyNewHeaderGroup();
+
+		this.findBalanceAccounts();
 	}
 
 	@Override
 	public Map<String, Object> returnBusinessData() {
 		this.setArtifact("objectiveList", this.objectiveListResult);
+		this.setArtifact("accountListBalanceCombo", this.accountListBalanceCombo);
 		return super.returnBusinessData();
 	}
 
@@ -71,11 +80,11 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	}
 
 	private void findItemsOfEachObjective() {
-		this.objectiveListResult.forEach(objective -> objective.setObjectiveItemList(objectiveItemRepository.findByObjective(objective)));
+		this.objectiveListResult.forEach(objective -> objective.setObjectiveItemList(this.objectiveItemRepository.findByObjective(objective)));
 	}
 
 	private void findMovementsOfEachObjective() {
-		this.objectiveListResult.forEach(objective -> objective.setObjectiveMovementList(objectiveMovementRepository.findByObjective(objective)));
+		this.objectiveListResult.forEach(objective -> objective.setObjectiveMovementList(this.objectiveMovementRepository.findByObjective(objective)));
 	}
 
 	private void identifyMovementOfPeriod() {
@@ -113,5 +122,9 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 				}
 			}
 		}
+	}
+
+	private void findBalanceAccounts() {
+		this.accountListBalanceCombo = this.accountRepositoryCustomized.searchAllTypeBalance(this.objectiveParam.getUserIdentity());
 	}
 }
