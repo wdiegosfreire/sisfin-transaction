@@ -44,7 +44,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.entities.ObjectiveItemEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.entities.ObjectiveMovementEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.entities.PaymentMethodEntity;
 
 @Service
 @RequestScope
@@ -144,17 +143,17 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 	}
 
 	private void getStatementPatterns() {
-		this.statementPatternList = statementPatternRepository.findByUserIdentityOrderByComparatorAsc(this.statementParam.getUserIdentity());
+		this.statementPatternList = statementPatternRepository.findByUserIdentityAndStatementTypeOrderByComparatorAsc(this.statementParam.getUserIdentity(), this.statementParam.getStatementType());
 	}
 
 	private void exportIdentifiableStatementItems() throws BaseException {
 		for (StatementItemEntity statementItem : this.statement.getStatementItemList()) {
-			StatementPatternEntity statementPattern = this.statementPatternList.stream().filter(x -> statementItem.getDescription().contains(x.getComparator())).findFirst().orElse(null);
+			StatementPatternEntity statementPattern = this.statementPatternList.stream()
+				.filter(statementPatternStream -> statementItem.getDescription().contains(statementPatternStream.getComparator()))
+				.findFirst().orElse(null);
 
 			if (!Objects.isNull(statementPattern)) {
-				PaymentMethodEntity paymentMethodDefault = this.statementParam.getStatementType().getPaymentMethod();
-
-				this.createAndSaveObjectiveFromStatement(statementItem, statementPattern, paymentMethodDefault);
+				this.createAndSaveObjectiveFromStatement(statementItem, statementPattern);
 				this.updateStatementItemToExported(statementItem);
 			}
 		}
@@ -163,7 +162,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 	/*
 	 * Todos os metodos a partir deste ponto devem ser refatorados para uma classe especifica.
 	 */
-	private void createAndSaveObjectiveFromStatement(StatementItemEntity statementItem, StatementPatternEntity statementPattern, PaymentMethodEntity paymentMethod) throws BaseException {
+	private void createAndSaveObjectiveFromStatement(StatementItemEntity statementItem, StatementPatternEntity statementPattern) throws BaseException {
 		ObjectiveEntity objective = new ObjectiveEntity();
 		objective.setObjectiveMovementList(new ArrayList<>());
 		objective.setObjectiveItemList(new ArrayList<>());
@@ -176,8 +175,8 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		objectiveMovement.setPaymentDate(statementItem.getMovementDate());
 		objectiveMovement.setValue(statementItem.getMovementValue());
 		objectiveMovement.setInstallment(1);
-		objectiveMovement.setPaymentMethod(paymentMethod);
-		objectiveMovement.setAccountSource(this.statement.getStatementType().getAccountSource());
+		objectiveMovement.setPaymentMethod(statementPattern.getPaymentMethod());
+		objectiveMovement.setAccountSource(statementPattern.getAccountSource());
 
 		ObjectiveItemEntity objectiveItem = new ObjectiveItemEntity();
 		objectiveItem.setDescription(statementPattern.getDescription());
@@ -318,7 +317,6 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		if (statementParam.getStatementType().getIdentity() != null) {
 			statement.getStatementType().setIdentity(statementParam.getStatementType().getIdentity());
 			statement.getStatementType().setAccountSource(statementParam.getStatementType().getAccountSource());
-			statement.getStatementType().setPaymentMethod(statementParam.getStatementType().getPaymentMethod());
 
 			bankStatementFound = Boolean.TRUE;
 		}

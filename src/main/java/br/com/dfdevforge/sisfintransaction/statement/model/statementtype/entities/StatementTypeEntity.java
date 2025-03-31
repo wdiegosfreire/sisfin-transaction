@@ -12,7 +12,6 @@ import javax.persistence.Table;
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.bank.entities.BankEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.entities.PaymentMethodEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -41,10 +40,6 @@ public class StatementTypeEntity extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "acc_identity_source")
 	private AccountEntity accountSource;
-
-	@ManyToOne
-	@JoinColumn(name = "pam_identity")
-	private PaymentMethodEntity paymentMethod;
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;

@@ -10,8 +10,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.entities.StatementTypeEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.entities.PaymentMethodEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +38,24 @@ public class StatementPatternEntity extends BaseEntity {
 	private String description;
 
 	@ManyToOne
+	@JoinColumn(name = "acc_identity_source")
+	private AccountEntity accountSource;
+
+	@ManyToOne
 	@JoinColumn(name = "acc_identity_target")
 	private AccountEntity accountTarget;
 
 	@ManyToOne
 	@JoinColumn(name = "loc_identity")
 	private LocationEntity location;
+
+	@ManyToOne
+	@JoinColumn(name = "pam_identity")
+	private PaymentMethodEntity paymentMethod;
+
+	@ManyToOne
+	@JoinColumn(name = "stt_identity")
+	private StatementTypeEntity statementType;
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;
