@@ -49,7 +49,7 @@ public class StatementPatternExecuteRegistrationService extends StatementPattern
 		if (this.statementPatternParam.getPaymentMethod() == null || this.statementPatternParam.getPaymentMethod().getIdentity() == null)
 			errorList.add("Please, enter payment method.");
 		if (this.statementPatternParam.getUserIdentity() == null)
-			errorList.add("Please, the bank need to be associated with a user.");
+			errorList.add("Please, the statement pattern need to be associated with a user.");
 
 		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
