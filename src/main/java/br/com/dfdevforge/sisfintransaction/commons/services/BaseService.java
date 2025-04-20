@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.statement.model.bank.entities.BankEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.bank.repositories.BankRepository;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.entities.StatementTypeEntity;
+import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.repositories.StatementTypeRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositories.AccountRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
@@ -24,6 +26,7 @@ public abstract class BaseService implements CommonService {
 	@Autowired private AccountRepository accountRepository;
 	@Autowired private LocationRepository locationRepository;
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
+	@Autowired private StatementTypeRepository statementTypeRepository;
 
 	@Override
 	public void validateUserAccess() throws BaseException {
@@ -64,5 +67,9 @@ public abstract class BaseService implements CommonService {
 
 	protected List<PaymentMethodEntity> findPaymentMethodsByUserIdentityOrderByNameAsc(long userIdentity) {
 		return this.paymentMethodRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
+	protected List<StatementTypeEntity> findStatementTypesByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.statementTypeRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 }

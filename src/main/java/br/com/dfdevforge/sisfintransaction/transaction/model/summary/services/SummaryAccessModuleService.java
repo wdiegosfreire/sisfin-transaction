@@ -70,9 +70,8 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 		this.getPeriodList();
 		this.getTotalValueGroupedByOutcomingAccount();
 		this.buildIncomingOutcomingSummaryTableData();
-
-		this.buildOutcomingSummaryLineChart();
 		this.buildOutcomingSummaryPieChart();
+		this.buildOutcomingSummaryLineChart();
 	}
 
 	private void findBalanceAccounts() {
