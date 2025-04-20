@@ -27,6 +27,8 @@ public class StatementPatternAccessEditionService extends StatementPatternBaseSe
 		this.findByIdentity();
 		this.findLocations();
 		this.findAccountsTarget();
+		this.findPaymentMethods();
+		this.findStatementTypes();
 	}
 
 	private void findByIdentity() throws DataForEditionNotFoundException {
@@ -44,5 +46,13 @@ public class StatementPatternAccessEditionService extends StatementPatternBaseSe
 
 	private void findAccountsTarget() {
 		this.setArtifact("accountListComboTarget", this.findAccountsByUserIdentityOrderByLevel(this.statementPatternParam.getUserIdentity()));
+	}
+
+	private void findPaymentMethods() {
+		this.setArtifact("paymentMethodListCombo", this.findPaymentMethodsByUserIdentityOrderByNameAsc(this.statementPatternParam.getUserIdentity()));
+	}
+
+	private void findStatementTypes() {
+		this.setArtifact("statementTypeListCombo", this.findStatementTypesByUserIdentityOrderByNameAsc(this.statementPatternParam.getUserIdentity()));
 	}
 }

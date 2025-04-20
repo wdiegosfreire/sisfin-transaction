@@ -16,6 +16,8 @@ public class StatementPatternAccessRegistrationService extends StatementPatternB
 	public void executeBusinessRule() throws BaseException {
 		this.findLocations();
 		this.findAccountsTarget();
+		this.findPaymentMethods();
+		this.findStatementTypes();
 	}
 
 	private void findLocations() {
@@ -24,5 +26,13 @@ public class StatementPatternAccessRegistrationService extends StatementPatternB
 
 	private void findAccountsTarget() {
 		this.setArtifact("accountListComboTarget", this.findAccountsByUserIdentityOrderByLevel(this.statementPatternParam.getUserIdentity()));
+	}
+
+	private void findPaymentMethods() {
+		this.setArtifact("paymentMethodListCombo", this.findPaymentMethodsByUserIdentityOrderByNameAsc(this.statementPatternParam.getUserIdentity()));
+	}
+
+	private void findStatementTypes() {
+		this.setArtifact("statementTypeListCombo", this.findStatementTypesByUserIdentityOrderByNameAsc(this.statementPatternParam.getUserIdentity()));
 	}
 }
