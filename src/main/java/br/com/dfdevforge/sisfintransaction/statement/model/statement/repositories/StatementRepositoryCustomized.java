@@ -25,6 +25,7 @@ public class StatementRepositoryCustomized {
 		whereClause.append(" and ( ");
 		whereClause.append("   sta.statementType.name like :filter ");
 		whereClause.append("   or sta.statementType.bank.name like :filter ");
+		whereClause.append("   or concat(sta.month, '/', sta.year) like :filter ");
 
 		if (Utils.value.isNumber(statement.getFilter())) {
 			whereClause.append(" or sta.year like :filter ");
