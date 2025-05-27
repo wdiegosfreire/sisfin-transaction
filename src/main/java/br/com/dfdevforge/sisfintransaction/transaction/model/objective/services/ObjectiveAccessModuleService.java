@@ -57,7 +57,6 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 		this.identifyMovementOfPeriod();
 		this.sortObjectivesBySortDate();
 		this.identifyNewHeaderGroup();
-
 		this.findBalanceAccounts();
 	}
 

@@ -26,22 +26,30 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repos
 @RequestScope
 @Transactional
 public class ObjectiveAccessEditionService extends ObjectiveBaseService implements CommonService {
-	@Autowired private ObjectiveRepository objectiveRepository;
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
+	private final AccountRepository accountRepository;
+	private final LocationRepository locationRepository;
+	private final ObjectiveRepository objectiveRepository;
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+	private final PaymentMethodRepository paymentMethodRepository;
 
-	@Autowired private AccountRepository accountRepository;
-	@Autowired private LocationRepository locationRepository;
-	@Autowired private PaymentMethodRepository paymentMethodRepository;
+	@Autowired
+	public ObjectiveAccessEditionService(AccountRepository accountRepository, LocationRepository locationRepository, ObjectiveRepository objectiveRepository, ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository, PaymentMethodRepository paymentMethodRepository) {
+		this.accountRepository = accountRepository;
+		this.locationRepository = locationRepository;
+		this.objectiveRepository = objectiveRepository;
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+		this.paymentMethodRepository = paymentMethodRepository;
+	}
 
 	private ObjectiveEntity objectiveResult;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
-		this.findByIdentity();
+		this.findObjectiveByIdentity();
 		this.findItemsOfObjective();
 		this.findMovementsOfObjective();
-
 		this.findLocations();
 		this.findPaymentMethods();
 		this.findAccountsSource();
@@ -54,7 +62,7 @@ public class ObjectiveAccessEditionService extends ObjectiveBaseService implemen
 		return super.returnBusinessData();
 	}
 
-	private void findByIdentity() throws DataForEditionNotFoundException {
+	private void findObjectiveByIdentity() throws DataForEditionNotFoundException {
 		this.objectiveResult = this.objectiveRepository.findByIdentity(this.objectiveParam.getIdentity());
 
 		if (objectiveResult == null)
