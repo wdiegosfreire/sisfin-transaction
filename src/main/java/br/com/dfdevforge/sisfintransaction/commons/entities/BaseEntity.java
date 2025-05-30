@@ -10,4 +10,5 @@ import lombok.Setter;
 public class BaseEntity {
 	private String filter;
 	private Map<String, Object> map;
+	private Map<String, Object> filterMap;
 }
