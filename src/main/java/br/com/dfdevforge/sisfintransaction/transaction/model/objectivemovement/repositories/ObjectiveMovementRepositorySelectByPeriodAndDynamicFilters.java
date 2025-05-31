@@ -15,14 +15,16 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.e
 
 @Repository
 public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
+	private static final String ACCOUNT_SOURCE_IDENTITY = "accountSourceIdentity";
+
 	private final EntityManager entityManager;
 
 	public ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
-	public List<ObjectiveMovementEntity> execute(Map<String, Object> filterMap, Long userIdentity) {
-		Instant instant = Instant.parse((String) filterMap.get("periodDate"));
+	public List<ObjectiveMovementEntity> execute(Map<String, String> filterMap, Long userIdentity) {
+		Instant instant = Instant.parse(filterMap.get("periodDate"));
 		Date periodDate = Date.from(instant);
 
 		StringBuilder whereClause = new StringBuilder();
@@ -34,6 +36,9 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 		whereClause.append("   (obm.paymentDate is null and obm.dueDate between :startDate and :endDate) ");
 		whereClause.append(" ) ");
 
+		if (Utils.value.exists(filterMap, ACCOUNT_SOURCE_IDENTITY))
+			whereClause.append(" and obm.accountSource.identity = :accountSourceIdentity ");
+
 		StringBuilder jpql = new StringBuilder();
 
 		jpql.append("select obm from ObjectiveMovementEntity as obm where " + whereClause + " order by obm.paymentDate ");
@@ -43,6 +48,9 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 		query.setParameter("userIdentity", userIdentity);
 		query.setParameter("startDate", this.findStartDate(periodDate));
 		query.setParameter("endDate", this.findEndDate(periodDate));
+
+		if (Utils.value.exists(filterMap, ACCOUNT_SOURCE_IDENTITY))
+			query.setParameter(ACCOUNT_SOURCE_IDENTITY, Long.parseLong(filterMap.get(ACCOUNT_SOURCE_IDENTITY)));
 
 		return query.getResultList();
 	}
