@@ -17,7 +17,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteEditionService;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteExclusionService;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteRegistrationService;
-import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteSearchService;
 
 @RestController
 @RequestMapping(value = "/objective")
@@ -27,17 +26,15 @@ public class ObjectiveResource {
 	private final ObjectiveAccessModuleService objectiveAccessModuleService;
 	private final ObjectiveAccessEditionService objectiveAccessEditionService;
 	private final ObjectiveAccessRegistrationService objectiveAccessRegistrationService;
-	private final ObjectiveExecuteSearchService objectiveExecuteSearchService;
 	private final ObjectiveExecuteEditionService objectiveExecuteEditionService;
 	private final ObjectiveExecuteExclusionService objectiveExecuteExclusionService;
 	private final ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
 
 	@Autowired
-	public ObjectiveResource(ObjectiveAccessModuleService objectiveAccessModuleService, ObjectiveAccessEditionService objectiveAccessEditionService, ObjectiveAccessRegistrationService objectiveAccessRegistrationService, ObjectiveExecuteSearchService objectiveExecuteSearchService, ObjectiveExecuteEditionService objectiveExecuteEditionService, ObjectiveExecuteExclusionService objectiveExecuteExclusionService, ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService) {
+	public ObjectiveResource(ObjectiveAccessModuleService objectiveAccessModuleService, ObjectiveAccessEditionService objectiveAccessEditionService, ObjectiveAccessRegistrationService objectiveAccessRegistrationService, ObjectiveExecuteEditionService objectiveExecuteEditionService, ObjectiveExecuteExclusionService objectiveExecuteExclusionService, ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService) {
 		this.objectiveAccessModuleService = objectiveAccessModuleService;
 		this.objectiveAccessEditionService = objectiveAccessEditionService;
 		this.objectiveAccessRegistrationService = objectiveAccessRegistrationService;
-		this.objectiveExecuteSearchService = objectiveExecuteSearchService;
 		this.objectiveExecuteEditionService = objectiveExecuteEditionService;
 		this.objectiveExecuteExclusionService = objectiveExecuteExclusionService;
 		this.objectiveExecuteRegistrationService = objectiveExecuteRegistrationService;
@@ -63,14 +60,6 @@ public class ObjectiveResource {
 	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody ObjectiveEntity objective, @RequestParam String token) throws BaseException {
 		this.objectiveAccessRegistrationService.setParams(objective, token);
 		this.resourceData.setMap(this.objectiveAccessRegistrationService.execute());
-
-		return ResponseEntity.ok(this.resourceData);
-	}
-
-	@PostMapping(value = "/executeSearch")
-	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody ObjectiveEntity objective, @RequestParam String token) throws BaseException {
-		this.objectiveExecuteSearchService.setParams(objective, token);
-		this.resourceData.setMap(this.objectiveExecuteSearchService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
