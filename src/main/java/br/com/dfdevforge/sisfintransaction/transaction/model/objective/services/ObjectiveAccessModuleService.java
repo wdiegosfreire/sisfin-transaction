@@ -59,6 +59,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 		this.sortObjectivesBySortDate();
 		this.identifyNewHeaderGroup();
 		this.findBalanceAccounts();
+		this.findLocations();
 	}
 
 	@Override
@@ -127,5 +128,9 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 
 	private void findBalanceAccounts() {
 		this.accountListBalanceCombo = this.accountRepositoryCustomized.searchAllTypeBalance(this.objectiveParam.getUserIdentity());
+	}
+
+	private void findLocations() {
+		this.setArtifact("locationListCombo", this.findLocationsByUserIdentityOrderByNameAsc(this.objectiveParam.getUserIdentity()));
 	}
 }
