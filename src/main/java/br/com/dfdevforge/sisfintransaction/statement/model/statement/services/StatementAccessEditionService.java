@@ -96,15 +96,15 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 				List<ObjectiveMovementEntity> objectiveMovementList = objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue.execute(statementItem.getMovementDate(), statementItem.getMovementValue(), this.statementParam.getUserIdentity());
 
 				final String separator = " | ";
-				objectiveMovementList.forEach(objectiveMovementLoop -> {
+				objectiveMovementList.forEach(objectiveMovementLoop -> 
 					statementItem.props.getSimilarMovementList().add(
 						objectiveMovementLoop.getIdentity() + separator +
 						this.traceAccount(objectiveMovementLoop.getAccountSource()) + separator +
 						objectiveMovementLoop.getObjective().getDescription() + separator +
 						Utils.date.toStringFromDate(objectiveMovementLoop.getPaymentDate(), null) + separator +
 						objectiveMovementLoop.getValue()
-					);
-				});
+					)
+				);
 			}
 		});
 	}

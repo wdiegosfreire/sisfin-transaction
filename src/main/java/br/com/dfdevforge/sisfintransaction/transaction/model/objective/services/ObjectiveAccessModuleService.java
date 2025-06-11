@@ -89,7 +89,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	}
 
 	private void identifyMovementOfPeriod() {
-		Instant instant = Instant.parse((String) this.objectiveParam.getFilterMap().get("periodDate"));
+		Instant instant = Instant.parse(this.objectiveParam.getFilterMap().get("periodDate"));
 		int selectedPeriod = Utils.date.getPeriodOf(Date.from(instant));
 
 		for (ObjectiveEntity objective : this.objectiveListResult) {

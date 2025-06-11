@@ -26,13 +26,22 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repos
 @RequestScope
 @Transactional
 public class ObjectiveMovementAccessEditionService extends ObjectiveMovementBaseService implements CommonService {
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
-	@Autowired private AccountRepository accountRepository;
-	@Autowired private LocationRepository locationRepository;
-	@Autowired private PaymentMethodRepository paymentMethodRepository;
-
 	private ObjectiveMovementEntity objectiveMovementResult;
+
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+	private final AccountRepository accountRepository;
+	private final LocationRepository locationRepository;
+	private final PaymentMethodRepository paymentMethodRepository;
+
+	@Autowired
+	public ObjectiveMovementAccessEditionService(ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository, AccountRepository accountRepository, LocationRepository locationRepository, PaymentMethodRepository paymentMethodRepository) {
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+		this.accountRepository = accountRepository;
+		this.locationRepository = locationRepository;
+		this.paymentMethodRepository = paymentMethodRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

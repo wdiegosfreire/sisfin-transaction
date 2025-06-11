@@ -23,12 +23,22 @@ import br.com.dfdevforge.sisfintransaction.statement.model.bank.services.BankExe
 public class BankResource {
 	private ResourceDataEntity resourceData = new ResourceDataEntity();
 
-	@Autowired private BankAccessModuleService bankAccessModuleService;
-	@Autowired private BankAccessEditionService bankAccessEditionService;
-	@Autowired private BankExecuteSearchService bankExecuteSearchService;
-	@Autowired private BankExecuteEditionService bankExecuteEditionService;
-	@Autowired private BankExecuteExclusionService bankExecuteExclusionService;
-	@Autowired private BankExecuteRegistrationService bankExecuteRegistrationService;
+	private final BankAccessModuleService bankAccessModuleService;
+	private final BankAccessEditionService bankAccessEditionService;
+	private final BankExecuteSearchService bankExecuteSearchService;
+	private final BankExecuteEditionService bankExecuteEditionService;
+	private final BankExecuteExclusionService bankExecuteExclusionService;
+	private final BankExecuteRegistrationService bankExecuteRegistrationService;
+
+	@Autowired
+	public BankResource(BankAccessModuleService bankAccessModuleService, BankAccessEditionService bankAccessEditionService, BankExecuteSearchService bankExecuteSearchService, BankExecuteEditionService bankExecuteEditionService, BankExecuteExclusionService bankExecuteExclusionService, BankExecuteRegistrationService bankExecuteRegistrationService) {
+		this.bankAccessModuleService = bankAccessModuleService;
+		this.bankAccessEditionService = bankAccessEditionService;
+		this.bankExecuteSearchService = bankExecuteSearchService;
+		this.bankExecuteEditionService = bankExecuteEditionService;
+		this.bankExecuteExclusionService = bankExecuteExclusionService;
+		this.bankExecuteRegistrationService = bankExecuteRegistrationService;
+	}
 
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody BankEntity bank, @RequestParam String token) throws BaseException {

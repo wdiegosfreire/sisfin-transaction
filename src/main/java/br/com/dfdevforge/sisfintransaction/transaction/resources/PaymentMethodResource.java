@@ -23,13 +23,22 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.servi
 public class PaymentMethodResource {
 	private ResourceDataEntity resourceData = new ResourceDataEntity();
 
-	@Autowired private PaymentMethodAccessModuleService paymentMethodAccessModuleService;
-	@Autowired private PaymentMethodAccessEditionService paymentMethodAccessEditionService;
-	@Autowired private PaymentMethodExecuteSearchService paymentMethodExecuteSearchService;
-	@Autowired private PaymentMethodExecuteEditionService paymentMethodExecuteEditionService;
-	@Autowired private PaymentMethodExecuteExclusionService paymentMethodExecuteExclusionService;
-	@Autowired private PaymentMethodExecuteRegistrationService paymentMethodExecuteRegistrationService;
+	private final PaymentMethodAccessModuleService paymentMethodAccessModuleService;
+	private final PaymentMethodAccessEditionService paymentMethodAccessEditionService;
+	private final PaymentMethodExecuteSearchService paymentMethodExecuteSearchService;
+	private final PaymentMethodExecuteEditionService paymentMethodExecuteEditionService;
+	private final PaymentMethodExecuteExclusionService paymentMethodExecuteExclusionService;
+	private final PaymentMethodExecuteRegistrationService paymentMethodExecuteRegistrationService;
 
+	@Autowired
+	public PaymentMethodResource(PaymentMethodAccessModuleService paymentMethodAccessModuleService, PaymentMethodAccessEditionService paymentMethodAccessEditionService, PaymentMethodExecuteSearchService paymentMethodExecuteSearchService, PaymentMethodExecuteEditionService paymentMethodExecuteEditionService, PaymentMethodExecuteExclusionService paymentMethodExecuteExclusionService, PaymentMethodExecuteRegistrationService paymentMethodExecuteRegistrationService) {
+		this.paymentMethodAccessModuleService = paymentMethodAccessModuleService;
+		this.paymentMethodAccessEditionService = paymentMethodAccessEditionService;
+		this.paymentMethodExecuteSearchService = paymentMethodExecuteSearchService;
+		this.paymentMethodExecuteEditionService = paymentMethodExecuteEditionService;
+		this.paymentMethodExecuteExclusionService = paymentMethodExecuteExclusionService;
+		this.paymentMethodExecuteRegistrationService = paymentMethodExecuteRegistrationService;
+	}
 
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody PaymentMethodEntity paymentMethod, @RequestParam String token) throws BaseException {

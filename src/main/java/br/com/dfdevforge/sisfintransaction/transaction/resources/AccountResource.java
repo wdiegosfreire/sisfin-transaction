@@ -24,14 +24,24 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.Ac
 public class AccountResource {
 	private ResourceDataEntity resourceData = new ResourceDataEntity();
 
-	@Autowired private AccountAccessModuleService accountAccessModuleService;
-	@Autowired private AccountAccessEditionService accountAccessEditionService;
-	@Autowired private AccountAccessRegistrationService accountAccessRegistrationService;
+	private final AccountAccessModuleService accountAccessModuleService;
+	private final AccountAccessEditionService accountAccessEditionService;
+	private final AccountAccessRegistrationService accountAccessRegistrationService;
+	private final AccountExecuteSearchService accountExecuteSearchService;
+	private final AccountExecuteEditionService accountExecuteEditionService;
+	private final AccountExecuteExclusionService accountExecuteExclusionService;
+	private final AccountExecuteRegistrationService accountExecuteRegistrationService;
 
-	@Autowired private AccountExecuteSearchService accountExecuteSearchService;
-	@Autowired private AccountExecuteEditionService accountExecuteEditionService;
-	@Autowired private AccountExecuteExclusionService accountExecuteExclusionService;
-	@Autowired private AccountExecuteRegistrationService accountExecuteRegistrationService;
+	@Autowired
+	public AccountResource(AccountAccessModuleService accountAccessModuleService, AccountAccessEditionService accountAccessEditionService, AccountAccessRegistrationService accountAccessRegistrationService, AccountExecuteSearchService accountExecuteSearchService, AccountExecuteEditionService accountExecuteEditionService, AccountExecuteExclusionService accountExecuteExclusionService, AccountExecuteRegistrationService accountExecuteRegistrationService) {
+		this.accountAccessModuleService = accountAccessModuleService;
+		this.accountAccessEditionService = accountAccessEditionService;
+		this.accountAccessRegistrationService = accountAccessRegistrationService;
+		this.accountExecuteSearchService = accountExecuteSearchService;
+		this.accountExecuteEditionService = accountExecuteEditionService;
+		this.accountExecuteExclusionService = accountExecuteExclusionService;
+		this.accountExecuteRegistrationService = accountExecuteRegistrationService;
+	}
 
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {

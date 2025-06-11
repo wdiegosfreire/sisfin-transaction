@@ -15,7 +15,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.location.repositori
 @RequestScope
 @Transactional
 public class LocationAccessEditionService extends LocationBaseService implements CommonService {
-	@Autowired private LocationRepository locationRepository;
+	private final LocationRepository locationRepository;
+
+	@Autowired
+	public LocationAccessEditionService(LocationRepository locationRepository) {
+		this.locationRepository = locationRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

@@ -15,7 +15,12 @@ import br.com.dfdevforge.sisfintransaction.statement.model.bank.repositories.Ban
 @RequestScope
 @Transactional
 public class BankAccessEditionService extends BankBaseService implements CommonService {
-	@Autowired private BankRepository bankRepository;
+	private final BankRepository bankRepository;
+
+	@Autowired
+	public BankAccessEditionService(BankRepository bankRepository) {
+		this.bankRepository = bankRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

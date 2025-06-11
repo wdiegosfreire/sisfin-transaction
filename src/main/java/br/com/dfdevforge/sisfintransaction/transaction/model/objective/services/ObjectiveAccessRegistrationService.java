@@ -21,9 +21,16 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repos
 @RequestScope
 @Transactional
 public class ObjectiveAccessRegistrationService extends ObjectiveBaseService implements CommonService {
-	@Autowired private AccountRepository accountRepository;
-	@Autowired private LocationRepository locationRepository;
-	@Autowired private PaymentMethodRepository paymentMethodRepository;
+	private final AccountRepository accountRepository;
+	private final LocationRepository locationRepository;
+	private final PaymentMethodRepository paymentMethodRepository;
+
+	@Autowired
+	public ObjectiveAccessRegistrationService(AccountRepository accountRepository, LocationRepository locationRepository, PaymentMethodRepository paymentMethodRepository) {
+		this.accountRepository = accountRepository;
+		this.locationRepository = locationRepository;
+		this.paymentMethodRepository = paymentMethodRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

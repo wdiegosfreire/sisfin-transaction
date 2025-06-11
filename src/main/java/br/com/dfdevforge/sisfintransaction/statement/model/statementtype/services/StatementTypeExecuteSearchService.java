@@ -14,8 +14,14 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.reposit
 @RequestScope
 @Transactional
 public class StatementTypeExecuteSearchService extends StatementTypeBaseService implements CommonService {
-	@Autowired private StatementTypeRepository statementTypeRepository;
-	@Autowired private StatementTypeRepositoryCustomized statementTypeRepositoryCustomized;
+	private final StatementTypeRepository statementTypeRepository;
+	private final StatementTypeRepositoryCustomized statementTypeRepositoryCustomized;
+
+	@Autowired
+	public StatementTypeExecuteSearchService(StatementTypeRepository statementTypeRepository, StatementTypeRepositoryCustomized statementTypeRepositoryCustomized) {
+		this.statementTypeRepository = statementTypeRepository;
+		this.statementTypeRepositoryCustomized = statementTypeRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

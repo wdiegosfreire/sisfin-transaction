@@ -1,7 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.statement.model.statementitem.entities;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 
 import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
@@ -20,13 +19,7 @@ public class StatementItemEntityYaml {
 	}
 
 	public Date getDateObject() {
-		try {
-			return Utils.date.toDateFromString(date);
-		}
-		catch (ParseException e) {
-			Utils.log.stackTrace(e);
-			return null;
-		}
+		return Utils.date.toDateFromString(date);
 	}
 
 	public BigDecimal stringToBigDecimal(String value) {

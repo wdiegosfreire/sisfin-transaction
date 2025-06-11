@@ -22,9 +22,16 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 @RequestScope
 @Transactional
 public class ObjectiveExecuteEditionService extends ObjectiveBaseService implements CommonService {
-	@Autowired private ObjectiveRepository objectiveRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveRepository objectiveRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+	private final ObjectiveItemRepository objectiveItemRepository;
+
+	@Autowired
+	public ObjectiveExecuteEditionService(ObjectiveRepository objectiveRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveItemRepository objectiveItemRepository) {
+		this.objectiveRepository = objectiveRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+		this.objectiveItemRepository = objectiveItemRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
