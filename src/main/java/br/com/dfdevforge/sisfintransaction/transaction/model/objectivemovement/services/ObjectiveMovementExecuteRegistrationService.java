@@ -30,10 +30,18 @@ public class ObjectiveMovementExecuteRegistrationService extends ObjectiveMoveme
 	private BigDecimal installmentValue;
 	private BigDecimal installmentDiference;
 
-	@Autowired private ObjectiveRepository objectiveRepository;
-	@Autowired private ObjectiveItemRepository objectiveItemRepository;
-	@Autowired private ObjectiveMovementRepository objectiveMovementRepository;
-	@Autowired private ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+	private final ObjectiveRepository objectiveRepository;
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+	private final ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
+
+	@Autowired
+	public ObjectiveMovementExecuteRegistrationService(ObjectiveRepository objectiveRepository, ObjectiveItemRepository objectiveItemRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized) {
+		this.objectiveRepository = objectiveRepository;
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+		this.objectiveMovementRepositoryCustomized = objectiveMovementRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

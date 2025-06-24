@@ -17,7 +17,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repos
 @RequestScope
 @Transactional
 public class PaymentMethodExecuteExclusionService extends PaymentMethodBaseService implements CommonService {
-	@Autowired private PaymentMethodRepository paymentMethodRepository;
+	private final PaymentMethodRepository paymentMethodRepository;
+
+	@Autowired
+	public PaymentMethodExecuteExclusionService(PaymentMethodRepository paymentMethodRepository) {
+		this.paymentMethodRepository = paymentMethodRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

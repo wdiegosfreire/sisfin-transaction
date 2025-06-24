@@ -17,7 +17,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.location.repositori
 @RequestScope
 @Transactional
 public class LocationExecuteExclusionService extends LocationBaseService implements CommonService {
-	@Autowired private LocationRepository locationRepository;
+	private final LocationRepository locationRepository;
+
+	@Autowired
+	public LocationExecuteExclusionService(LocationRepository locationRepository) {
+		this.locationRepository = locationRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

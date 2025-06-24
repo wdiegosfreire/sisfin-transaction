@@ -15,8 +15,14 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repos
 @RequestScope
 @Transactional
 public class PaymentMethodExecuteSearchService extends PaymentMethodBaseService implements CommonService {
-	@Autowired private PaymentMethodRepository paymentMethodRepository;
-	@Autowired private PaymentMethodRepositoryCustomized paymentMethodRepositoryCustomized;
+	private final PaymentMethodRepository paymentMethodRepository;
+	private final PaymentMethodRepositoryCustomized paymentMethodRepositoryCustomized;
+
+	@Autowired
+	public PaymentMethodExecuteSearchService(PaymentMethodRepository paymentMethodRepository, PaymentMethodRepositoryCustomized paymentMethodRepositoryCustomized) {
+		this.paymentMethodRepository = paymentMethodRepository;
+		this.paymentMethodRepositoryCustomized = paymentMethodRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

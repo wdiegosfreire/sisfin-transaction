@@ -22,8 +22,12 @@ import io.swagger.v3.oas.annotations.Operation;
 public class ImRunning {
 	private static final String BREAK = "<br>";
 
+	private final BuildProperties buildProperties;
+
 	@Autowired
-	private BuildProperties buildProperties;
+	public ImRunning(BuildProperties buildProperties) {
+		this.buildProperties = buildProperties;
+	}
 
 	@Value("${server.port}")
 	private String serverPort;

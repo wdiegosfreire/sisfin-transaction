@@ -13,7 +13,12 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.reposit
 @RequestScope
 @Transactional
 public class StatementAccessRegistrationService extends StatementBaseService implements CommonService {
-	@Autowired private StatementTypeRepository statementTypeRepository;
+	private final  StatementTypeRepository statementTypeRepository;
+
+	@Autowired
+	public StatementAccessRegistrationService(StatementTypeRepository statementTypeRepository) {
+		this.statementTypeRepository = statementTypeRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

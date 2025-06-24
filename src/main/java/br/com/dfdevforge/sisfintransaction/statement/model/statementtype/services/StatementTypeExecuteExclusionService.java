@@ -17,7 +17,12 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.reposit
 @RequestScope
 @Transactional
 public class StatementTypeExecuteExclusionService extends StatementTypeBaseService implements CommonService {
-	@Autowired private StatementTypeRepository statementTypeRepository;
+	private final StatementTypeRepository statementTypeRepository;
+
+	@Autowired
+	public StatementTypeExecuteExclusionService(StatementTypeRepository statementTypeRepository) {
+		this.statementTypeRepository = statementTypeRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

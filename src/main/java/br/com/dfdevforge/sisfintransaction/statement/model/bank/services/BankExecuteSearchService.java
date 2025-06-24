@@ -14,8 +14,14 @@ import br.com.dfdevforge.sisfintransaction.statement.model.bank.repositories.Ban
 @RequestScope
 @Transactional
 public class BankExecuteSearchService extends BankBaseService implements CommonService {
-	@Autowired private BankRepository bankRepository;
-	@Autowired private BankRepositoryCustomized bankRepositoryCustomized;
+	private final BankRepository bankRepository;
+	private final BankRepositoryCustomized bankRepositoryCustomized;
+
+	@Autowired
+	public BankExecuteSearchService(BankRepository bankRepository, BankRepositoryCustomized bankRepositoryCustomized) {
+		this.bankRepository = bankRepository;
+		this.bankRepositoryCustomized = bankRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

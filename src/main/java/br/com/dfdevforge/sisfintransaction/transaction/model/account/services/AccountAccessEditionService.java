@@ -15,7 +15,12 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositorie
 @RequestScope
 @Transactional
 public class AccountAccessEditionService extends AccountBaseService implements CommonService {
-	@Autowired private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
+
+	@Autowired
+	public AccountAccessEditionService(AccountRepository accountRepository) {
+		this.accountRepository = accountRepository;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {

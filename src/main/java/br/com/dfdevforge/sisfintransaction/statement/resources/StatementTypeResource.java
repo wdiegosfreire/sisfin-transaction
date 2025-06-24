@@ -24,14 +24,24 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.service
 public class StatementTypeResource {
 	private ResourceDataEntity resourceData = new ResourceDataEntity();
 
-	@Autowired private StatementTypeAccessModuleService statementTypeAccessModuleService;
-	@Autowired private StatementTypeAccessEditionService statementTypeAccessEditionService;
-	@Autowired private StatementTypeExecuteSearchService statementTypeExecuteSearchService;
-	@Autowired private StatementTypeExecuteEditionService statementTypeExecuteEditionService;
-	@Autowired private StatementTypeExecuteExclusionService statementTypeExecuteExclusionService;
-	@Autowired private StatementTypeAccessRegistrationService statementTypeAccessRegistrationService;
-	@Autowired private StatementTypeExecuteRegistrationService statementTypeExecuteRegistrationService;
-	
+	private final StatementTypeAccessModuleService statementTypeAccessModuleService;
+	private final StatementTypeAccessEditionService statementTypeAccessEditionService;
+	private final StatementTypeExecuteSearchService statementTypeExecuteSearchService;
+	private final StatementTypeExecuteEditionService statementTypeExecuteEditionService;
+	private final StatementTypeExecuteExclusionService statementTypeExecuteExclusionService;
+	private final StatementTypeAccessRegistrationService statementTypeAccessRegistrationService;
+	private final StatementTypeExecuteRegistrationService statementTypeExecuteRegistrationService;
+
+	@Autowired
+	public StatementTypeResource(StatementTypeAccessModuleService statementTypeAccessModuleService, StatementTypeAccessEditionService statementTypeAccessEditionService, StatementTypeExecuteSearchService statementTypeExecuteSearchService, StatementTypeExecuteEditionService statementTypeExecuteEditionService, StatementTypeExecuteExclusionService statementTypeExecuteExclusionService, StatementTypeAccessRegistrationService statementTypeAccessRegistrationService, StatementTypeExecuteRegistrationService statementTypeExecuteRegistrationService) {
+		this.statementTypeAccessModuleService = statementTypeAccessModuleService;
+		this.statementTypeAccessEditionService = statementTypeAccessEditionService;
+		this.statementTypeExecuteSearchService = statementTypeExecuteSearchService;
+		this.statementTypeExecuteEditionService = statementTypeExecuteEditionService;
+		this.statementTypeExecuteExclusionService = statementTypeExecuteExclusionService;
+		this.statementTypeAccessRegistrationService = statementTypeAccessRegistrationService;
+		this.statementTypeExecuteRegistrationService = statementTypeExecuteRegistrationService;
+	}
 
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody StatementTypeEntity statementType, @RequestParam String token) throws BaseException {

@@ -107,7 +107,7 @@ public class DateUtils {
 	 * @return
 	 * @throws ParseException
 	 */
-	public Date toDateFromString(String dateString) throws ParseException {
+	public Date toDateFromString(String dateString) {
 		if (dateString == null)
 			return null;
 

@@ -14,8 +14,14 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositorie
 @RequestScope
 @Transactional
 public class AccountExecuteSearchService extends AccountBaseService implements CommonService {
-	@Autowired private AccountRepository accountRepository;
-	@Autowired private AccountRepositoryCustomized accountRepositoryCustomized;
+	private final AccountRepository accountRepository;
+	private final AccountRepositoryCustomized accountRepositoryCustomized;
+
+	@Autowired
+	public AccountExecuteSearchService(AccountRepository accountRepository, AccountRepositoryCustomized accountRepositoryCustomized) {
+		this.accountRepository = accountRepository;
+		this.accountRepositoryCustomized = accountRepositoryCustomized;
+	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
