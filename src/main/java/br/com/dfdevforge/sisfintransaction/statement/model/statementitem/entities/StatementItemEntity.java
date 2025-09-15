@@ -93,6 +93,9 @@ public class StatementItemEntity extends BaseEntity {
 	@Transient
 	public final StatementItemEntityProps props = new StatementItemEntityProps();
 
+	@Transient
+	public final StatementItemEntityMethods methods = new StatementItemEntityMethods(this);
+
 	public boolean isIncoming() {
 		return this.operationType.equalsIgnoreCase("C");
 	}
