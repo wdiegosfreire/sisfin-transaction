@@ -61,6 +61,8 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 	private void saveObjectiveMovementsEdition() {
 		Date now = new Date();
 		for (ObjectiveMovementEntity objectiveMovementEdited : this.objectiveParam.getObjectiveMovementList()) {
+			objectiveMovementEdited.setIdentity(Math.abs(objectiveMovementEdited.getIdentity()));
+
 			objectiveMovementEdited.setRegistrationDate(now);
 			objectiveMovementEdited.setObjective(this.objectiveParam);
 			objectiveMovementEdited.setUserIdentity(this.objectiveParam.getUserIdentity());
