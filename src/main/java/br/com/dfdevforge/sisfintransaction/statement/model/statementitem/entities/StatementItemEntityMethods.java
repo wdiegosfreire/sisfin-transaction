@@ -10,6 +10,10 @@ import lombok.Setter;
 public class StatementItemEntityMethods {
 	private final StatementItemEntity statementItem;
 
+	public StatementItemEntityMethods() {
+		this.statementItem = null;
+	}
+
 	public boolean isIncoming() {
 		return this.statementItem.getOperationType().equalsIgnoreCase("C");
 	}
