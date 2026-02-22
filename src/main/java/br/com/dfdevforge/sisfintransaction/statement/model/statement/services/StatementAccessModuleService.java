@@ -1,6 +1,8 @@
 package br.com.dfdevforge.sisfintransaction.statement.model.statement.services;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.statement.model.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.statement.repositories.StatementRepository;
 
@@ -29,7 +32,7 @@ public class StatementAccessModuleService extends StatementBaseService implement
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
-		this.findAllStatements();
+		this.findStatementsByUserAndPeriod();
 		this.setStatementStatus();
 		this.identifyNewHeaderGroup();
 	}
@@ -40,8 +43,10 @@ public class StatementAccessModuleService extends StatementBaseService implement
 		return super.returnBusinessData();
 	}
 
-	private void findAllStatements() {
-		this.statementListResult =  this.statementRepository.findByUserIdentityOrderByYearAscMonthAsc(statementParam.getUserIdentity());
+	private void findStatementsByUserAndPeriod() {
+		Instant instant = Instant.parse(this.statementParam.getFilterMap().get("periodDate"));
+		Date periodDate = Date.from(instant);
+		this.statementListResult = this.statementRepository.findByUserIdentityAndMonthAndYearOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), Utils.date.getMonthOf(periodDate), Utils.date.getYearOf(periodDate));
 	}
 
 	private void setStatementStatus() {

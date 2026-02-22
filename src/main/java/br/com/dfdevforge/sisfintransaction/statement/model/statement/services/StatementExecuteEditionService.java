@@ -92,7 +92,7 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			objectiveItem.setSequential(1);
 			objectiveItem.setUnitaryValue(statementItemLoop.getMovementValue());
 			objectiveItem.setAmount(new BigDecimal(1));
-			objectiveItem.setAccountTarget(statementItemLoop.isIncoming() ? this.statementParam.getStatementType().getAccountSource() : statementItemLoop.getAccountTarget());
+			objectiveItem.setAccountTarget(statementItemLoop.methods.isIncoming() ? this.statementParam.getStatementType().getAccountSource() : statementItemLoop.getAccountTarget());
 
 			objective.getObjectiveMovementList().add(objectiveMovement);
 			objective.getObjectiveItemList().add(objectiveItem);
