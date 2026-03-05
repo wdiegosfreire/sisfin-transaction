@@ -9,6 +9,9 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statement.entities.St
 
 public interface StatementRepository extends JpaRepository<StatementEntity, Long>, JpaSpecificationExecutor<StatementEntity> {
 	public StatementEntity findByIdentity(Long identity);
+
 	public List<StatementEntity> findByUserIdentityOrderByYearAscMonthAsc(Long userIdentity);
+	public List<StatementEntity> findByUserIdentityAndYearOrderByYearAscMonthAsc(Long userIdentity, Integer year);
+	public List<StatementEntity> findByUserIdentityAndMonthOrderByYearAscMonthAsc(Long userIdentity, Integer month);
 	public List<StatementEntity> findByUserIdentityAndMonthAndYearOrderByYearAscMonthAsc(Long userIdentity, Integer month, Integer year);
 }
