@@ -1,8 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.statement.model.statement.services;
 
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,9 +42,22 @@ public class StatementAccessModuleService extends StatementBaseService implement
 	}
 
 	private void findStatementsByUserAndPeriod() {
-		Instant instant = Instant.parse(this.statementParam.getFilterMap().get("periodDate"));
-		Date periodDate = Date.from(instant);
-		this.statementListResult = this.statementRepository.findByUserIdentityAndMonthAndYearOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), Utils.date.getMonthOf(periodDate), Utils.date.getYearOf(periodDate));
+		Integer year = null;
+		Integer month = null;
+
+		if (Utils.value.isNumber(this.statementParam.getFilterMap().get("year")))
+			year = Integer.valueOf(this.statementParam.getFilterMap().get("year"));
+		if (Utils.value.isNumber(this.statementParam.getFilterMap().get("month")))
+			month = Integer.valueOf(this.statementParam.getFilterMap().get("month"));
+
+		if (month == null && year == null)
+			this.statementListResult = this.statementRepository.findByUserIdentityOrderByYearAscMonthAsc(this.statementParam.getUserIdentity());
+		else if (month != null && year == null)
+            this.statementListResult = this.statementRepository.findByUserIdentityAndMonthOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), month);
+		else if (month == null)
+			this.statementListResult = this.statementRepository.findByUserIdentityAndYearOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), year);
+		else
+			this.statementListResult = this.statementRepository.findByUserIdentityAndMonthAndYearOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), month, year);
 	}
 
 	private void setStatementStatus() {
