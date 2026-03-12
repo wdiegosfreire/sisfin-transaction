@@ -73,10 +73,10 @@ public class StatementAccessModuleService extends StatementBaseService implement
 		for (StatementEntity statement : this.statementListResult) {
 			String checkPeriod = statement.getYear().toString() + statement.getMonth().toString();
 
-			statement.getProps().setIsNewHeader(Boolean.FALSE);
+			statement.props.setIsNewHeader(Boolean.FALSE);
 			if (!headerPeriod.equals(checkPeriod)) {
 				headerPeriod = checkPeriod;
-				statement.getProps().setIsNewHeader(Boolean.TRUE);
+				statement.props.setIsNewHeader(Boolean.TRUE);
 			}
 		}
 	}

@@ -100,7 +100,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 				int movementPeriod = Utils.date.getPeriodOf(movementDate);
 
 				if (movementPeriod == selectedPeriod) {
-					objectiveMovement.getProps().setIsInPeriod(Boolean.TRUE);
+					objectiveMovement.props.setIsInPeriod(Boolean.TRUE);
 					objective.setSortDate(movementDate);
 				}
 			}
@@ -122,7 +122,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 
 				if (!headerDate.equals(checkDate.toString())) {
 					headerDate = checkDate.toString();
-					objectiveMovement.getProps().setIsNewHeader(Boolean.TRUE);
+					objectiveMovement.props.setIsNewHeader(Boolean.TRUE);
 				}
 			}
 		}

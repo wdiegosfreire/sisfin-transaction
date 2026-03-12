@@ -85,8 +85,8 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			objectiveMovement.setValue(statementItemLoop.getMovementValue());
 			objectiveMovement.setInstallment(1);
 			objectiveMovement.setPaymentMethod(statementItemLoop.getPaymentMethod());
-			objectiveMovement.setAccountSource(statementItemLoop.isOutcoming() ? this.statementParam.getStatementType().getAccountSource() : statementItemLoop.getAccountSource());
-			
+			objectiveMovement.setAccountSource(statementItemLoop.methods.isOutcoming() ? this.statementParam.getStatementType().getAccountSource() : statementItemLoop.getAccountSource());
+
 			ObjectiveItemEntity objectiveItem = new ObjectiveItemEntity();
 			objectiveItem.setDescription(description);
 			objectiveItem.setSequential(1);

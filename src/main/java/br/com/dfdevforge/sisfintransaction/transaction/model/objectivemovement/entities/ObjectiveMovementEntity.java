@@ -69,5 +69,5 @@ public class ObjectiveMovementEntity extends BaseEntity {
 	private Long userIdentity;
 
 	@Transient
-	private ObjectiveMovementEntityProps props = new ObjectiveMovementEntityProps();
+	public ObjectiveMovementEntityProps props = new ObjectiveMovementEntityProps();
 }
