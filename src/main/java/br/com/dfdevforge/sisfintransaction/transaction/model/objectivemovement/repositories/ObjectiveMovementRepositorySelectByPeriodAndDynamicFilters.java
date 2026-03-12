@@ -1,7 +1,8 @@
 package br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.repositories;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,8 +29,16 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 	}
 
 	public List<ObjectiveMovementEntity> execute(Map<String, String> filterMap, Long userIdentity) {
-		Instant instant = Instant.parse(filterMap.get("periodDate"));
-		Date periodDate = Date.from(instant);
+		Integer year = null;
+		Integer month = null;
+
+		if (Utils.value.isNumber(filterMap.get("year")))
+			year = Integer.valueOf(filterMap.get("year"));
+		if (Utils.value.isNumber(filterMap.get("month")))
+			month = Integer.valueOf(filterMap.get("month"));
+
+		Date dateStart = Date.from(LocalDateTime.of(year, month, 1, 8, 0, 0).atZone(ZoneId.systemDefault()).toInstant());
+		Date dateEnd = this.findEndDate(dateStart);
 
 		StringBuilder whereClause = new StringBuilder();
 
@@ -52,24 +61,14 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 		var query = this.entityManager.createQuery(jpql.toString(), ObjectiveMovementEntity.class);
 
 		query.setParameter("userIdentity", userIdentity);
-		query.setParameter("startDate", this.findStartDate(periodDate));
-		query.setParameter("endDate", this.findEndDate(periodDate));
+		query.setParameter("startDate", dateStart);
+		query.setParameter("endDate", dateEnd);
 		query.setParameter(ACCOUNT_SOURCE_IDENTITY, Utils.value.exists(filterMap, ACCOUNT_SOURCE_IDENTITY) ? Long.parseLong(filterMap.get(ACCOUNT_SOURCE_IDENTITY)) : null);
 		query.setParameter(VALUE_START, Utils.value.exists(filterMap, VALUE_START) ? new BigDecimal(filterMap.get(VALUE_START)) : null);
 		query.setParameter(VALUE_END, Utils.value.exists(filterMap, VALUE_END) ? new BigDecimal(filterMap.get(VALUE_END)) : null);
 		query.setParameter(LOCATION_IDENTITY, Utils.value.exists(filterMap, LOCATION_IDENTITY) ? Long.parseLong(filterMap.get(LOCATION_IDENTITY)) : null);
 
 		return query.getResultList();
-	}
-
-	private Date findStartDate(Date periodDate) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(Utils.date.getFirstDayOfMonth(periodDate));
-		calendar.set(Calendar.HOUR_OF_DAY, 8);
-		calendar.set(Calendar.MINUTE, 00);
-		calendar.set(Calendar.SECOND, 00);
-
-		return calendar.getTime();
 	}
 
 	private Date findEndDate(Date periodDate) {

@@ -53,7 +53,7 @@ public class StatementAccessModuleService extends StatementBaseService implement
 		if (month == null && year == null)
 			this.statementListResult = this.statementRepository.findByUserIdentityOrderByYearAscMonthAsc(this.statementParam.getUserIdentity());
 		else if (month != null && year == null)
-            this.statementListResult = this.statementRepository.findByUserIdentityAndMonthOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), month);
+			this.statementListResult = this.statementRepository.findByUserIdentityAndMonthOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), month);
 		else if (month == null)
 			this.statementListResult = this.statementRepository.findByUserIdentityAndYearOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), year);
 		else
@@ -73,6 +73,7 @@ public class StatementAccessModuleService extends StatementBaseService implement
 		for (StatementEntity statement : this.statementListResult) {
 			String checkPeriod = statement.getYear().toString() + statement.getMonth().toString();
 
+			statement.getProps().setIsNewHeader(Boolean.FALSE);
 			if (!headerPeriod.equals(checkPeriod)) {
 				headerPeriod = checkPeriod;
 				statement.getProps().setIsNewHeader(Boolean.TRUE);
