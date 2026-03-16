@@ -95,12 +95,4 @@ public class StatementItemEntity extends BaseEntity {
 
 	@Transient
 	public final StatementItemEntityMethods methods = new StatementItemEntityMethods(this);
-
-	public boolean isIncoming() {
-		return this.operationType.equalsIgnoreCase("C");
-	}
-
-	public boolean isOutcoming() {
-		return this.operationType.equalsIgnoreCase("D");
-	}
 }

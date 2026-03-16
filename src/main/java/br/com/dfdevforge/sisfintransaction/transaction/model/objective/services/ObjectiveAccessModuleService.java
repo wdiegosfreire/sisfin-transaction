@@ -1,6 +1,7 @@
 package br.com.dfdevforge.sisfintransaction.transaction.model.objective.services;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -89,8 +90,9 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 	}
 
 	private void identifyMovementOfPeriod() {
-		Instant instant = Instant.parse(this.objectiveParam.getFilterMap().get("periodDate"));
-		int selectedPeriod = Utils.date.getPeriodOf(Date.from(instant));
+		Integer year = Integer.valueOf(this.objectiveParam.getFilterMap().get("year"));
+		Integer month = Integer.valueOf(this.objectiveParam.getFilterMap().get("month"));
+		int selectedPeriod = Utils.date.getPeriodOf(Date.from(LocalDateTime.of(year, month, 1, 8, 0, 0).atZone(ZoneId.systemDefault()).toInstant()));
 
 		for (ObjectiveEntity objective : this.objectiveListResult) {
 			for (ObjectiveMovementEntity objectiveMovement : objective.getObjectiveMovementList()) {
@@ -98,7 +100,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 				int movementPeriod = Utils.date.getPeriodOf(movementDate);
 
 				if (movementPeriod == selectedPeriod) {
-					objectiveMovement.setInPeriod(true);
+					objectiveMovement.props.setIsInPeriod(Boolean.TRUE);
 					objective.setSortDate(movementDate);
 				}
 			}
@@ -120,7 +122,7 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 
 				if (!headerDate.equals(checkDate.toString())) {
 					headerDate = checkDate.toString();
-					objectiveMovement.getProps().setIsNewHeader(Boolean.TRUE);
+					objectiveMovement.props.setIsNewHeader(Boolean.TRUE);
 				}
 			}
 		}
