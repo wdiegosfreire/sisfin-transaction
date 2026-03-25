@@ -53,6 +53,7 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 		whereClause.append(" and (obm.value >= :valueStart or :valueStart is null) ");
 		whereClause.append(" and (obm.value <= :valueEnd or :valueEnd is null) ");
 		whereClause.append(" and (obm.objective.location.identity = :locationIdentity or :locationIdentity is null) ");
+		whereClause.append(" and (lower(obm.objective.description) like lower(concat('%', :description, '%')) or :description is null) ");
 
 		StringBuilder jpql = new StringBuilder();
 
@@ -66,6 +67,9 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 		query.setParameter(ACCOUNT_SOURCE_IDENTITY, Utils.value.exists(filterMap, ACCOUNT_SOURCE_IDENTITY) ? Long.parseLong(filterMap.get(ACCOUNT_SOURCE_IDENTITY)) : null);
 		query.setParameter(VALUE_START, Utils.value.exists(filterMap, VALUE_START) ? new BigDecimal(filterMap.get(VALUE_START)) : null);
 		query.setParameter(VALUE_END, Utils.value.exists(filterMap, VALUE_END) ? new BigDecimal(filterMap.get(VALUE_END)) : null);
+		
+		query.setParameter("description", Utils.value.exists(filterMap, "description") ? (String) filterMap.get("description") : null);
+		
 		query.setParameter(LOCATION_IDENTITY, Utils.value.exists(filterMap, LOCATION_IDENTITY) ? Long.parseLong(filterMap.get(LOCATION_IDENTITY)) : null);
 
 		return query.getResultList();
