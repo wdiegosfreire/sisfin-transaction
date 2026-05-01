@@ -21,6 +21,7 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 	private static final String ACCOUNT_SOURCE_IDENTITY = "accountSourceIdentity";
 	private static final String VALUE_START = "valueStart";
 	private static final String VALUE_END = "valueEnd";
+	private static final String DESCRIPTION = "description";
 
 	private final EntityManager entityManager;
 
@@ -67,9 +68,7 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 		query.setParameter(ACCOUNT_SOURCE_IDENTITY, Utils.value.exists(filterMap, ACCOUNT_SOURCE_IDENTITY) ? Long.parseLong(filterMap.get(ACCOUNT_SOURCE_IDENTITY)) : null);
 		query.setParameter(VALUE_START, Utils.value.exists(filterMap, VALUE_START) ? new BigDecimal(filterMap.get(VALUE_START)) : null);
 		query.setParameter(VALUE_END, Utils.value.exists(filterMap, VALUE_END) ? new BigDecimal(filterMap.get(VALUE_END)) : null);
-		
-		query.setParameter("description", Utils.value.exists(filterMap, "description") ? (String) filterMap.get("description") : null);
-		
+		query.setParameter(DESCRIPTION, Utils.value.exists(filterMap, DESCRIPTION) ? (String) filterMap.get(DESCRIPTION) : null);
 		query.setParameter(LOCATION_IDENTITY, Utils.value.exists(filterMap, LOCATION_IDENTITY) ? Long.parseLong(filterMap.get(LOCATION_IDENTITY)) : null);
 
 		return query.getResultList();
