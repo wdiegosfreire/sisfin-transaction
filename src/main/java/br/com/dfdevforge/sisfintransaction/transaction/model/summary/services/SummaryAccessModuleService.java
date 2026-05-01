@@ -118,10 +118,10 @@ public class SummaryAccessModuleService extends SummaryBaseService implements Co
 		incomingOutcomingSummaryTableData.setUserIdentity(this.summaryParam.getUserIdentity());
 		incomingOutcomingSummaryTableData.setLabels(this.periodList);
 
-		DataSet dataSetPrevious = this.buildDataSet("Previous", "fa-arrow-rotate-left", "A", "orange");
-		DataSet dataSetIncoming = this.buildDataSet("Incoming", "fa-arrow-trend-up", "B", "green");
-		DataSet dataSetOutcoming = this.buildDataSet("Outcoming", "fa-arrow-trend-down", "C", "red");
-		DataSet dataSetBalance = this.buildDataSet("Balance", "fa-hand-holding-dollar", "D", "blue");
+		DataSet dataSetPrevious = this.buildDataSet("Previous", "mdi-rotate-left", "A", "orange");
+		DataSet dataSetIncoming = this.buildDataSet("Incoming", "mdi-trending-up", "B", "green");
+		DataSet dataSetOutcoming = this.buildDataSet("Outcoming", "mdi-trending-down", "C", "red");
+		DataSet dataSetBalance = this.buildDataSet("Balance", "mdi-hand-coin-outline", "D", "blue");
 
 		incomingOutcomingSummaryTableData.getDatasets().add(dataSetPrevious);
 		incomingOutcomingSummaryTableData.getDatasets().add(dataSetIncoming);
