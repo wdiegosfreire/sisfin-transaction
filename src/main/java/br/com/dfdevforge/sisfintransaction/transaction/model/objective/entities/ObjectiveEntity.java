@@ -42,6 +42,9 @@ public class ObjectiveEntity extends BaseEntity {
 	@Column(name = "obj_description")
 	private String description;
 
+	@Column(name = "obj_installment_amount")
+	private Integer installmentAmount;
+
 	@ManyToOne
 	@JoinColumn(name = "loc_identity")
 	private LocationEntity location;
