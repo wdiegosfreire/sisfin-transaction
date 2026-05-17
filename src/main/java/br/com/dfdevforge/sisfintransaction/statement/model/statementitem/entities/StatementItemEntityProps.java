@@ -9,5 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StatementItemEntityProps {
+	private Integer installmentAmount;
 	private List<String> similarMovementList = new ArrayList<>();
 }

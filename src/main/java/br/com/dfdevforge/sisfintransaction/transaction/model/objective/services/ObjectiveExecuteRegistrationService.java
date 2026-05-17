@@ -70,7 +70,7 @@ public class ObjectiveExecuteRegistrationService extends ObjectiveBaseService im
 		if (this.objectiveParam.getLocation() != null && this.objectiveParam.getLocation().getIdentity() == null)
 			this.objectiveParam.setLocation(null);
 
-		if (this.objectiveParam.getInstallmentAmount() == null || this.objectiveParam.getInstallmentAmount() == 0)
+		if (this.objectiveParam.getInstallmentAmount() == null || this.objectiveParam.getInstallmentAmount() < 1)
 			this.objectiveParam.setInstallmentAmount(1);
 
 		this.objectiveRepository.save(this.objectiveParam);

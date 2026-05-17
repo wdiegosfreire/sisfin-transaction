@@ -7,4 +7,8 @@ import lombok.Setter;
 @Setter
 public class StatementEntityProps {
 	private Boolean isNewHeader;
+	private Boolean isAddInstallment;
+	private Boolean isCreateObjective;
+
+	private Long objectiveIdentity;
 }
