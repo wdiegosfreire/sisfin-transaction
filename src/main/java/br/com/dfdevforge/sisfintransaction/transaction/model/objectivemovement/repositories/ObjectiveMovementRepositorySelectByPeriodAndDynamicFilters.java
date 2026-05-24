@@ -53,12 +53,13 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 		whereClause.append(" and (obm.accountSource.identity = :accountSourceIdentity or :accountSourceIdentity is null) ");
 		whereClause.append(" and (obm.value >= :valueStart or :valueStart is null) ");
 		whereClause.append(" and (obm.value <= :valueEnd or :valueEnd is null) ");
+		whereClause.append(" and (:isInstallmentPlan = false or obj.installmentAmount > 1) ");
 		whereClause.append(" and (obm.objective.location.identity = :locationIdentity or :locationIdentity is null) ");
 		whereClause.append(" and (lower(obm.objective.description) like lower(concat('%', :description, '%')) or :description is null) ");
 
 		StringBuilder jpql = new StringBuilder();
 
-		jpql.append("select obm from ObjectiveMovementEntity as obm where " + whereClause + " order by obm.paymentDate ");
+		jpql.append("select obm from ObjectiveMovementEntity as obm join obm.objective obj where " + whereClause + " order by obm.paymentDate ");
 
 		var query = this.entityManager.createQuery(jpql.toString(), ObjectiveMovementEntity.class);
 
@@ -70,6 +71,7 @@ public class ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters {
 		query.setParameter(VALUE_END, Utils.value.exists(filterMap, VALUE_END) ? new BigDecimal(filterMap.get(VALUE_END)) : null);
 		query.setParameter(DESCRIPTION, Utils.value.exists(filterMap, DESCRIPTION) ? (String) filterMap.get(DESCRIPTION) : null);
 		query.setParameter(LOCATION_IDENTITY, Utils.value.exists(filterMap, LOCATION_IDENTITY) ? Long.parseLong(filterMap.get(LOCATION_IDENTITY)) : null);
+		query.setParameter("isInstallmentPlan", Utils.value.existsAndEqualsTo(filterMap, "isInstallmentPlan", "true") ? Boolean.TRUE : Boolean.FALSE);
 
 		return query.getResultList();
 	}

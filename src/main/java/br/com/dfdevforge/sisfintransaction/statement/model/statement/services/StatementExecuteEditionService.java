@@ -2,6 +2,9 @@ package br.com.dfdevforge.sisfintransaction.statement.model.statement.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,20 +21,38 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statement.repositorie
 import br.com.dfdevforge.sisfintransaction.statement.model.statementitem.entities.StatementItemEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.statementitem.repositories.StatementItemRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objective.repositories.ObjectiveRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.ObjectiveExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.entities.ObjectiveItemEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.repositories.ObjectiveItemRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.entities.ObjectiveMovementEntity;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.repositories.ObjectiveMovementRepository;
 
 @Service
 @RequestScope
 @Transactional
 public class StatementExecuteEditionService extends StatementBaseService implements CommonService {
+	private final ObjectiveRepository objectiveRepository;
+	private final ObjectiveItemRepository objectiveItemRepository;
+	private final ObjectiveMovementRepository objectiveMovementRepository;
+
 	private final StatementRepository statementRepository;
 	private final StatementItemRepository statementItemRepository;
 	private final ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService;
 
 	@Autowired
-	public StatementExecuteEditionService(StatementRepository statementRepository, StatementItemRepository statementItemRepository, ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService) {
+	public StatementExecuteEditionService(
+		ObjectiveRepository objectiveRepository,
+		ObjectiveItemRepository objectiveItemRepository,
+		ObjectiveMovementRepository objectiveMovementRepository,
+		StatementRepository statementRepository,
+		StatementItemRepository statementItemRepository,
+		ObjectiveExecuteRegistrationService objectiveExecuteRegistrationService) {
+
+		this.objectiveRepository = objectiveRepository;
+		this.objectiveItemRepository = objectiveItemRepository;
+		this.objectiveMovementRepository = objectiveMovementRepository;
+
 		this.statementRepository = statementRepository;
 		this.statementItemRepository = statementItemRepository;
 		this.objectiveExecuteRegistrationService = objectiveExecuteRegistrationService;
@@ -41,8 +62,10 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 	public void executeBusinessRule() throws BaseException {
 		this.findByIdentity();
 
-		if (this.statementParam.getIsCreateMovement().booleanValue())
-			this.createMovementBasedOnSatementItem();
+		if (this.statementParam.getProps().getIsCreateObjective().booleanValue())
+			this.createFullObjective();
+		else if (this.statementParam.getProps().getIsAddInstallment().booleanValue())
+			this.createInstallmentInExistingObjective();
 
 		this.setStatementItemAsExported();
 		this.editStatement();
@@ -68,7 +91,7 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 		}
 	}
 
-	private void createMovementBasedOnSatementItem() throws BaseException {
+	private void createFullObjective() throws BaseException {
 		for (StatementItemEntity statementItemLoop : this.statementParam.getStatementItemList()) {
 			String description = StringUtils.isBlank(statementItemLoop.getDescriptionNew()) ? statementItemLoop.getDescription() : statementItemLoop.getDescriptionNew();
 
@@ -76,6 +99,7 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			objective.setObjectiveMovementList(new ArrayList<>());
 			objective.setObjectiveItemList(new ArrayList<>());
 			objective.setDescription(description);
+			objective.setInstallmentAmount(statementItemLoop.getProps().getInstallmentAmount());
 			objective.setLocation(statementItemLoop.getLocation());
 			objective.setUserIdentity(statementItemLoop.getUserIdentity());
 
@@ -100,6 +124,33 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			this.objectiveExecuteRegistrationService.setParams(objective, token);
 			this.objectiveExecuteRegistrationService.execute();
 		}
+	}
+
+	private void createInstallmentInExistingObjective() throws DataForEditionNotFoundException {
+		StatementItemEntity statementItem = this.statementParam.getStatementItemList().get(0);
+		ObjectiveEntity objective = this.objectiveRepository.findByIdentity(this.statementParam.getProps().getObjectiveIdentity());
+
+		List<ObjectiveItemEntity> objectiveItemList = this.objectiveItemRepository.findByObjective(objective);
+		objectiveItemList.forEach(item -> item.setUnitaryValue(item.getUnitaryValue().add(statementItem.getMovementValue())));
+		this.objectiveItemRepository.saveAll(objectiveItemList);
+
+		List<ObjectiveMovementEntity> objectiveMovementList = this.objectiveMovementRepository.findByObjective(objective);
+		ObjectiveMovementEntity objectiveMovementLastInstallment = objectiveMovementList.stream().max(Comparator.comparing(ObjectiveMovementEntity::getInstallment)).orElse(null);
+
+		if (objectiveMovementLastInstallment == null || objectiveMovementLastInstallment.getInstallment().equals(objective.getInstallmentAmount()))
+			throw new DataForEditionNotFoundException();
+
+		ObjectiveMovementEntity objectiveMovement= new ObjectiveMovementEntity();
+		objectiveMovement.setDueDate(statementItem.getMovementDate());
+		objectiveMovement.setPaymentDate(statementItem.getMovementDate());
+		objectiveMovement.setValue(statementItem.getMovementValue());
+		objectiveMovement.setRegistrationDate(Calendar.getInstance().getTime());
+		objectiveMovement.setInstallment(objectiveMovementLastInstallment.getInstallment() + 1);
+		objectiveMovement.setPaymentMethod(objectiveMovementLastInstallment.getPaymentMethod());
+		objectiveMovement.setAccountSource(objectiveMovementLastInstallment.getAccountSource());
+		objectiveMovement.setUserIdentity(this.statementParam.getUserIdentity());
+		objectiveMovement.setObjective(objective);
+		this.objectiveMovementRepository.save(objectiveMovement);
 	}
 
 	private void setStatementItemAsExported() {

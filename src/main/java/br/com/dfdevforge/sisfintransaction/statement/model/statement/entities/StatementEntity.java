@@ -68,8 +68,5 @@ public class StatementEntity extends BaseEntity {
 	private String statementFile;
 
 	@Transient
-	private Boolean isCreateMovement;
-
-	@Transient
 	public StatementEntityProps props = new StatementEntityProps();
 }
