@@ -1,5 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.statement.model.statement.services;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +18,10 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statement.repositorie
 import br.com.dfdevforge.sisfintransaction.statement.model.statementitem.repositories.StatementItemRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.location.repositories.LocationRepository;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.repositories.ObjectiveItemRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.entities.ObjectiveMovementEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.repositories.ObjectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue;
+import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.repositories.ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters;
 
 @Service
 @RequestScope
@@ -26,15 +29,25 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 public class StatementAccessEditionService extends StatementBaseService implements CommonService {
 	private final LocationRepository locationRepository;
 	private final StatementRepository statementRepository;
+	private final ObjectiveItemRepository objectiveItemRepository;
 	private final StatementItemRepository statementItemRepository;
+	private final ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters objectiveMovementRepositorySelectByPeriodAndDynamicFilters;
 	private final ObjectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue;
-	
 
 	@Autowired
-	public StatementAccessEditionService(LocationRepository locationRepository, StatementRepository statementRepository, StatementItemRepository statementItemRepository, ObjectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue) {
+	public StatementAccessEditionService(
+		LocationRepository locationRepository,
+		StatementRepository statementRepository,
+		ObjectiveItemRepository objectiveItemRepository,
+		StatementItemRepository statementItemRepository,
+		ObjectiveMovementRepositorySelectByPeriodAndDynamicFilters objectiveMovementRepositorySelectByPeriodAndDynamicFilters,
+		ObjectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue) {
+
 		this.locationRepository = locationRepository;
 		this.statementRepository = statementRepository;
+		this.objectiveItemRepository = objectiveItemRepository;
 		this.statementItemRepository = statementItemRepository;
+		this.objectiveMovementRepositorySelectByPeriodAndDynamicFilters = objectiveMovementRepositorySelectByPeriodAndDynamicFilters;
 		this.objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue = objectiveMovementRepositorySelectByDueDateOrPaymentDateOrValue;
 	}
 
@@ -50,6 +63,7 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 		this.findPaymentMethods();
 		this.setStatementStatus();
 		this.findSimilarMovements();
+		this.findInstallmentPlanFromPreviousMonth();
 	}
 
 	@Override
@@ -107,6 +121,35 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 				);
 			}
 		});
+	}
+
+	private void findInstallmentPlanFromPreviousMonth() {
+		Integer year = Integer.valueOf(this.statementParam.getFilterMap().get("year"));
+		Integer month = Integer.valueOf(this.statementParam.getFilterMap().get("month"));
+
+		if (month == 1) {
+			month = 12;
+			year--;
+		}
+		else {
+			month--;
+		}
+
+		Map<String, String> objectiveMovementFilter = new HashMap<>();
+		objectiveMovementFilter.put("year", year.toString());
+		objectiveMovementFilter.put("month", month.toString());
+		objectiveMovementFilter.put("isInstallmentPlan", "true");
+
+		List<ObjectiveMovementEntity> objectiveMovementList = this.objectiveMovementRepositorySelectByPeriodAndDynamicFilters.execute(
+			objectiveMovementFilter,
+			this.statementParam.getUserIdentity()
+		);
+
+		objectiveMovementList.forEach(objectiveMovement -> {
+			objectiveMovement.getObjective().setObjectiveItemList(this.objectiveItemRepository.findByObjective(objectiveMovement.getObjective()));
+		});
+
+		this.setArtifact("objectiveMovementListInstallmentPlan", objectiveMovementList);
 	}
 
 	private String traceAccount(AccountEntity account) {
