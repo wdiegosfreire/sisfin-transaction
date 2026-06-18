@@ -3,6 +3,7 @@ package br.com.dfdevforge.sisfintransaction.statement.model.statement.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,13 @@ public class StatementAccessModuleService extends StatementBaseService implement
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.findStatementsByUserAndPeriod();
+
+		if (Utils.value.exists(this.statementParam.getFilterMap(), "statementTypeIdentity"))
+			this.filterResultsByStatementType();
+
 		this.setStatementStatus();
 		this.identifyNewHeaderGroup();
+		this.findStatementTypes();
 	}
 
 	@Override
@@ -60,6 +66,15 @@ public class StatementAccessModuleService extends StatementBaseService implement
 			this.statementListResult = this.statementRepository.findByUserIdentityAndMonthAndYearOrderByYearAscMonthAsc(this.statementParam.getUserIdentity(), month, year);
 	}
 
+	private void filterResultsByStatementType() {
+		Long statementTypeIdentity = Long.parseLong(this.statementParam.getFilterMap().get("statementTypeIdentity"));
+		
+		this.statementListResult = this.statementListResult.stream()
+			.filter(statement -> statement.getStatementType().getIdentity().equals(statementTypeIdentity))
+			.collect(Collectors.toList())
+		;
+	}
+
 	private void setStatementStatus() {
 		this.statementListResult.forEach(statementLoop -> {
 			long statementItemsNotExportedCount = statementLoop.getStatementItemList().stream().filter(statementItem -> statementItem.getIsExported() == Boolean.FALSE).count();
@@ -79,5 +94,9 @@ public class StatementAccessModuleService extends StatementBaseService implement
 				statement.props.setIsNewHeader(Boolean.TRUE);
 			}
 		}
+	}
+
+	private void findStatementTypes() {
+		this.setArtifact("statementTypeListCombo", this.findStatementTypesByUserIdentityOrderByNameAsc(this.statementParam.getUserIdentity()));
 	}
 }

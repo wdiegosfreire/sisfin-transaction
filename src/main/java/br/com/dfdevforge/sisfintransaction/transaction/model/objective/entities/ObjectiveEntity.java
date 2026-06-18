@@ -61,5 +61,12 @@ public class ObjectiveEntity extends BaseEntity {
 	private Long userIdentity;
 
 	@Transient
+	@Deprecated(forRemoval = true)
 	private Date sortDate;
+
+	@Transient
+	public final ObjectiveEntityProps props = new ObjectiveEntityProps();
+
+	@Transient
+	public final ObjectiveEntityMethods methods = new ObjectiveEntityMethods(this);
 }
