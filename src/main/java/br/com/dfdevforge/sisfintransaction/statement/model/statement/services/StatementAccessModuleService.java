@@ -37,6 +37,10 @@ public class StatementAccessModuleService extends StatementBaseService implement
 			this.filterResultsByStatementType();
 
 		this.setStatementStatus();
+
+		if (Utils.value.exists(this.statementParam.getFilterMap(), "isClosed"))
+			this.filterResultsByStatus();
+
 		this.identifyNewHeaderGroup();
 		this.findStatementTypes();
 	}
@@ -80,6 +84,15 @@ public class StatementAccessModuleService extends StatementBaseService implement
 			long statementItemsNotExportedCount = statementLoop.getStatementItemList().stream().filter(statementItem -> statementItem.getIsExported() == Boolean.FALSE).count();
 			statementLoop.setIsClosed(statementItemsNotExportedCount == 0);
 		});
+	}
+
+	private void filterResultsByStatus() {
+		boolean isClosed = Boolean.parseBoolean(this.statementParam.getFilterMap().get("isClosed"));
+		
+		this.statementListResult = this.statementListResult.stream()
+			.filter(statement -> statement.getIsClosed().equals(isClosed))
+			.collect(Collectors.toList())
+		;
 	}
 
 	private void identifyNewHeaderGroup() {
