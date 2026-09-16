@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -34,4 +36,12 @@ public class BrandEntity extends BaseEntity {
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;
+
+	@PrePersist
+	@PreUpdate
+	private void blankStringsToNull() {
+		name = this.emptyToNull(name);
+		email = this.emptyToNull(email);
+		website = this.emptyToNull(website);
+	}
 }
