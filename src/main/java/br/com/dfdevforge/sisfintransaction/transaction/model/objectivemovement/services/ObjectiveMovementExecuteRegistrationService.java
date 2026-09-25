@@ -25,7 +25,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveMovementExecuteRegistrationService extends ObjectiveMovementBaseService implements CommonService {
 	private BigDecimal installmentValue;
 	private BigDecimal installmentDiference;
