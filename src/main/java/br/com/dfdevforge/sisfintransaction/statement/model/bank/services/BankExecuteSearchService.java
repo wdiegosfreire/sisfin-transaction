@@ -12,7 +12,7 @@ import br.com.dfdevforge.sisfintransaction.statement.model.bank.repositories.Ban
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class BankExecuteSearchService extends BankBaseService implements CommonService {
 	private final BankRepository bankRepository;
 	private final BankRepositoryCustomized bankRepositoryCustomized;

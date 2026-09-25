@@ -35,7 +35,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.summary.repositorie
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class SummaryAccessModuleService extends SummaryBaseService implements CommonService {
 	private static final String COL_ACC_NAME = "acc_name"; 
 	private final AccountRepositoryCustomized accountRepositoryCustomized;
