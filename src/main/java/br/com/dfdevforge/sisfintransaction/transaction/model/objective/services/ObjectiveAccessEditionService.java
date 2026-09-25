@@ -24,7 +24,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repos
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveAccessEditionService extends ObjectiveBaseService implements CommonService {
 	private final AccountRepository accountRepository;
 	private final LocationRepository locationRepository;
