@@ -13,7 +13,7 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.repo
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementPatternAccessEditionService extends StatementPatternBaseService implements CommonService {
 	private final StatementPatternRepository statementPatternRepository;
 
