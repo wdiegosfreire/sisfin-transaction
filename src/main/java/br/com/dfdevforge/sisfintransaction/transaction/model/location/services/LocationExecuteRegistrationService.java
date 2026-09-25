@@ -16,7 +16,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.location.repositori
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class LocationExecuteRegistrationService extends LocationBaseService implements CommonService {
 	private final LocationRepository locationRepository;
 
