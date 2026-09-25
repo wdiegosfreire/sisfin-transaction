@@ -17,7 +17,7 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementitem.service
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementExecuteExclusionService extends StatementBaseService implements CommonService {
 	private final StatementRepository statementRepository;
 	private final StatementItemExecuteExclusionService statementItemExecuteExclusionService;

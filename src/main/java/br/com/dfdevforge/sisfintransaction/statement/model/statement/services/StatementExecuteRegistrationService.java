@@ -47,7 +47,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.e
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementExecuteRegistrationService extends StatementBaseService implements CommonService {
 	private static final String EXECECAO_NAO_IDENTIFICADA = "Exceção não Identificada";
 	private static final String EXTRATO_CONTA_CORRENTE = "Extrato de conta corrente";

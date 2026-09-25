@@ -25,7 +25,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementAccessEditionService extends StatementBaseService implements CommonService {
 	private final LocationRepository locationRepository;
 	private final StatementRepository statementRepository;
