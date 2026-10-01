@@ -20,7 +20,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveExecuteEditionService extends ObjectiveBaseService implements CommonService {
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveMovementRepository objectiveMovementRepository;
@@ -59,6 +59,8 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 	}
 
 	private void saveObjectiveMovementsEdition() {
+		this.objectiveMovementRepository.deleteAll(this.objectiveMovementRepository.findByObjective(objectiveParam));
+
 		Date now = new Date();
 		for (ObjectiveMovementEntity objectiveMovementEdited : this.objectiveParam.getObjectiveMovementList()) {
 			objectiveMovementEdited.setIdentity(Math.abs(objectiveMovementEdited.getIdentity()));
@@ -71,6 +73,8 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 	}
 
 	private void saveObjectiveItemsEdition() {
+		this.objectiveItemRepository.deleteAll(this.objectiveItemRepository.findByObjective(objectiveParam));
+		
 		for (ObjectiveItemEntity objectiveItemEdited : this.objectiveParam.getObjectiveItemList()) {
 			objectiveItemEdited.setObjective(this.objectiveParam);
 			objectiveItemEdited.setUserIdentity(this.objectiveParam.getUserIdentity());
