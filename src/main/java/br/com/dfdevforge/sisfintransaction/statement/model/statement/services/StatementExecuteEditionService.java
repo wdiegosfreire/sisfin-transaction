@@ -121,7 +121,7 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			objective.getObjectiveMovementList().add(objectiveMovement);
 			objective.getObjectiveItemList().add(objectiveItem);
 
-			this.objectiveExecuteRegistrationService.setParams(objective, token);
+			this.objectiveExecuteRegistrationService.setParams(objective);
 			this.objectiveExecuteRegistrationService.execute();
 		}
 	}

@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
@@ -44,56 +43,56 @@ public class AccountResource {
 	}
 
 	@PostMapping(value = "/accessModule")
-	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
-		this.accountAccessModuleService.setParams(account, token);
+	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody AccountEntity account) throws BaseException {
+		this.accountAccessModuleService.setParams(account);
 		this.resourceData.setMap(this.accountAccessModuleService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
-	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
-		this.accountAccessEditionService.setParams(account, token);
+	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody AccountEntity account) throws BaseException {
+		this.accountAccessEditionService.setParams(account);
 		this.resourceData.setMap(this.accountAccessEditionService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/accessRegistration")
-	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
-		this.accountAccessRegistrationService.setParams(account, token);
+	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody AccountEntity account) throws BaseException {
+		this.accountAccessRegistrationService.setParams(account);
 		this.resourceData.setMap(this.accountAccessRegistrationService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeSearch")
-	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
-		this.accountExecuteSearchService.setParams(account, token);
+	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody AccountEntity account) throws BaseException {
+		this.accountExecuteSearchService.setParams(account);
 		this.resourceData.setMap(this.accountExecuteSearchService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
-	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
-		this.accountExecuteEditionService.setParams(account, token);
+	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody AccountEntity account) throws BaseException {
+		this.accountExecuteEditionService.setParams(account);
 		this.resourceData.setMap(this.accountExecuteEditionService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
-	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
-		this.accountExecuteExclusionService.setParams(account, token);
+	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody AccountEntity account) throws BaseException {
+		this.accountExecuteExclusionService.setParams(account);
 		this.resourceData.setMap(this.accountExecuteExclusionService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
-	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody AccountEntity account, @RequestParam String token) throws BaseException {
-		this.accountExecuteRegistrationService.setParams(account, token);
+	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody AccountEntity account) throws BaseException {
+		this.accountExecuteRegistrationService.setParams(account);
 		this.resourceData.setMap(this.accountExecuteRegistrationService.execute());
 
 		return ResponseEntity.ok(this.resourceData);

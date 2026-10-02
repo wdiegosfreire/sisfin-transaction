@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "bra_brand")
 @EqualsAndHashCode(callSuper = false, of = {"identity"})
-public class BrandEntity extends BaseEntity {
+public class BrandEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "bra_identity", length = 36, updatable = false, nullable = false)
 	@GeneratedValue(generator = "uuid2")

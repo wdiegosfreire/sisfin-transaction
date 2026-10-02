@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "acc_account")
-public class AccountEntity extends BaseEntity {
+public class AccountEntity extends BaseEntity implements UserOwnedEntity {
 	public AccountEntity(Long identity) {
 		this.identity = identity;
 	}

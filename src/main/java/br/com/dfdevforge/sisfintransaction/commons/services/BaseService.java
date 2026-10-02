@@ -19,7 +19,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.entit
 import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repositories.PaymentMethodRepository;
 
 public abstract class BaseService implements CommonService {
-	protected String token;
 	protected Map<String, Object> resultMap = new HashMap<>();
 
 	@Autowired private BankRepository bankRepository;

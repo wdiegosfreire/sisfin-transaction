@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.bank.entities.BankEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import lombok.EqualsAndHashCode;
@@ -24,7 +25,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "stt_statement_type")
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity")
-public class StatementTypeEntity extends BaseEntity {
+public class StatementTypeEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "stt_identity")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
