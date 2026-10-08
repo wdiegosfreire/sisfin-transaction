@@ -9,6 +9,8 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForExclusionNotFoundException;
+import br.com.dfdevforge.sisfintransaction.commons.exceptions.UserUnauthorizedException;
+import br.com.dfdevforge.sisfintransaction.commons.security.AuthenticatedUser;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.statement.model.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.statement.repositories.StatementRepository;
@@ -43,16 +45,19 @@ public class StatementExecuteExclusionService extends StatementBaseService imple
 		return super.returnBusinessData();
 	}
 
-	private void findByIdentity() throws DataForExclusionNotFoundException {
+	private void findByIdentity() throws DataForExclusionNotFoundException, UserUnauthorizedException {
 		this.statementDelete = this.statementRepository.findByIdentity(this.statementParam.getIdentity());
 
 		if (this.statementDelete == null)
 			throw new DataForExclusionNotFoundException();
+
+		if (!this.statementDelete.getUserIdentity().equals(AuthenticatedUser.getIdentity()))
+			throw new UserUnauthorizedException();
 	}
 
 	private void deleteAllItemsByStatement() throws BaseException {
 		for (StatementItemEntity statementItemDelete : this.statementDelete.getStatementItemList()) {
-			this.statementItemExecuteExclusionService.setParams(statementItemDelete, this.token);
+			this.statementItemExecuteExclusionService.setParams(statementItemDelete);
 			this.statementItemExecuteExclusionService.execute();
 		}
 	}

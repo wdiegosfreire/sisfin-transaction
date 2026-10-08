@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "pam_payment_method")
-public class PaymentMethodEntity extends BaseEntity {
+public class PaymentMethodEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "pam_identity")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

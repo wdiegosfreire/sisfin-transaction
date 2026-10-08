@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.entities.PaymentMethodEntity;
@@ -32,7 +33,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "obm_objective_movement")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity")
-public class ObjectiveMovementEntity extends BaseEntity {
+public class ObjectiveMovementEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "obm_identity")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

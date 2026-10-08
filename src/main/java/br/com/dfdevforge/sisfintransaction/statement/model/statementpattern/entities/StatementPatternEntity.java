@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.entities.StatementTypeEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
@@ -25,7 +26,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "stp_statement_pattern")
-public class StatementPatternEntity extends BaseEntity {
+public class StatementPatternEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "stp_identity")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

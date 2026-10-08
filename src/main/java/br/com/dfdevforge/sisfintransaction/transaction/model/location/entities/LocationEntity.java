@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "loc_location")
 @EqualsAndHashCode(callSuper=false, of={"identity"})
-public class LocationEntity extends BaseEntity {
+public class LocationEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "loc_identity")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
