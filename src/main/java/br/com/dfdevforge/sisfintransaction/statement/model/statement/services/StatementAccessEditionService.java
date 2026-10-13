@@ -145,9 +145,7 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 			this.statementParam.getUserIdentity()
 		);
 
-		objectiveMovementList.forEach(objectiveMovement -> {
-			objectiveMovement.getObjective().setObjectiveItemList(this.objectiveItemRepository.findByObjective(objectiveMovement.getObjective()));
-		});
+		objectiveMovementList.forEach(objectiveMovement -> objectiveMovement.getObjective().setObjectiveItemList(this.objectiveItemRepository.findByObjective(objectiveMovement.getObjective())));
 
 		this.setArtifact("objectiveMovementListInstallmentPlan", objectiveMovementList);
 	}
