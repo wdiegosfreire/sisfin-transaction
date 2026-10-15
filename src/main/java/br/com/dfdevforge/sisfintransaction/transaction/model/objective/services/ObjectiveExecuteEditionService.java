@@ -11,6 +11,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.repositories.ObjectiveRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.entities.ObjectiveItemEntity;
@@ -39,6 +40,9 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		this.saveObjectiveEdition();
 		this.saveObjectiveMovementsEdition();
 		this.saveObjectiveItemsEdition();
+
+		if (this.objectiveParam.getProps() != null && this.objectiveParam.getProps().getTaxCouponFile() != null)
+			this.saveProductList();
 	}
 
 	@Override
@@ -80,5 +84,9 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 			objectiveItemEdited.setUserIdentity(this.objectiveParam.getUserIdentity());
 			this.objectiveItemRepository.save(objectiveItemEdited);
 		}
+	}
+
+	private void saveProductList() {
+		Utils.log.info(this.objectiveParam.getProps().getTaxCouponFile());
 	}
 }

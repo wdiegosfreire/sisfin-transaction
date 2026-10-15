@@ -9,4 +9,5 @@ import lombok.Setter;
 @Setter
 public class ObjectiveEntityProps {
 	private Date sortDate;
+	private String taxCouponFile;
 }
