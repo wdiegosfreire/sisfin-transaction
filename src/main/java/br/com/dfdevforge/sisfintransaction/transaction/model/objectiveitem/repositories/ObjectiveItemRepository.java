@@ -11,6 +11,4 @@ public interface ObjectiveItemRepository extends JpaRepository<ObjectiveItemEnti
 	public ObjectiveItemEntity findByIdentity(Long identity);
 	public List<ObjectiveItemEntity> findByUserIdentity(Long userIdentity);
 	public List<ObjectiveItemEntity> findByObjective(ObjectiveEntity objective);
-
-	public void deleteByObjective(ObjectiveEntity objective);
 }

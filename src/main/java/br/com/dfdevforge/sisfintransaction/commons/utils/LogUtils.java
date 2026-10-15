@@ -36,7 +36,7 @@ public class LogUtils {
 
 		for (StackTraceElement stackTraceElement : exception.getStackTrace()) {
 			if (StringUtils.contains(stackTraceElement.getClassName(), "dfdevforge")) {
-				stackTrace.append(TAB + stackTraceElement + BREAK);
+				stackTrace.append(TAB).append(stackTraceElement).append(BREAK);
 			}
 		}
 

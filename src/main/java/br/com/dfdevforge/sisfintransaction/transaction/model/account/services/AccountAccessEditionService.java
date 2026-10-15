@@ -13,7 +13,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositorie
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class AccountAccessEditionService extends AccountBaseService implements CommonService {
 	private final AccountRepository accountRepository;
 

@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
@@ -44,56 +43,56 @@ public class StatementResource {
 	}
 
 	@PostMapping(value = "/accessModule")
-	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody StatementEntity statement, @RequestParam String token) throws BaseException {
-		this.statementAccessModuleService.setParams(statement, token);
+	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody StatementEntity statement) throws BaseException {
+		this.statementAccessModuleService.setParams(statement);
 		this.resourceData.setMap(this.statementAccessModuleService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
-	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody StatementEntity statement, @RequestParam String token) throws BaseException {
-		this.statementAccessEditionService.setParams(statement, token);
+	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody StatementEntity statement) throws BaseException {
+		this.statementAccessEditionService.setParams(statement);
 		this.resourceData.setMap(this.statementAccessEditionService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/accessRegistration")
-	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody StatementEntity statement, @RequestParam String token) throws BaseException {
-		this.statementAccessRegistrationService.setParams(statement, token);
+	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody StatementEntity statement) throws BaseException {
+		this.statementAccessRegistrationService.setParams(statement);
 		this.resourceData.setMap(this.statementAccessRegistrationService.execute());
 		
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeSearch")
-	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody StatementEntity statement, @RequestParam String token) throws BaseException {
-		this.statementExecuteSearchService.setParams(statement, token);
+	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody StatementEntity statement) throws BaseException {
+		this.statementExecuteSearchService.setParams(statement);
 		this.resourceData.setMap(this.statementExecuteSearchService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
-	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody StatementEntity statement, @RequestParam String token) throws BaseException {
-		this.statementExecuteEditionService.setParams(statement, token);
+	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody StatementEntity statement) throws BaseException {
+		this.statementExecuteEditionService.setParams(statement);
 		this.resourceData.setMap(this.statementExecuteEditionService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
-	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody StatementEntity statement, @RequestParam String token) throws BaseException {
-		this.statementExecuteExclusionService.setParams(statement, token);
+	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody StatementEntity statement) throws BaseException {
+		this.statementExecuteExclusionService.setParams(statement);
 		this.resourceData.setMap(this.statementExecuteExclusionService.execute());
 
 		return ResponseEntity.ok(this.resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
-	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody StatementEntity statement, @RequestParam String token) throws BaseException {
-		this.statementExecuteRegistrationService.setParams(statement, token);
+	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody StatementEntity statement) throws BaseException {
+		this.statementExecuteRegistrationService.setParams(statement);
 		this.resourceData.setMap(this.statementExecuteRegistrationService.execute());
 
 		return ResponseEntity.ok(this.resourceData);

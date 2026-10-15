@@ -47,7 +47,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.e
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementExecuteRegistrationService extends StatementBaseService implements CommonService {
 	private static final String EXECECAO_NAO_IDENTIFICADA = "Exceção não Identificada";
 	private static final String EXTRATO_CONTA_CORRENTE = "Extrato de conta corrente";
@@ -188,14 +188,14 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 		objective.getObjectiveMovementList().add(objectiveMovement);
 		objective.getObjectiveItemList().add(objectiveItem);
 
-		this.objectiveExecuteRegistrationService.setParams(objective, token);
+		this.objectiveExecuteRegistrationService.setParams(objective);
 		this.objectiveExecuteRegistrationService.execute();
 	}
 
 	private void updateStatementItemToExported(StatementItemEntity statementItem) throws BaseException {
 		statementItem.setIsExported(Boolean.TRUE);
 
-		this.statementItemExecuteRegistrationService.setParams(statementItem, token);
+		this.statementItemExecuteRegistrationService.setParams(statementItem);
 		this.statementItemExecuteRegistrationService.execute();
 	}
 
@@ -238,7 +238,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 			statementItemLoop.setUserIdentity(this.statement.getUserIdentity());
 			statementItemLoop.setIsExported(Boolean.FALSE);
 
-			this.statementItemExecuteRegistrationService.setParams(statementItemLoop, token);
+			this.statementItemExecuteRegistrationService.setParams(statementItemLoop);
 			this.statementItemExecuteRegistrationService.execute();
 		}
 	}
@@ -288,7 +288,7 @@ public class StatementExecuteRegistrationService extends StatementBaseService im
 
 		this.statementRepository.save(this.statement);
 		for (StatementItemEntity statementItemLoop : this.statement.getStatementItemList()) {
-			this.statementItemExecuteRegistrationService.setParams(statementItemLoop, token);
+			this.statementItemExecuteRegistrationService.setParams(statementItemLoop);
 			this.statementItemExecuteRegistrationService.execute();
 		}
 	}

@@ -11,7 +11,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repos
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class PaymentMethodAccessModuleService extends PaymentMethodBaseService implements CommonService {
 	private final PaymentMethodRepository paymentMethodRepository;
 

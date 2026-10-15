@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.entities.StatementTypeEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,7 +25,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "ban_bank")
-public class BankEntity extends BaseEntity {
+public class BankEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "ban_identity")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

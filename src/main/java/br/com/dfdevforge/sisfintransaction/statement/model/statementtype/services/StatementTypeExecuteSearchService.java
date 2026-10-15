@@ -12,7 +12,7 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.reposit
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementTypeExecuteSearchService extends StatementTypeBaseService implements CommonService {
 	private final StatementTypeRepository statementTypeRepository;
 	private final StatementTypeRepositoryCustomized statementTypeRepositoryCustomized;

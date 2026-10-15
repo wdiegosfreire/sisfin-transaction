@@ -30,7 +30,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementExecuteEditionService extends StatementBaseService implements CommonService {
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveItemRepository objectiveItemRepository;
@@ -121,7 +121,7 @@ public class StatementExecuteEditionService extends StatementBaseService impleme
 			objective.getObjectiveMovementList().add(objectiveMovement);
 			objective.getObjectiveItemList().add(objectiveItem);
 
-			this.objectiveExecuteRegistrationService.setParams(objective, token);
+			this.objectiveExecuteRegistrationService.setParams(objective);
 			this.objectiveExecuteRegistrationService.execute();
 		}
 	}

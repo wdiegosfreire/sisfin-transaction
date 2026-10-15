@@ -16,7 +16,7 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.reposit
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementTypeExecuteRegistrationService extends StatementTypeBaseService implements CommonService {
 	private final StatementTypeRepository statementTypeRepository;
 

@@ -17,7 +17,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveMovementExecuteExclusionService extends ObjectiveMovementBaseService implements CommonService {
 	private final ObjectiveItemRepository objectiveItemRepository;
 	private final ObjectiveMovementRepository objectiveMovementRepository;
@@ -54,7 +54,7 @@ public class ObjectiveMovementExecuteExclusionService extends ObjectiveMovementB
 	}
 
 	private void deleteAllItemsByObjective() {
-		this.objectiveItemRepository.deleteByObjective(this.objectiveMovementExclusion.getObjective());
+		this.objectiveItemRepository.deleteAll(this.objectiveItemRepository.findByObjective(this.objectiveMovementExclusion.getObjective()));
 	}
 
 	private void deleteAllMovementsByObjective() {

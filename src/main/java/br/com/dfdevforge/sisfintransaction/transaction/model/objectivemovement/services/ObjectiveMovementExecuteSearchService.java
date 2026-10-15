@@ -11,7 +11,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveMovementExecuteSearchService extends ObjectiveMovementBaseService implements CommonService {
 	private final ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 

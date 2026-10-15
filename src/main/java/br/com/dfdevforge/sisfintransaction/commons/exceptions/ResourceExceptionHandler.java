@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -34,6 +35,9 @@ public class ResourceExceptionHandler {
 		}
 		else if (exception instanceof UserUnauthorizedException) {
 			responseEntity = new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+		}
+		else if (exception instanceof AccessDeniedException) {
+			responseEntity = new ResponseEntity<>(new UserUnauthorizedException().getMessage(), HttpStatus.UNAUTHORIZED);
 		}
 		else {
 			responseEntity = new ResponseEntity<>(Utils.log.stackTrace(exception), HttpStatus.INTERNAL_SERVER_ERROR);

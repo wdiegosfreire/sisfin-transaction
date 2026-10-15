@@ -11,6 +11,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.repositories.ObjectiveRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.entities.ObjectiveItemEntity;
@@ -20,7 +21,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveExecuteEditionService extends ObjectiveBaseService implements CommonService {
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveMovementRepository objectiveMovementRepository;
@@ -39,6 +40,9 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		this.saveObjectiveEdition();
 		this.saveObjectiveMovementsEdition();
 		this.saveObjectiveItemsEdition();
+
+		if (this.objectiveParam.getProps() != null && this.objectiveParam.getProps().getTaxCouponFile() != null)
+			this.saveProductList();
 	}
 
 	@Override
@@ -59,6 +63,8 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 	}
 
 	private void saveObjectiveMovementsEdition() {
+		this.objectiveMovementRepository.deleteAll(this.objectiveMovementRepository.findByObjective(objectiveParam));
+
 		Date now = new Date();
 		for (ObjectiveMovementEntity objectiveMovementEdited : this.objectiveParam.getObjectiveMovementList()) {
 			objectiveMovementEdited.setIdentity(Math.abs(objectiveMovementEdited.getIdentity()));
@@ -71,10 +77,16 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 	}
 
 	private void saveObjectiveItemsEdition() {
+		this.objectiveItemRepository.deleteAll(this.objectiveItemRepository.findByObjective(objectiveParam));
+		
 		for (ObjectiveItemEntity objectiveItemEdited : this.objectiveParam.getObjectiveItemList()) {
 			objectiveItemEdited.setObjective(this.objectiveParam);
 			objectiveItemEdited.setUserIdentity(this.objectiveParam.getUserIdentity());
 			this.objectiveItemRepository.save(objectiveItemEdited);
 		}
+	}
+
+	private void saveProductList() {
+		Utils.log.info(this.objectiveParam.getProps().getTaxCouponFile());
 	}
 }

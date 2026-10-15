@@ -18,7 +18,7 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statement.repositorie
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementAccessModuleService extends StatementBaseService implements CommonService {
 	private final StatementRepository statementRepository;
 

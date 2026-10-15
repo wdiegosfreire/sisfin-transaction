@@ -9,7 +9,7 @@ import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementTypeAccessRegistrationService extends StatementTypeBaseService implements CommonService {
 
 	@Override

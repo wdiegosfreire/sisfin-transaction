@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
@@ -26,8 +25,8 @@ public class SummaryResource {
 	}
 
 	@PostMapping(value = "/accessModule")
-	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody SummaryEntity summary, @RequestParam String token) throws BaseException {
-		this.summaryAccessModuleService.setParams(summary, token);
+	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody SummaryEntity summary) throws BaseException {
+		this.summaryAccessModuleService.setParams(summary);
 		this.resourceData.setMap(this.summaryAccessModuleService.execute());
 
 		return ResponseEntity.ok(this.resourceData);

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
+import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.statement.entities.StatementEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
@@ -37,7 +38,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "sti_statement_item")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity", scope = StatementItemEntity.class)
-public class StatementItemEntity extends BaseEntity {
+public class StatementItemEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "sti_identity")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

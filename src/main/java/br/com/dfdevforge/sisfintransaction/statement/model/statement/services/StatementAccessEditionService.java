@@ -25,7 +25,7 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional
+@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementAccessEditionService extends StatementBaseService implements CommonService {
 	private final LocationRepository locationRepository;
 	private final StatementRepository statementRepository;
@@ -145,9 +145,7 @@ public class StatementAccessEditionService extends StatementBaseService implemen
 			this.statementParam.getUserIdentity()
 		);
 
-		objectiveMovementList.forEach(objectiveMovement -> {
-			objectiveMovement.getObjective().setObjectiveItemList(this.objectiveItemRepository.findByObjective(objectiveMovement.getObjective()));
-		});
+		objectiveMovementList.forEach(objectiveMovement -> objectiveMovement.getObjective().setObjectiveItemList(this.objectiveItemRepository.findByObjective(objectiveMovement.getObjective())));
 
 		this.setArtifact("objectiveMovementListInstallmentPlan", objectiveMovementList);
 	}

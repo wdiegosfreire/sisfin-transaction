@@ -15,6 +15,6 @@ public class ObjectiveEntityMethods {
 	}
 
 	public boolean isInstallmentPlan() {
-		return this.objectiveItem.getInstallmentAmount() > 1;
+		return this.objectiveItem != null && this.objectiveItem.getInstallmentAmount() > 1;
 	}
 }

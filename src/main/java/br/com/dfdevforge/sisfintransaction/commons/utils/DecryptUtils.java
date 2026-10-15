@@ -1,6 +1,7 @@
 package br.com.dfdevforge.sisfintransaction.commons.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -22,7 +23,7 @@ public class DecryptUtils {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
         SecretKey secretKey = new SecretKeySpec(System.getenv("SISFIN_BACKEND_AES_SECRET").getBytes(), ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] decryptedMessage = cipher.doFinal(decrypt.getBytes("UTF-8"));
+        byte[] decryptedMessage = cipher.doFinal(decrypt.getBytes(StandardCharsets.UTF_8));
 
         return new String(decryptedMessage);
     }
