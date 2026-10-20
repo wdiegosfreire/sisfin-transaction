@@ -42,7 +42,7 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		this.saveObjectiveItemsEdition();
 
 		if (this.objectiveParam.getProps() != null && this.objectiveParam.getProps().getTaxCouponFile() != null)
-			this.saveProductList();
+			this.processTaxCouponFile();
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		}
 	}
 
-	private void saveProductList() {
+	private void processTaxCouponFile() {
 		Utils.log.info(this.objectiveParam.getProps().getTaxCouponFile());
 	}
 }
