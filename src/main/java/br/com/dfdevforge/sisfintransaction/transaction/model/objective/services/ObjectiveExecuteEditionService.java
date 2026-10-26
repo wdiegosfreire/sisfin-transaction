@@ -20,9 +20,8 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.TaxCouponFileInval
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.address.entities.AddressEntity;
-import br.com.dfdevforge.sisfintransaction.supermarket.model.address.repositories.AddressRepository;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.CompanyEntity;
-import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositories.CompanyRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.company.services.CompanyExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.repositories.ObjectiveRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.entities.ObjectiveItemEntity;
@@ -37,17 +36,15 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveMovementRepository objectiveMovementRepository;
 	private final ObjectiveItemRepository objectiveItemRepository;
-	private final CompanyRepository companyRepository;
-	private final AddressRepository addressRepository;
+	private final CompanyExecuteRegistrationService companyExecuteRegistrationService;
 	private final ObjectMapper objectMapper;
 
 	@Autowired
-	public ObjectiveExecuteEditionService(ObjectiveRepository objectiveRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveItemRepository objectiveItemRepository, CompanyRepository companyRepository, AddressRepository addressRepository, ObjectMapper objectMapper) {
+	public ObjectiveExecuteEditionService(ObjectiveRepository objectiveRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveItemRepository objectiveItemRepository, CompanyExecuteRegistrationService companyExecuteRegistrationService, ObjectMapper objectMapper) {
 		this.objectiveRepository = objectiveRepository;
 		this.objectiveMovementRepository = objectiveMovementRepository;
 		this.objectiveItemRepository = objectiveItemRepository;
-		this.companyRepository = companyRepository;
-		this.addressRepository = addressRepository;
+		this.companyExecuteRegistrationService = companyExecuteRegistrationService;
 		this.objectMapper = objectMapper;
 	}
 
@@ -58,8 +55,9 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		this.saveObjectiveMovementsEdition();
 		this.saveObjectiveItemsEdition();
 
-		if (this.objectiveParam.getProps() != null && this.objectiveParam.getProps().getTaxCouponFile() != null)
+		if (this.objectiveParam.getProps() != null && this.objectiveParam.getProps().getTaxCouponFile() != null) {
 			this.processTaxCouponFile();
+		}
 	}
 
 	@Override
@@ -103,10 +101,15 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		}
 	}
 
-	private void processTaxCouponFile() throws TaxCouponFileInvalidException {
+	private void processTaxCouponFile() throws BaseException {
 		JsonNode taxCoupon = this.readTaxCouponFile();
 
-		this.saveCompanyFromTaxCoupon(taxCoupon);
+		this.saveCompany(this.buildCompanyFromTaxCoupon(taxCoupon));
+	}
+
+	private CompanyEntity saveCompany(CompanyEntity company) throws BaseException {
+		this.companyExecuteRegistrationService.setParams(company);
+		return (CompanyEntity) this.companyExecuteRegistrationService.execute().get("companyRegistered");
 	}
 
 	/*
@@ -125,36 +128,26 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		}
 	}
 
-	/*
-	 * Se a empresa (CNPJ) ja estiver cadastrada para o usuario, ela e reaproveitada para evitar duplicidade.
-	 */
-	private CompanyEntity saveCompanyFromTaxCoupon(JsonNode taxCoupon) throws TaxCouponFileInvalidException {
+	private CompanyEntity buildCompanyFromTaxCoupon(JsonNode taxCoupon) throws TaxCouponFileInvalidException {
 		String taxNumber = this.readText(taxCoupon, "taxIdNumber");
 
 		if (taxNumber == null)
 			throw new TaxCouponFileInvalidException();
 
-		taxNumber = Utils.value.formatToCnpj(taxNumber);
-
-		CompanyEntity company = this.companyRepository.findFirstByTaxNumberAndUserIdentity(taxNumber, this.objectiveParam.getUserIdentity());
-
-		if (company != null)
-			return company;
-
 		String fantasyName = this.readText(taxCoupon, "fantasyName");
 
-		company = new CompanyEntity();
-		company.setTaxNumber(taxNumber);
+		CompanyEntity company = new CompanyEntity();
+		company.setTaxNumber(Utils.value.formatToCnpj(taxNumber));
 		company.setName(this.readText(taxCoupon, "companyName"));
 		company.setFantasyName(fantasyName != null ? fantasyName : company.getName());
 		company.setIsInactive(false);
-		company.setAddress(this.saveAddressFromTaxCoupon(taxCoupon.path("address")));
+		company.setAddress(this.buildAddressFromTaxCoupon(taxCoupon.path("address")));
 		company.setUserIdentity(this.objectiveParam.getUserIdentity());
 
-		return this.companyRepository.save(company);
+		return company;
 	}
 
-	private AddressEntity saveAddressFromTaxCoupon(JsonNode addressNode) {
+	private AddressEntity buildAddressFromTaxCoupon(JsonNode addressNode) {
 		if (addressNode.isMissingNode() || addressNode.isNull())
 			return null;
 
@@ -166,7 +159,7 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		address.setCity(this.readText(addressNode.path("city"), "name"));
 		address.setUserIdentity(this.objectiveParam.getUserIdentity());
 
-		return this.addressRepository.save(address);
+		return address;
 	}
 
 	private String readText(JsonNode node, String fieldName) {

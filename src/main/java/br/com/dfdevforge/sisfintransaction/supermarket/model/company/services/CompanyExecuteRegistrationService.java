@@ -13,6 +13,9 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.address.entities.AddressEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.address.repositories.AddressRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.CompanyEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositories.CompanyRepository;
 
 @Service
@@ -20,16 +23,36 @@ import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositorie
 @Transactional(rollbackFor = java.lang.Exception.class)
 public class CompanyExecuteRegistrationService extends CompanyBaseService implements CommonService {
 	private final CompanyRepository companyRepository;
+	private final AddressRepository addressRepository;
 
 	@Autowired
-	public CompanyExecuteRegistrationService(CompanyRepository companyRepository) {
+	public CompanyExecuteRegistrationService(CompanyRepository companyRepository, AddressRepository addressRepository) {
 		this.companyRepository = companyRepository;
+		this.addressRepository = addressRepository;
+	}
+
+	/*
+	 * O execute() e um metodo default de CommonService. Sem esta sobrescrita ele e declarado na interface,
+	 * o @Transactional da classe nao se aplica a ele e cada save() roda em uma transacao propria (sem rollback total).
+	 * Sobrescrevendo aqui, o metodo passa a ser declarado nesta classe, o @Transactional da classe passa a valer para ele
+	 * e o fluxo inteiro (validacao + persistencia do endereco + persistencia da empresa) roda em uma unica transacao.
+	 * Se ja existir uma transacao ativa (ex.: chamada a partir de outro service), ela e reaproveitada.
+	 * NAO remover esta sobrescrita, mesmo que pareca redundante.
+	 */
+	@Override
+	public Map<String, Object> execute() throws BaseException {
+		return super.execute();
 	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();
-		this.saveCompany();
+
+		if (!this.reuseCompanyAlreadyRegistered()) {
+			this.saveAddress();
+			this.saveCompany();
+		}
+
 		this.findAllCompanies();
 	}
 
@@ -51,8 +74,39 @@ public class CompanyExecuteRegistrationService extends CompanyBaseService implem
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
+	/*
+	 * Se a empresa (CNPJ) ja estiver cadastrada para o usuario, ela e reaproveitada para evitar duplicidade.
+	 */
+	private boolean reuseCompanyAlreadyRegistered() {
+		if (StringUtils.isBlank(this.companyParam.getTaxNumber()))
+			return false;
+
+		CompanyEntity company = this.companyRepository.findFirstByTaxNumberAndUserIdentity(this.companyParam.getTaxNumber(), this.companyParam.getUserIdentity());
+
+		if (company == null)
+			return false;
+
+		this.companyParam = company;
+		return true;
+	}
+
+	private void saveAddress() {
+		AddressEntity address = this.companyParam.getAddress();
+
+		if (address == null)
+			return;
+
+		if (address.getUserIdentity() == null)
+			address.setUserIdentity(this.companyParam.getUserIdentity());
+
+		this.companyParam.setAddress(this.addressRepository.save(address));
+	}
+
 	private void saveCompany() {
-		this.companyRepository.save(this.companyParam);
+		if (this.companyParam.getIsInactive() == null)
+			this.companyParam.setIsInactive(false);
+
+		this.companyParam = this.companyRepository.save(this.companyParam);
 	}
 
 	private void findAllCompanies() {
