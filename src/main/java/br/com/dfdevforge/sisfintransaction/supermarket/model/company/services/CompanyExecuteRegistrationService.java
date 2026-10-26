@@ -35,7 +35,7 @@ public class CompanyExecuteRegistrationService extends CompanyBaseService implem
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();
 
-		if (!this.reuseCompanyAlreadyRegistered()) {
+		if (this.companyDoesntExist()) {
 			this.saveAddress();
 			this.saveCompany();
 		}
@@ -52,8 +52,10 @@ public class CompanyExecuteRegistrationService extends CompanyBaseService implem
 	private void checkRequiredFields() throws RequiredFieldNotFoundException {
 		List<String> errorList = new ArrayList<>();
 
+		if (StringUtils.isBlank(this.companyParam.getTaxNumber()))
+			errorList.add("Tax number is required.");
 		if (StringUtils.isBlank(this.companyParam.getName()))
-			errorList.add("Please, enter name.");
+			errorList.add("Company name is required.");
 		if (this.companyParam.getUserIdentity() == null)
 			errorList.add("Please, the company need to be associated with a user.");
 
@@ -64,17 +66,14 @@ public class CompanyExecuteRegistrationService extends CompanyBaseService implem
 	/*
 	 * Se a empresa (CNPJ) ja estiver cadastrada para o usuario, ela e reaproveitada para evitar duplicidade.
 	 */
-	private boolean reuseCompanyAlreadyRegistered() {
-		if (StringUtils.isBlank(this.companyParam.getTaxNumber()))
-			return false;
-
+	private boolean companyDoesntExist() {
 		CompanyEntity company = this.companyRepository.findFirstByTaxNumberAndUserIdentity(this.companyParam.getTaxNumber(), this.companyParam.getUserIdentity());
 
 		if (company == null)
-			return false;
+			return true;
 
 		this.companyParam = company;
-		return true;
+		return false;
 	}
 
 	private void saveAddress() {
