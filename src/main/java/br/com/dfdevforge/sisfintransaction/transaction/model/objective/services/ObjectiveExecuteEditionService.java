@@ -54,7 +54,10 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		this.saveObjectiveItemsEdition();
 
 		if (this.objectiveParam.getProps() != null && this.objectiveParam.getProps().getTaxCouponFile() != null) {
-			this.processTaxCouponFile();
+			JsonNode taxCoupon = this.readTaxCouponFile();
+			CompanyEntity company = this.buildCompanyFromTaxCoupon(taxCoupon);
+
+			this.saveCompany(company);
 		}
 	}
 
@@ -101,15 +104,9 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		}
 	}
 
-	private void processTaxCouponFile() throws BaseException {
-		JsonNode taxCoupon = this.readTaxCouponFile();
-
-		this.saveCompany(this.buildCompanyFromTaxCoupon(taxCoupon));
-	}
-
-	private CompanyEntity saveCompany(CompanyEntity company) throws BaseException {
+	private void saveCompany(CompanyEntity company) throws BaseException {
 		this.companyExecuteRegistrationService.setParams(company);
-		return (CompanyEntity) this.companyExecuteRegistrationService.execute().get("companyRegistered");
+		this.companyExecuteRegistrationService.execute();
 	}
 
 	/*
