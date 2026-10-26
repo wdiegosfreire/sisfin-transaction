@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -28,7 +27,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveAccessModuleService extends ObjectiveBaseService implements CommonService {
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveItemRepository objectiveItemRepository;

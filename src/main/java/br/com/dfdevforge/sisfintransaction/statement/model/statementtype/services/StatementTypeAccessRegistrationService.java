@@ -1,7 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.statement.model.statementtype.services;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -9,7 +8,6 @@ import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementTypeAccessRegistrationService extends StatementTypeBaseService implements CommonService {
 
 	@Override

@@ -13,7 +13,6 @@ import javax.persistence.Tuple;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.enums.ColorEnum;
@@ -35,7 +34,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.summary.repositorie
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class SummaryAccessModuleService extends SummaryBaseService implements CommonService {
 	private static final String COL_ACC_NAME = "acc_name"; 
 	private final AccountRepositoryCustomized accountRepositoryCustomized;

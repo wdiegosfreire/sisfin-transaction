@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -16,7 +15,6 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.reposit
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementTypeExecuteRegistrationService extends StatementTypeBaseService implements CommonService {
 	private final StatementTypeRepository statementTypeRepository;
 

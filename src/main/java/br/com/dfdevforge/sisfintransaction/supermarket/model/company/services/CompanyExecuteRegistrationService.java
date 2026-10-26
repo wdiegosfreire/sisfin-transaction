@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -20,7 +19,6 @@ import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositorie
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class CompanyExecuteRegistrationService extends CompanyBaseService implements CommonService {
 	private final CompanyRepository companyRepository;
 	private final AddressRepository addressRepository;

@@ -9,7 +9,6 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -20,7 +19,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.paymentmethod.repos
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class PaymentMethodExecuteRegistrationService extends PaymentMethodBaseService implements CommonService {
 	private final PaymentMethodRepository paymentMethodRepository;
 

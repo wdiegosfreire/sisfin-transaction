@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,7 +30,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveExecuteEditionService extends ObjectiveBaseService implements CommonService {
 	private final ObjectiveRepository objectiveRepository;
 	private final ObjectiveMovementRepository objectiveMovementRepository;
