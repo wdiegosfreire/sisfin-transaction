@@ -11,4 +11,5 @@ import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.Co
 public interface CompanyRepository extends JpaRepository<CompanyEntity, String> {
 	public CompanyEntity findByIdentity(String identity);
 	public List<CompanyEntity> findByUserIdentityOrderByNameAsc(Long userIdentity);
+	public CompanyEntity findFirstByTaxNumberAndUserIdentity(String taxNumber, Long userIdentity);
 }

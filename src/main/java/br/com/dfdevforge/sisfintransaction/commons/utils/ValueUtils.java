@@ -66,4 +66,23 @@ public class ValueUtils {
 	public boolean isNumber(String value) {
 		return NumberUtils.isParsable(value);
 	}
+
+	public String formatToCnpj(String value) {
+		String digits = this.leftPadDigits(value, 14);
+		return digits == null ? value : digits.replaceFirst("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+	}
+
+	public String formatToZipCode(String value) {
+		String digits = this.leftPadDigits(value, 8);
+		return digits == null ? value : digits.replaceFirst("(\\d{5})(\\d{3})", "$1-$2");
+	}
+
+	private String leftPadDigits(String value, int size) {
+		String digits = StringUtils.getDigits(value);
+
+		if (StringUtils.isEmpty(digits) || digits.length() > size)
+			return null;
+
+		return StringUtils.leftPad(digits, size, '0');
+	}
 }
