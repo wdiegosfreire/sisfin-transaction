@@ -31,19 +31,6 @@ public class CompanyExecuteRegistrationService extends CompanyBaseService implem
 		this.addressRepository = addressRepository;
 	}
 
-	/*
-	 * O execute() e um metodo default de CommonService. Sem esta sobrescrita ele e declarado na interface,
-	 * o @Transactional da classe nao se aplica a ele e cada save() roda em uma transacao propria (sem rollback total).
-	 * Sobrescrevendo aqui, o metodo passa a ser declarado nesta classe, o @Transactional da classe passa a valer para ele
-	 * e o fluxo inteiro (validacao + persistencia do endereco + persistencia da empresa) roda em uma unica transacao.
-	 * Se ja existir uma transacao ativa (ex.: chamada a partir de outro service), ela e reaproveitada.
-	 * NAO remover esta sobrescrita, mesmo que pareca redundante.
-	 */
-	@Override
-	public Map<String, Object> execute() throws BaseException {
-		return super.execute();
-	}
-
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();

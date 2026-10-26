@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.statement.model.bank.entities.BankEntity;
@@ -26,6 +27,20 @@ public abstract class BaseService implements CommonService {
 	@Autowired private LocationRepository locationRepository;
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
 	@Autowired private StatementTypeRepository statementTypeRepository;
+
+	/*
+	 * O execute() e um metodo default de CommonService; declarado na interface, nenhum @Transactional se aplica a ele
+	 * e cada save() roda em uma transacao propria (sem rollback total).
+	 * Redeclarado aqui, o service que herda de BaseService executa validateUserAccess() -> executeBusinessRule() ->
+	 * configureUserActions() -> returnBusinessData() em uma unica transacao. Services chamados a partir de outro service
+	 * participam da transacao ja aberta (propagacao REQUIRED).
+	 * A anotacao precisa ficar NO METODO: o @Transactional das classes concretas nao se aplica a metodos herdados.
+	 */
+	@Override
+	@Transactional(rollbackFor = java.lang.Exception.class)
+	public Map<String, Object> execute() throws BaseException {
+		return CommonService.super.execute();
+	}
 
 	@Override
 	public void validateUserAccess() throws BaseException {
