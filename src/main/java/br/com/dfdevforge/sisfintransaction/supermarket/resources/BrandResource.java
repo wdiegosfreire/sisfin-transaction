@@ -21,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping(value = "/brand")
 public class BrandResource {
-	private ResourceDataEntity resourceData = new ResourceDataEntity();
-
 	private final BrandAccessModuleService brandAccessModuleService;
 	private final BrandAccessEditionService brandAccessEditionService;
 	private final BrandExecuteSearchService brandExecuteSearchService;
@@ -33,48 +31,60 @@ public class BrandResource {
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody BrandEntity brand) throws BaseException {
 		this.brandAccessModuleService.setParams(brand);
-		this.resourceData.setMap(this.brandAccessModuleService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.brandAccessModuleService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
 	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody BrandEntity brand) throws BaseException {
 		this.brandAccessEditionService.setParams(brand);
-		this.resourceData.setMap(this.brandAccessEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.brandAccessEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeSearch")
 	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody BrandEntity brand) throws BaseException {
 		this.brandExecuteSearchService.setParams(brand);
-		this.resourceData.setMap(this.brandExecuteSearchService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.brandExecuteSearchService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
 	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody BrandEntity brand) throws BaseException {
 		this.brandExecuteEditionService.setParams(brand);
-		this.resourceData.setMap(this.brandExecuteEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.brandExecuteEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
 	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody BrandEntity brand) throws BaseException {
 		this.brandExecuteExclusionService.setParams(brand);
-		this.resourceData.setMap(this.brandExecuteExclusionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.brandExecuteExclusionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
 	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody BrandEntity brand) throws BaseException {
 		this.brandExecuteRegistrationService.setParams(brand);
-		this.resourceData.setMap(this.brandExecuteRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.brandExecuteRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 }

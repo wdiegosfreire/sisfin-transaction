@@ -20,8 +20,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objective.services.
 @RestController
 @RequestMapping(value = "/objective")
 public class ObjectiveResource {
-	private ResourceDataEntity resourceData = new ResourceDataEntity();
-
 	private final ObjectiveAccessModuleService objectiveAccessModuleService;
 	private final ObjectiveAccessEditionService objectiveAccessEditionService;
 	private final ObjectiveAccessRegistrationService objectiveAccessRegistrationService;
@@ -42,48 +40,60 @@ public class ObjectiveResource {
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody ObjectiveEntity objective) throws BaseException {
 		this.objectiveAccessModuleService.setParams(objective);
-		this.resourceData.setMap(this.objectiveAccessModuleService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveAccessModuleService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
 	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody ObjectiveEntity objective) throws BaseException {
 		this.objectiveAccessEditionService.setParams(objective);
-		this.resourceData.setMap(this.objectiveAccessEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveAccessEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessRegistration")
 	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody ObjectiveEntity objective) throws BaseException {
 		this.objectiveAccessRegistrationService.setParams(objective);
-		this.resourceData.setMap(this.objectiveAccessRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveAccessRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
 	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody ObjectiveEntity objective) throws BaseException {
 		this.objectiveExecuteEditionService.setParams(objective);
-		this.resourceData.setMap(this.objectiveExecuteEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveExecuteEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
 	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody ObjectiveEntity objective) throws BaseException {
 		this.objectiveExecuteExclusionService.setParams(objective);
-		this.resourceData.setMap(this.objectiveExecuteExclusionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveExecuteExclusionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
 	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody ObjectiveEntity objective) throws BaseException {
 		this.objectiveExecuteRegistrationService.setParams(objective);
-		this.resourceData.setMap(this.objectiveExecuteRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveExecuteRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 }

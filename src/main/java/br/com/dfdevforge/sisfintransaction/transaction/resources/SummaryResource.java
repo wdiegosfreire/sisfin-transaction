@@ -15,8 +15,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.summary.services.Su
 @RestController
 @RequestMapping(value = "/summary")
 public class SummaryResource {
-	private ResourceDataEntity resourceData = new ResourceDataEntity();
-
 	private final SummaryAccessModuleService summaryAccessModuleService;
 
 	@Autowired
@@ -27,8 +25,10 @@ public class SummaryResource {
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody SummaryEntity summary) throws BaseException {
 		this.summaryAccessModuleService.setParams(summary);
-		this.resourceData.setMap(this.summaryAccessModuleService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.summaryAccessModuleService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 }
