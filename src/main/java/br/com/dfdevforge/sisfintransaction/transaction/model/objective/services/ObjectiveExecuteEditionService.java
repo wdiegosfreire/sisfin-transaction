@@ -77,11 +77,11 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 
 	private void saveObjectiveMovementsEdition() {
 		this.objectiveMovementRepository.deleteAll(this.objectiveMovementRepository.findByObjective(objectiveParam));
+		this.objectiveMovementRepository.flush();
 
 		Date now = new Date();
 		for (ObjectiveMovementEntity objectiveMovementEdited : this.objectiveParam.getObjectiveMovementList()) {
-			objectiveMovementEdited.setIdentity(Math.abs(objectiveMovementEdited.getIdentity()));
-
+			objectiveMovementEdited.setIdentity(null);
 			objectiveMovementEdited.setRegistrationDate(now);
 			objectiveMovementEdited.setObjective(this.objectiveParam);
 			objectiveMovementEdited.setUserIdentity(this.objectiveParam.getUserIdentity());
@@ -91,8 +91,10 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 
 	private void saveObjectiveItemsEdition() {
 		this.objectiveItemRepository.deleteAll(this.objectiveItemRepository.findByObjective(objectiveParam));
+		this.objectiveItemRepository.flush();
 		
 		for (ObjectiveItemEntity objectiveItemEdited : this.objectiveParam.getObjectiveItemList()) {
+			objectiveItemEdited.setIdentity(null);
 			objectiveItemEdited.setObjective(this.objectiveParam);
 			objectiveItemEdited.setUserIdentity(this.objectiveParam.getUserIdentity());
 			this.objectiveItemRepository.save(objectiveItemEdited);
@@ -149,9 +151,11 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		if (addressNode.isMissingNode() || addressNode.isNull())
 			return null;
 
+		String addressNumber = this.readText(addressNode, "number");
+
 		AddressEntity address = new AddressEntity();
 		address.setStreet(this.readText(addressNode, "street"));
-		address.setNumber(this.readText(addressNode, "number"));
+		address.setNumber(addressNumber != null ? addressNumber : "SN");
 		address.setNeighborhood(this.readText(addressNode, "neighborhood"));
 		address.setZipCode(Utils.value.formatToZipCode(this.readText(addressNode, "zipCode")));
 		address.setCity(this.readText(addressNode.path("city"), "name"));
