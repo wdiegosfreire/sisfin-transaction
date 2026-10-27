@@ -12,8 +12,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
-import br.com.dfdevforge.sisfintransaction.supermarket.model.address.entities.AddressEntity;
-import br.com.dfdevforge.sisfintransaction.supermarket.model.address.repositories.AddressRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.address.services.AddressExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.CompanyEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositories.CompanyRepository;
 
@@ -21,12 +20,12 @@ import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositorie
 @RequestScope
 public class CompanyExecuteRegistrationService extends CompanyBaseService implements CommonService {
 	private final CompanyRepository companyRepository;
-	private final AddressRepository addressRepository;
+	private final AddressExecuteRegistrationService addressExecuteRegistrationService;
 
 	@Autowired
-	public CompanyExecuteRegistrationService(CompanyRepository companyRepository, AddressRepository addressRepository) {
+	public CompanyExecuteRegistrationService(CompanyRepository companyRepository, AddressExecuteRegistrationService addressExecuteRegistrationService) {
 		this.companyRepository = companyRepository;
-		this.addressRepository = addressRepository;
+		this.addressExecuteRegistrationService = addressExecuteRegistrationService;
 	}
 
 	@Override
@@ -74,16 +73,9 @@ public class CompanyExecuteRegistrationService extends CompanyBaseService implem
 		return false;
 	}
 
-	private void saveAddress() {
-		AddressEntity address = this.companyParam.getAddress();
-
-		if (address == null)
-			return;
-
-		if (address.getUserIdentity() == null)
-			address.setUserIdentity(this.companyParam.getUserIdentity());
-
-		this.companyParam.setAddress(this.addressRepository.save(address));
+	private void saveAddress() throws BaseException {
+		this.addressExecuteRegistrationService.setParams(this.companyParam.getAddress());
+		this.addressExecuteRegistrationService.execute();
 	}
 
 	private void saveCompany() {

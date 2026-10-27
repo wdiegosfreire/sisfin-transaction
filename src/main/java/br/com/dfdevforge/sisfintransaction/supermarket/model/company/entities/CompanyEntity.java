@@ -14,7 +14,6 @@ import org.hibernate.annotations.GenericGenerator;
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.address.entities.AddressEntity;
-import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
