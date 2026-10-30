@@ -10,6 +10,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
@@ -55,5 +56,6 @@ public class AddressEntity extends BaseEntity implements UserOwnedEntity {
 	public final AddressEntityProps props = new AddressEntityProps();
 
 	@Transient
+	@JsonIgnore
 	public final AddressEntityMethods methods = new AddressEntityMethods(this);
 }

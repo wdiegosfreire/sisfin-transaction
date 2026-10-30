@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
@@ -59,5 +60,6 @@ public class CompanyEntity extends BaseEntity implements UserOwnedEntity {
 	public final CompanyEntityProps props = new CompanyEntityProps();
 
 	@Transient
+	@JsonIgnore
 	public final CompanyEntityMethods methods = new CompanyEntityMethods(this);
 }

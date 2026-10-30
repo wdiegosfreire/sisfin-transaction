@@ -2,6 +2,7 @@ package br.com.dfdevforge.sisfintransaction.supermarket.model.company.services;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
@@ -9,6 +10,9 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.address.entities.AddressEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.address.services.AddressExecuteEditionService;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.address.services.AddressExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.CompanyEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositories.CompanyRepository;
 
@@ -16,15 +20,20 @@ import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositorie
 @RequestScope
 public class CompanyExecuteEditionService extends CompanyBaseService implements CommonService {
 	private final CompanyRepository companyRepository;
+	private final AddressExecuteEditionService addressExecuteEditionService;
+	private final AddressExecuteRegistrationService addressExecuteRegistrationService;
 
 	@Autowired
-	public CompanyExecuteEditionService(CompanyRepository companyRepository) {
+	public CompanyExecuteEditionService(CompanyRepository companyRepository, AddressExecuteEditionService addressExecuteEditionService, AddressExecuteRegistrationService addressExecuteRegistrationService) {
 		this.companyRepository = companyRepository;
+		this.addressExecuteEditionService = addressExecuteEditionService;
+		this.addressExecuteRegistrationService = addressExecuteRegistrationService;
 	}
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.findById();
+		this.saveAddress();
 		this.editCompany();
 		this.findAllCompanies();
 	}
@@ -42,8 +51,26 @@ public class CompanyExecuteEditionService extends CompanyBaseService implements 
 			throw new DataForEditionNotFoundException();
 	}
 
+	private void saveAddress() throws BaseException {
+		AddressEntity address = this.companyParam.getAddress();
+
+		if (address == null)
+			return;
+
+		address.setUserIdentity(this.companyParam.getUserIdentity());
+
+		if (StringUtils.isBlank(address.getIdentity())) {
+			this.addressExecuteRegistrationService.setParams(address);
+			this.addressExecuteRegistrationService.execute();
+		}
+		else {
+			this.addressExecuteEditionService.setParams(address);
+			this.addressExecuteEditionService.execute();
+		}
+	}
+
 	private void editCompany() {
-		this.companyRepository.save(this.companyParam);
+		this.companyParam = this.companyRepository.save(this.companyParam);
 	}
 
 	private void findAllCompanies() {

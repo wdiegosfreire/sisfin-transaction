@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
@@ -69,5 +70,6 @@ public class ObjectiveEntity extends BaseEntity implements UserOwnedEntity {
 	public final ObjectiveEntityProps props = new ObjectiveEntityProps();
 
 	@Transient
+	@JsonIgnore
 	public final ObjectiveEntityMethods methods = new ObjectiveEntityMethods(this);
 }
