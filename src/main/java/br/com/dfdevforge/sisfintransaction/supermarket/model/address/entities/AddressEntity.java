@@ -9,15 +9,23 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "add_address")
-@EqualsAndHashCode(callSuper = false, of = {"identity"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity")
 public class AddressEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "add_identity", length = 36, updatable = false, nullable = false)
