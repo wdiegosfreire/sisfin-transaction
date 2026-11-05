@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.CompanyEntity;
-import br.com.dfdevforge.sisfintransaction.supermarket.model.measurementunit.entities.MeasurementUnitEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.product.entities.ProductEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -12,6 +12,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.address.services.AddressExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.CompanyEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.repositories.CompanyRepository;
@@ -81,6 +82,9 @@ public class CompanyExecuteRegistrationService extends CompanyBaseService implem
 	private void saveCompany() {
 		if (this.companyParam.getIsInactive() == null)
 			this.companyParam.setIsInactive(false);
+
+		if (Utils.value.exists(this.companyParam.getName()))
+			this.companyParam.setName(this.companyParam.getName().toUpperCase());
 
 		this.companyParam = this.companyRepository.save(this.companyParam);
 	}
