@@ -1,6 +1,5 @@
 package br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -61,10 +60,6 @@ public class ObjectiveEntity extends BaseEntity implements UserOwnedEntity {
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;
-
-	@Transient
-	@Deprecated(forRemoval = true)
-	private Date sortDate;
 
 	@Transient
 	public final ObjectiveEntityProps props = new ObjectiveEntityProps();

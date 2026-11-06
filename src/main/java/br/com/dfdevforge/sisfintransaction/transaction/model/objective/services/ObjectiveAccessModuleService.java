@@ -99,14 +99,14 @@ public class ObjectiveAccessModuleService extends ObjectiveBaseService implement
 
 				if (movementPeriod == selectedPeriod) {
 					objectiveMovement.props.setIsInPeriod(Boolean.TRUE);
-					objective.setSortDate(movementDate);
+					objective.props.setSortDate(movementDate);
 				}
 			}
 		}
 	}
 
 	private void sortObjectivesBySortDate() {
-		this.objectiveListResult = this.objectiveListResult.stream().sorted(Comparator.comparing(ObjectiveEntity::getSortDate)).collect(Collectors.toList());
+		this.objectiveListResult = this.objectiveListResult.stream().sorted(Comparator.comparing((ObjectiveEntity objective) -> objective.props.getSortDate())).collect(Collectors.toList());
 	}
 
 	private void identifyNewHeaderGroup() {
