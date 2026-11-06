@@ -1,7 +1,9 @@
 package br.com.dfdevforge.sisfintransaction.transaction.model.objective.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +22,8 @@ import br.com.dfdevforge.sisfintransaction.commons.utils.Utils;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.address.entities.AddressEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.CompanyEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.services.CompanyExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.entities.ProductCompanyEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.services.ProductCompanyExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.repositories.ObjectiveRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.entities.ObjectiveItemEntity;
@@ -34,19 +38,22 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 	private final ObjectiveMovementRepository objectiveMovementRepository;
 	private final ObjectiveItemRepository objectiveItemRepository;
 	private final CompanyExecuteRegistrationService companyExecuteRegistrationService;
+	private final ProductCompanyExecuteRegistrationService productCompanyExecuteRegistrationService;
 	private final ObjectMapper objectMapper;
 
 	@Autowired
-	public ObjectiveExecuteEditionService(ObjectiveRepository objectiveRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveItemRepository objectiveItemRepository, CompanyExecuteRegistrationService companyExecuteRegistrationService, ObjectMapper objectMapper) {
+	public ObjectiveExecuteEditionService(ObjectiveRepository objectiveRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveItemRepository objectiveItemRepository, CompanyExecuteRegistrationService companyExecuteRegistrationService, ProductCompanyExecuteRegistrationService productCompanyExecuteRegistrationService, ObjectMapper objectMapper) {
 		this.objectiveRepository = objectiveRepository;
 		this.objectiveMovementRepository = objectiveMovementRepository;
 		this.objectiveItemRepository = objectiveItemRepository;
 		this.companyExecuteRegistrationService = companyExecuteRegistrationService;
+		this.productCompanyExecuteRegistrationService = productCompanyExecuteRegistrationService;
 		this.objectMapper = objectMapper;
 	}
 
 	private CompanyEntity company;
 	private JsonNode taxCouponJson;
+	private List<ProductCompanyEntity> productCompanyList;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -59,6 +66,8 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 			this.readTaxCouponFile();
 			this.buildCompanyFromTaxCoupon();
 			this.saveCompany();
+			this.buildProductCompanyFromTaxCoupon();
+			this.saveProductCompany();
 		}
 	}
 
@@ -105,14 +114,6 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		}
 	}
 
-	private void saveCompany() throws BaseException {
-		this.companyExecuteRegistrationService.setParams(this.company);
-		this.companyExecuteRegistrationService.execute();
-	}
-
-	/*
-	 * O arquivo chega do frontend como data URL ("data:application/json;base64,<conteudo>").
-	 */
 	private void readTaxCouponFile() throws TaxCouponFileInvalidException {
 		String taxCouponFile = this.objectiveParam.getProps().getTaxCouponFile();
 		String base64Content = taxCouponFile.contains("base64,") ? taxCouponFile.split("base64,")[1] : taxCouponFile;
@@ -141,6 +142,44 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		company.setIsInactive(false);
 		company.setAddress(this.buildAddressFromTaxCoupon(this.taxCouponJson.path("address")));
 		company.setUserIdentity(this.objectiveParam.getUserIdentity());
+	}
+
+	private void saveCompany() throws BaseException {
+		this.companyExecuteRegistrationService.setParams(this.company);
+		Map<String, Object> result = this.companyExecuteRegistrationService.execute();
+		this.company = (CompanyEntity) result.get("companyRegistered");
+	}
+
+	private void buildProductCompanyFromTaxCoupon() {
+		this.productCompanyList = new ArrayList<>();
+
+		JsonNode itemsNode = this.taxCouponJson.path("items");
+
+		if (!itemsNode.isArray())
+			return;
+
+		for (JsonNode itemNode : itemsNode) {
+			String code = this.readText(itemNode, "code");
+			String description = this.readText(itemNode, "description");
+
+			if (code == null || description == null)
+				continue;
+
+			ProductCompanyEntity productCompany = new ProductCompanyEntity();
+			productCompany.setCode(code);
+			productCompany.setDescription(description);
+			productCompany.setCompany(this.company);
+			productCompany.setUserIdentity(this.objectiveParam.getUserIdentity());
+
+			this.productCompanyList.add(productCompany);
+		}
+	}
+
+	private void saveProductCompany() throws BaseException {
+		for (ProductCompanyEntity productCompany : this.productCompanyList) {
+			this.productCompanyExecuteRegistrationService.setParams(productCompany);
+			this.productCompanyExecuteRegistrationService.execute();
+		}
 	}
 
 	private AddressEntity buildAddressFromTaxCoupon(JsonNode addressNode) {
