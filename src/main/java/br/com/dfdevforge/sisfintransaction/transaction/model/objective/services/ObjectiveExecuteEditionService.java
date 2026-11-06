@@ -1,9 +1,8 @@
 package br.com.dfdevforge.sisfintransaction.transaction.model.objective.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +13,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.dfdevforge.sisfintransaction.commons.enums.DatePatternEnum;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.DataForEditionNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.TaxCouponFileInvalidException;
@@ -24,6 +24,8 @@ import br.com.dfdevforge.sisfintransaction.supermarket.model.company.entities.Co
 import br.com.dfdevforge.sisfintransaction.supermarket.model.company.services.CompanyExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.entities.ProductCompanyEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.services.ProductCompanyExecuteRegistrationService;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productpricehistory.entities.ProductPriceHistoryEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productpricehistory.services.ProductPriceHistoryExecuteRegistrationService;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities.ObjectiveEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objective.repositories.ObjectiveRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.objectiveitem.entities.ObjectiveItemEntity;
@@ -39,21 +41,22 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 	private final ObjectiveItemRepository objectiveItemRepository;
 	private final CompanyExecuteRegistrationService companyExecuteRegistrationService;
 	private final ProductCompanyExecuteRegistrationService productCompanyExecuteRegistrationService;
+	private final ProductPriceHistoryExecuteRegistrationService productPriceHistoryExecuteRegistrationService;
 	private final ObjectMapper objectMapper;
 
 	@Autowired
-	public ObjectiveExecuteEditionService(ObjectiveRepository objectiveRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveItemRepository objectiveItemRepository, CompanyExecuteRegistrationService companyExecuteRegistrationService, ProductCompanyExecuteRegistrationService productCompanyExecuteRegistrationService, ObjectMapper objectMapper) {
+	public ObjectiveExecuteEditionService(ObjectiveRepository objectiveRepository, ObjectiveMovementRepository objectiveMovementRepository, ObjectiveItemRepository objectiveItemRepository, CompanyExecuteRegistrationService companyExecuteRegistrationService, ProductCompanyExecuteRegistrationService productCompanyExecuteRegistrationService, ProductPriceHistoryExecuteRegistrationService productPriceHistoryExecuteRegistrationService, ObjectMapper objectMapper) {
 		this.objectiveRepository = objectiveRepository;
 		this.objectiveMovementRepository = objectiveMovementRepository;
 		this.objectiveItemRepository = objectiveItemRepository;
 		this.companyExecuteRegistrationService = companyExecuteRegistrationService;
 		this.productCompanyExecuteRegistrationService = productCompanyExecuteRegistrationService;
+		this.productPriceHistoryExecuteRegistrationService = productPriceHistoryExecuteRegistrationService;
 		this.objectMapper = objectMapper;
 	}
 
 	private CompanyEntity company;
 	private JsonNode taxCouponJson;
-	private List<ProductCompanyEntity> productCompanyList;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
@@ -66,8 +69,7 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 			this.readTaxCouponFile();
 			this.buildCompanyFromTaxCoupon();
 			this.saveCompany();
-			this.buildProductCompanyFromTaxCoupon();
-			this.saveProductCompany();
+			this.saveItemsFromTaxCoupon();
 		}
 	}
 
@@ -150,36 +152,72 @@ public class ObjectiveExecuteEditionService extends ObjectiveBaseService impleme
 		this.company = (CompanyEntity) result.get("companyRegistered");
 	}
 
-	private void buildProductCompanyFromTaxCoupon() {
-		this.productCompanyList = new ArrayList<>();
-
+	private void saveItemsFromTaxCoupon() throws BaseException {
 		JsonNode itemsNode = this.taxCouponJson.path("items");
 
 		if (!itemsNode.isArray())
 			return;
 
-		for (JsonNode itemNode : itemsNode) {
-			String code = this.readText(itemNode, "code");
-			String description = this.readText(itemNode, "description");
+		Date purchaseDate = Utils.date.toDateFromString(this.readText(this.taxCouponJson, "emissionDate"), DatePatternEnum.PT_BR_BARS_DIA_MES_ANO_HOR_MIN_SEG);
 
-			if (code == null || description == null)
+		if (purchaseDate == null)
+			throw new TaxCouponFileInvalidException();
+
+		for (JsonNode itemNode : itemsNode) {
+			ProductCompanyEntity productCompany = this.buildProductCompanyFromTaxCoupon(itemNode);
+
+			if (productCompany == null)
 				continue;
 
-			ProductCompanyEntity productCompany = new ProductCompanyEntity();
-			productCompany.setCode(code);
-			productCompany.setDescription(description);
-			productCompany.setCompany(this.company);
-			productCompany.setUserIdentity(this.objectiveParam.getUserIdentity());
+			productCompany = this.saveProductCompany(productCompany);
 
-			this.productCompanyList.add(productCompany);
+			ProductPriceHistoryEntity productPriceHistory = this.buildProductPriceHistoryFromTaxCoupon(itemNode, productCompany, purchaseDate);
+
+			if (productPriceHistory != null)
+				this.saveProductPriceHistory(productPriceHistory);
 		}
 	}
 
-	private void saveProductCompany() throws BaseException {
-		for (ProductCompanyEntity productCompany : this.productCompanyList) {
-			this.productCompanyExecuteRegistrationService.setParams(productCompany);
-			this.productCompanyExecuteRegistrationService.execute();
-		}
+	private ProductCompanyEntity buildProductCompanyFromTaxCoupon(JsonNode itemNode) {
+		String code = this.readText(itemNode, "code");
+		String description = this.readText(itemNode, "description");
+
+		if (code == null || description == null)
+			return null;
+
+		ProductCompanyEntity productCompany = new ProductCompanyEntity();
+		productCompany.setCode(code);
+		productCompany.setDescription(description);
+		productCompany.setCompany(this.company);
+		productCompany.setUserIdentity(this.objectiveParam.getUserIdentity());
+
+		return productCompany;
+	}
+
+	private ProductCompanyEntity saveProductCompany(ProductCompanyEntity productCompany) throws BaseException {
+		this.productCompanyExecuteRegistrationService.setParams(productCompany);
+		Map<String, Object> result = this.productCompanyExecuteRegistrationService.execute();
+		return (ProductCompanyEntity) result.get("productCompanyRegistered");
+	}
+
+	private ProductPriceHistoryEntity buildProductPriceHistoryFromTaxCoupon(JsonNode itemNode, ProductCompanyEntity productCompany, Date purchaseDate) {
+		JsonNode priceNode = itemNode.path("price");
+
+		if (!priceNode.isNumber())
+			return null;
+
+		ProductPriceHistoryEntity productPriceHistory = new ProductPriceHistoryEntity();
+		productPriceHistory.setPrice(BigDecimal.valueOf(priceNode.asDouble()));
+		productPriceHistory.setPurchaseDate(purchaseDate);
+		productPriceHistory.setProductCompany(productCompany);
+		productPriceHistory.setUserIdentity(this.objectiveParam.getUserIdentity());
+
+		return productPriceHistory;
+	}
+
+	private void saveProductPriceHistory(ProductPriceHistoryEntity productPriceHistory) throws BaseException {
+		this.productPriceHistoryExecuteRegistrationService.setParams(productPriceHistory);
+		this.productPriceHistoryExecuteRegistrationService.execute();
 	}
 
 	private AddressEntity buildAddressFromTaxCoupon(JsonNode addressNode) {

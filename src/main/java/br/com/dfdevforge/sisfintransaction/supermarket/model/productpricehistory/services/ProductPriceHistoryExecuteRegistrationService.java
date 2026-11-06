@@ -11,6 +11,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productpricehistory.entities.ProductPriceHistoryEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productpricehistory.repositories.ProductPriceHistoryRepository;
 
 @Service
@@ -26,7 +27,9 @@ public class ProductPriceHistoryExecuteRegistrationService extends ProductPriceH
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();
-		this.saveProductPriceHistory();
+
+		if (this.productPriceHistoryDoesntExist())
+			this.saveProductPriceHistory();
 	}
 
 	@Override
@@ -49,6 +52,19 @@ public class ProductPriceHistoryExecuteRegistrationService extends ProductPriceH
 
 		if (!errorList.isEmpty())
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
+	}
+
+	/*
+	 * Se ja existir um preco registrado para o produto na mesma data/hora de compra, ele e reaproveitado para evitar duplicidade.
+	 */
+	private boolean productPriceHistoryDoesntExist() {
+		ProductPriceHistoryEntity productPriceHistory = this.productPriceHistoryRepository.findFirstByProductCompanyAndPurchaseDateAndUserIdentity(this.productPriceHistoryParam.getProductCompany(), this.productPriceHistoryParam.getPurchaseDate(), this.productPriceHistoryParam.getUserIdentity());
+
+		if (productPriceHistory == null)
+			return true;
+
+		this.productPriceHistoryParam = productPriceHistory;
+		return false;
 	}
 
 	private void saveProductPriceHistory() {

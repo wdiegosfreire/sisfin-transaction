@@ -1,5 +1,6 @@
 package br.com.dfdevforge.sisfintransaction.supermarket.model.productpricehistory.repositories;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ public interface ProductPriceHistoryRepository extends JpaRepository<ProductPric
 	public ProductPriceHistoryEntity findByIdentity(String identity);
 	public List<ProductPriceHistoryEntity> findByUserIdentityOrderByPurchaseDateDesc(Long userIdentity);
 	public List<ProductPriceHistoryEntity> findByProductCompanyAndUserIdentityOrderByPurchaseDateDesc(ProductCompanyEntity productCompany, Long userIdentity);
+	public ProductPriceHistoryEntity findFirstByProductCompanyAndPurchaseDateAndUserIdentity(ProductCompanyEntity productCompany, Date purchaseDate, Long userIdentity);
 }
