@@ -12,6 +12,12 @@ import br.com.dfdevforge.sisfintransaction.statement.model.bank.entities.BankEnt
 import br.com.dfdevforge.sisfintransaction.statement.model.bank.repositories.BankRepository;
 import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.entities.StatementTypeEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.repositories.StatementTypeRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.brand.entities.BrandEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.brand.repositories.BrandRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.measurementunit.entities.MeasurementUnitEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.measurementunit.repositories.MeasurementUnitRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.entities.ProductCategoryEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.repositories.ProductCategoryRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositories.AccountRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
@@ -23,10 +29,13 @@ public abstract class BaseService implements CommonService {
 	protected Map<String, Object> resultMap = new HashMap<>();
 
 	@Autowired private BankRepository bankRepository;
+	@Autowired private BrandRepository brandRepository;
 	@Autowired private AccountRepository accountRepository;
 	@Autowired private LocationRepository locationRepository;
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
 	@Autowired private StatementTypeRepository statementTypeRepository;
+	@Autowired private MeasurementUnitRepository measurementUnitRepository;
+	@Autowired private ProductCategoryRepository productCategoryRepository;
 
 	/*
 	 * O execute() e um metodo default de CommonService; declarado na interface, nenhum @Transactional se aplica a ele
@@ -71,6 +80,10 @@ public abstract class BaseService implements CommonService {
 		return this.bankRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 
+	protected List<BrandEntity> findBrandsByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.brandRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
 	protected List<AccountEntity> findAccountsByUserIdentityOrderByLevel(long userIdentity) {
 		return this.accountRepository.findByUserIdentityOrderByLevel(userIdentity);
 	}
@@ -85,5 +98,13 @@ public abstract class BaseService implements CommonService {
 
 	protected List<StatementTypeEntity> findStatementTypesByUserIdentityOrderByNameAsc(long userIdentity) {
 		return this.statementTypeRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
+	protected List<MeasurementUnitEntity> findMeasurementUnitsByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.measurementUnitRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
+	protected List<ProductCategoryEntity> findProductCategoriesByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.productCategoryRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 }

@@ -9,9 +9,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
@@ -26,7 +24,6 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false, of = {"identity"})
 @Entity
 @Table(name = "meu_measurement_unit")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "identity")
 public class MeasurementUnitEntity extends BaseEntity implements UserOwnedEntity {
 	@Id
 	@Column(name = "meu_identity", length = 36, updatable = false, nullable = false)
