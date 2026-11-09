@@ -6,12 +6,18 @@ import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 
 public interface CommonService {
 	default Map<String, Object> execute() throws BaseException {
+		this.convertDtoToEntity();
 		this.validateUserAccess();
 		this.executeBusinessRule();
 		this.configureUserActions();
 
 		return this.returnBusinessData();
 	}
+
+	/**
+	 * Its purpose is to validate user access before executing the business rule.
+	 */
+	public void convertDtoToEntity() throws BaseException;
 
 	/**
 	 * Its purpose is to validate user access before executing the business rule.
