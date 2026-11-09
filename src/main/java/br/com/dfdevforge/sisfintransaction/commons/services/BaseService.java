@@ -16,6 +16,8 @@ import br.com.dfdevforge.sisfintransaction.supermarket.model.brand.entities.Bran
 import br.com.dfdevforge.sisfintransaction.supermarket.model.brand.repositories.BrandRepository;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.measurementunit.entities.MeasurementUnitEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.measurementunit.repositories.MeasurementUnitRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.product.entities.ProductEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.product.repositories.ProductRepository;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.entities.ProductCategoryEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.repositories.ProductCategoryRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
@@ -31,6 +33,7 @@ public abstract class BaseService implements CommonService {
 	@Autowired private BankRepository bankRepository;
 	@Autowired private BrandRepository brandRepository;
 	@Autowired private AccountRepository accountRepository;
+	@Autowired private ProductRepository productRepository;
 	@Autowired private LocationRepository locationRepository;
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
 	@Autowired private StatementTypeRepository statementTypeRepository;
@@ -86,6 +89,10 @@ public abstract class BaseService implements CommonService {
 
 	protected List<AccountEntity> findAccountsByUserIdentityOrderByLevel(long userIdentity) {
 		return this.accountRepository.findByUserIdentityOrderByLevel(userIdentity);
+	}
+
+	protected List<ProductEntity> findProductsByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.productRepository.findByUserIdentityOrderByProductCategoryAsc(userIdentity);
 	}
 
 	protected List<LocationEntity> findLocationsByUserIdentityOrderByNameAsc(long userIdentity) {

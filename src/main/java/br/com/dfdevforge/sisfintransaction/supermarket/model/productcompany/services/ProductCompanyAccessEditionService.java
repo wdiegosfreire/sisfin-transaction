@@ -22,15 +22,20 @@ public class ProductCompanyAccessEditionService extends ProductCompanyBaseServic
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
-		this.findById();
+		this.findByIdentity();
+		this.findProducts();
 	}
 
-	private void findById() throws DataForEditionNotFoundException {
+	private void findByIdentity() throws DataForEditionNotFoundException {
 		ProductCompanyEntity productCompany = this.productCompanyRepository.findByIdentity(this.productCompanyParam.getIdentity());
 
 		if (productCompany == null)
 			throw new DataForEditionNotFoundException();
 
 		this.setArtifact("productCompany", productCompany);
+	}
+
+	private void findProducts() {
+		this.setArtifact("productListTable", this.findProductsByUserIdentityOrderByNameAsc(this.productCompanyParam.getUserIdentity()));
 	}
 }
