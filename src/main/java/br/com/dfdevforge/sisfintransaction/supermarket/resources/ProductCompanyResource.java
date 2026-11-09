@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.ResourceDataEntity;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
-import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.entities.ProductCompanyEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.dtos.ProductCompanyDtoMapper;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.dtos.ProductCompanyDtoRequest;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.services.ProductCompanyAccessEditionService;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.services.ProductCompanyAccessModuleService;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcompany.services.ProductCompanyExecuteEditionService;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping(value = "/productCompany")
 public class ProductCompanyResource {
+	private final ProductCompanyDtoMapper productCompanyDtoMapper;
 	private final ProductCompanyAccessModuleService productCompanyAccessModuleService;
 	private final ProductCompanyAccessEditionService productCompanyAccessEditionService;
 	private final ProductCompanyExecuteEditionService productCompanyExecuteEditionService;
@@ -27,51 +29,51 @@ public class ProductCompanyResource {
 	private final ProductCompanyExecuteRegistrationService productCompanyExecuteRegistrationService;
 
 	@PostMapping(value = "/accessModule")
-	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody ProductCompanyEntity productCompany) throws BaseException {
-		this.productCompanyAccessModuleService.setParams(productCompany);
+	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody ProductCompanyDtoRequest productCompany) throws BaseException {
+		this.productCompanyAccessModuleService.setParams(this.productCompanyDtoMapper.toEntity(productCompany));
 
 		ResourceDataEntity resourceData = new ResourceDataEntity();
-		resourceData.setMap(this.productCompanyAccessModuleService.execute());
+		resourceData.setMap(this.productCompanyDtoMapper.toResponseMap(this.productCompanyAccessModuleService.execute()));
 
 		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
-	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody ProductCompanyEntity productCompany) throws BaseException {
-		this.productCompanyAccessEditionService.setParams(productCompany);
+	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody ProductCompanyDtoRequest productCompany) throws BaseException {
+		this.productCompanyAccessEditionService.setParams(this.productCompanyDtoMapper.toEntity(productCompany));
 
 		ResourceDataEntity resourceData = new ResourceDataEntity();
-		resourceData.setMap(this.productCompanyAccessEditionService.execute());
+		resourceData.setMap(this.productCompanyDtoMapper.toResponseMap(this.productCompanyAccessEditionService.execute()));
 
 		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
-	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody ProductCompanyEntity productCompany) throws BaseException {
-		this.productCompanyExecuteEditionService.setParams(productCompany);
+	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody ProductCompanyDtoRequest productCompany) throws BaseException {
+		this.productCompanyExecuteEditionService.setParams(this.productCompanyDtoMapper.toEntity(productCompany));
 
 		ResourceDataEntity resourceData = new ResourceDataEntity();
-		resourceData.setMap(this.productCompanyExecuteEditionService.execute());
+		resourceData.setMap(this.productCompanyDtoMapper.toResponseMap(this.productCompanyExecuteEditionService.execute()));
 
 		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
-	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody ProductCompanyEntity productCompany) throws BaseException {
-		this.productCompanyExecuteExclusionService.setParams(productCompany);
+	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody ProductCompanyDtoRequest productCompany) throws BaseException {
+		this.productCompanyExecuteExclusionService.setParams(this.productCompanyDtoMapper.toEntity(productCompany));
 
 		ResourceDataEntity resourceData = new ResourceDataEntity();
-		resourceData.setMap(this.productCompanyExecuteExclusionService.execute());
+		resourceData.setMap(this.productCompanyDtoMapper.toResponseMap(this.productCompanyExecuteExclusionService.execute()));
 
 		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
-	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody ProductCompanyEntity productCompany) throws BaseException {
-		this.productCompanyExecuteRegistrationService.setParams(productCompany);
+	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody ProductCompanyDtoRequest productCompany) throws BaseException {
+		this.productCompanyExecuteRegistrationService.setParams(this.productCompanyDtoMapper.toEntity(productCompany));
 
 		ResourceDataEntity resourceData = new ResourceDataEntity();
-		resourceData.setMap(this.productCompanyExecuteRegistrationService.execute());
+		resourceData.setMap(this.productCompanyDtoMapper.toResponseMap(this.productCompanyExecuteRegistrationService.execute()));
 
 		return ResponseEntity.ok(resourceData);
 	}
