@@ -1,23 +1,29 @@
 package br.com.dfdevforge.sisfintransaction.supermarket.model.product.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.brand.entities.BrandEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.measurementunit.entities.MeasurementUnitEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.entities.ProductCategoryEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productinfo.entities.ProductInfoEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +65,10 @@ public class ProductEntity extends BaseEntity implements UserOwnedEntity {
 	@ManyToOne
 	@JoinColumn(name = "meu_identity")
 	private MeasurementUnitEntity measurementUnit;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@JsonIgnoreProperties("product")
+	private List<ProductInfoEntity> productInfoList;
 
 	@Column(name = "usr_identity")
 	private Long userIdentity;

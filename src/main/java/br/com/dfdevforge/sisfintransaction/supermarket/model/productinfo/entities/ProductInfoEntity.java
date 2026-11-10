@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
@@ -43,6 +44,7 @@ public class ProductInfoEntity extends BaseEntity implements UserOwnedEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "pro_identity")
+	@JsonIgnoreProperties("productInfoList")
 	private ProductEntity product;
 
 	@ManyToOne
