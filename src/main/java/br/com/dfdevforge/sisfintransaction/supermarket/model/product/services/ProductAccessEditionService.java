@@ -22,15 +22,30 @@ public class ProductAccessEditionService extends ProductBaseService implements C
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
-		this.findById();
+		this.findByIdentity();
+		this.findBrands();
+		this.findMeasurementUnits();
+		this.findProductCategories();
 	}
 
-	private void findById() throws DataForEditionNotFoundException {
+	private void findByIdentity() throws DataForEditionNotFoundException {
 		ProductEntity product = this.productRepository.findByIdentity(this.productParam.getIdentity());
 
 		if (product == null)
 			throw new DataForEditionNotFoundException();
 
 		this.setArtifact("product", product);
+	}
+
+	private void findBrands() {
+		this.setArtifact("brandListCombo", this.findBrandsByUserIdentityOrderByNameAsc(this.productParam.getUserIdentity()));
+	}
+
+	private void findMeasurementUnits() {
+		this.setArtifact("measurementUnitListCombo", this.findMeasurementUnitsByUserIdentityOrderByNameAsc(this.productParam.getUserIdentity()));
+	}
+
+	private void findProductCategories() {
+		this.setArtifact("productCategoryListCombo", this.findProductCategoriesByUserIdentityOrderByNameAsc(this.productParam.getUserIdentity()));
 	}
 }
