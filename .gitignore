@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Temp :: Excluir quando finalizar esta branch ###
+tax-coupon-full.json
