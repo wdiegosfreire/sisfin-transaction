@@ -41,12 +41,9 @@ public class AccountAccessModuleService extends AccountBaseService implements Co
 		this.accountListResult.forEach(accountLevelOne -> {
 			accountLevelOne.setAccountListChild(this.accountRepositoryCustomized.searchAllWithParent(accountLevelOne.getIdentity(), this.accountParam.getUserIdentity()));
 
-			accountLevelOne.getAccountListChild().forEach(accountLevelTwo -> {
-				accountLevelTwo.setAccountParent(null);
-				accountLevelTwo.setAccountListChild(this.accountRepositoryCustomized.searchAllWithParent(accountLevelTwo.getIdentity(), this.accountParam.getUserIdentity()));
-
-				accountLevelTwo.getAccountListChild().forEach(accountLevelThree -> accountLevelThree.setAccountParent(null));
-			});
+			accountLevelOne.getAccountListChild().forEach(accountLevelTwo ->
+				accountLevelTwo.setAccountListChild(this.accountRepositoryCustomized.searchAllWithParent(accountLevelTwo.getIdentity(), this.accountParam.getUserIdentity()))
+			);
 		});
 	}
 }
