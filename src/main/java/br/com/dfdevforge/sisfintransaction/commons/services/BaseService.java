@@ -20,6 +20,8 @@ import br.com.dfdevforge.sisfintransaction.supermarket.model.product.entities.Pr
 import br.com.dfdevforge.sisfintransaction.supermarket.model.product.repositories.ProductRepository;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.entities.ProductCategoryEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.repositories.ProductCategoryRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productproperty.entities.ProductPropertyEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productproperty.repositories.ProductPropertyRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositories.AccountRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
@@ -39,6 +41,7 @@ public abstract class BaseService implements CommonService {
 	@Autowired private StatementTypeRepository statementTypeRepository;
 	@Autowired private MeasurementUnitRepository measurementUnitRepository;
 	@Autowired private ProductCategoryRepository productCategoryRepository;
+	@Autowired private ProductPropertyRepository productPropertyRepository;
 
 	/*
 	 * O execute() e um metodo default de CommonService; declarado na interface, nenhum @Transactional se aplica a ele
@@ -118,5 +121,9 @@ public abstract class BaseService implements CommonService {
 
 	protected List<ProductCategoryEntity> findProductCategoriesByUserIdentityOrderByNameAsc(long userIdentity) {
 		return this.productCategoryRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
+	protected List<ProductPropertyEntity> findProductPropertiesByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.productPropertyRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 }

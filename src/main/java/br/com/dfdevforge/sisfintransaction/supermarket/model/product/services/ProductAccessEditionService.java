@@ -26,6 +26,7 @@ public class ProductAccessEditionService extends ProductBaseService implements C
 		this.findBrands();
 		this.findMeasurementUnits();
 		this.findProductCategories();
+		this.findProductProperties();
 	}
 
 	private void findByIdentity() throws DataForEditionNotFoundException {
@@ -47,5 +48,9 @@ public class ProductAccessEditionService extends ProductBaseService implements C
 
 	private void findProductCategories() {
 		this.setArtifact("productCategoryListCombo", this.findProductCategoriesByUserIdentityOrderByNameAsc(this.productParam.getUserIdentity()));
+	}
+
+	private void findProductProperties() {
+		this.setArtifact("productPropertyListTable", this.findProductPropertiesByUserIdentityOrderByNameAsc(this.productParam.getUserIdentity()));
 	}
 }

@@ -5,29 +5,30 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.RequiredFieldNotFoundException;
 import br.com.dfdevforge.sisfintransaction.commons.services.CommonService;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.product.entities.ProductEntity;
 import br.com.dfdevforge.sisfintransaction.supermarket.model.product.repositories.ProductRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productinfo.entities.ProductInfoEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productinfo.repositories.ProductInfoRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequestScope
+@RequiredArgsConstructor
 public class ProductExecuteRegistrationService extends ProductBaseService implements CommonService {
 	private final ProductRepository productRepository;
-
-	@Autowired
-	public ProductExecuteRegistrationService(ProductRepository productRepository) {
-		this.productRepository = productRepository;
-	}
+	private final ProductInfoRepository productInfoRepository;
 
 	@Override
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();
 		this.saveProduct();
+		this.saveProductInfo();
 	}
 
 	@Override
@@ -61,6 +62,18 @@ public class ProductExecuteRegistrationService extends ProductBaseService implem
 	}
 
 	private void saveProduct() {
-		this.productRepository.save(this.productParam);
+		ProductEntity productSaved = this.productRepository.save(this.productParam);
+		this.productParam.setIdentity(productSaved.getIdentity());
+	}
+
+	private void saveProductInfo() {
+		for (ProductInfoEntity productInfoEdited : this.productParam.getProductInfoList()) {
+			productInfoEdited.setIdentity(null);
+			productInfoEdited.setOrder(productInfoEdited.getOrder());
+			productInfoEdited.setDescription(productInfoEdited.getDescription());
+			productInfoEdited.setProduct(this.productParam);
+			productInfoEdited.setUserIdentity(this.productParam.getUserIdentity());
+			this.productInfoRepository.save(productInfoEdited);
+		}
 	}
 }
