@@ -67,13 +67,13 @@ public class ProductExecuteRegistrationService extends ProductBaseService implem
 	}
 
 	private void saveProductInfo() {
-		for (ProductInfoEntity productInfoEdited : this.productParam.getProductInfoList()) {
-			productInfoEdited.setIdentity(null);
-			productInfoEdited.setOrder(productInfoEdited.getOrder());
-			productInfoEdited.setDescription(productInfoEdited.getDescription());
-			productInfoEdited.setProduct(this.productParam);
-			productInfoEdited.setUserIdentity(this.productParam.getUserIdentity());
-			this.productInfoRepository.save(productInfoEdited);
+		for (ProductInfoEntity productInfoRegistered : this.productParam.getProductInfoList()) {
+			productInfoRegistered.setIdentity(null);
+			productInfoRegistered.setOrder(productInfoRegistered.getOrder());
+			productInfoRegistered.setDescription(productInfoRegistered.getDescription());
+			productInfoRegistered.setProduct(this.productParam);
+			productInfoRegistered.setUserIdentity(this.productParam.getUserIdentity());
+			this.productInfoRepository.save(productInfoRegistered);
 		}
 	}
 }

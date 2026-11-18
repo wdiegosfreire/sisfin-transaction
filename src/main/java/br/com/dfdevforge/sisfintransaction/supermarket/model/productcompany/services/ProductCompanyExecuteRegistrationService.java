@@ -29,8 +29,10 @@ public class ProductCompanyExecuteRegistrationService extends ProductCompanyBase
 	public void executeBusinessRule() throws BaseException {
 		this.checkRequiredFields();
 
-		if (this.productCompanyDoesntExist())
+		if (this.productCompanyDoesntExist()) {
+			this.standardizeData();
 			this.saveProductCompany();
+		}
 	}
 
 	@Override
@@ -66,6 +68,10 @@ public class ProductCompanyExecuteRegistrationService extends ProductCompanyBase
 
 		this.productCompanyParam = productCompany;
 		return false;
+	}
+
+	private void standardizeData() {
+		this.productCompanyParam.setDescription(this.productCompanyParam.getDescription().toUpperCase());
 	}
 
 	private void saveProductCompany() {

@@ -58,11 +58,6 @@ public abstract class BaseService implements CommonService {
 	}
 
 	@Override
-	public void convertDtoToEntity() throws BaseException {
-		
-	}
-
-	@Override
 	public void validateUserAccess() throws BaseException {
 		
 	}
