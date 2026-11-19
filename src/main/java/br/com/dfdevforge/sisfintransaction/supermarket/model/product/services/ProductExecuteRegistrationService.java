@@ -71,6 +71,8 @@ public class ProductExecuteRegistrationService extends ProductBaseService implem
 			productInfoRegistered.setIdentity(null);
 			productInfoRegistered.setOrder(productInfoRegistered.getOrder());
 			productInfoRegistered.setDescription(productInfoRegistered.getDescription());
+			productInfoRegistered.setShowInfo(productInfoRegistered.getShowInfo());
+			productInfoRegistered.setShowLabel(productInfoRegistered.getShowLabel());
 			productInfoRegistered.setProduct(this.productParam);
 			productInfoRegistered.setUserIdentity(this.productParam.getUserIdentity());
 			this.productInfoRepository.save(productInfoRegistered);

@@ -53,6 +53,8 @@ public class ProductExecuteEditionService extends ProductBaseService implements 
 			productInfoEdited.setIdentity(null);
 			productInfoEdited.setOrder(productInfoEdited.getOrder());
 			productInfoEdited.setDescription(productInfoEdited.getDescription());
+			productInfoEdited.setShowInfo(productInfoEdited.getShowInfo());
+			productInfoEdited.setShowLabel(productInfoEdited.getShowLabel());
 			productInfoEdited.setProduct(this.productParam);
 			productInfoEdited.setUserIdentity(this.productParam.getUserIdentity());
 			this.productInfoRepository.save(productInfoEdited);

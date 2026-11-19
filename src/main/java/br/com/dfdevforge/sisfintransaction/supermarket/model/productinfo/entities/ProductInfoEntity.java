@@ -42,6 +42,12 @@ public class ProductInfoEntity extends BaseEntity implements UserOwnedEntity {
 	@Column(name = "pri_description")
 	private String description;
 
+	@Column(name = "pri_show_info")
+	private Boolean showInfo;
+
+	@Column(name = "pri_show_label")
+	private Boolean showLabel;
+
 	@ManyToOne
 	@JoinColumn(name = "pro_identity")
 	@JsonIgnoreProperties("productInfoList")
