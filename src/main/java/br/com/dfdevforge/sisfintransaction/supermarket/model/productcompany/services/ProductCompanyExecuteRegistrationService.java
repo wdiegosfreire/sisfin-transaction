@@ -57,9 +57,6 @@ public class ProductCompanyExecuteRegistrationService extends ProductCompanyBase
 			throw new RequiredFieldNotFoundException("Required Field Not Found", errorList);
 	}
 
-	/*
-	 * Se o produto (codigo) ja estiver cadastrado para a empresa e o usuario, ele e reaproveitado para evitar duplicidade.
-	 */
 	private boolean productCompanyDoesntExist() {
 		ProductCompanyEntity productCompany = this.productCompanyRepository.findFirstByCodeAndCompanyAndUserIdentity(this.productCompanyParam.getCode(), this.productCompanyParam.getCompany(), this.productCompanyParam.getUserIdentity());
 
