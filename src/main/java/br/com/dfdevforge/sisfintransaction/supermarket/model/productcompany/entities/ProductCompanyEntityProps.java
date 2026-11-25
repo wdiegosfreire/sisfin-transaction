@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductCompanyEntityProps {
-	private String test;
+	private String taxCouponFile;
 }
