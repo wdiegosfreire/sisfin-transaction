@@ -2,7 +2,6 @@ package br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -11,7 +10,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.r
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class ObjectiveMovementExecuteSearchService extends ObjectiveMovementBaseService implements CommonService {
 	private final ObjectiveMovementRepositoryCustomized objectiveMovementRepositoryCustomized;
 

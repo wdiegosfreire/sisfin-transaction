@@ -1,6 +1,5 @@
 package br.com.dfdevforge.sisfintransaction.transaction.model.objective.entities;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -15,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
@@ -62,12 +62,9 @@ public class ObjectiveEntity extends BaseEntity implements UserOwnedEntity {
 	private Long userIdentity;
 
 	@Transient
-	@Deprecated(forRemoval = true)
-	private Date sortDate;
-
-	@Transient
 	public final ObjectiveEntityProps props = new ObjectiveEntityProps();
 
 	@Transient
+	@JsonIgnore
 	public final ObjectiveEntityMethods methods = new ObjectiveEntityMethods(this);
 }

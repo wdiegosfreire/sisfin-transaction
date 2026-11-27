@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -15,7 +14,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositorie
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class AccountAccessModuleService extends AccountBaseService implements CommonService {
 	private final AccountRepositoryCustomized accountRepositoryCustomized;
 
@@ -43,12 +41,9 @@ public class AccountAccessModuleService extends AccountBaseService implements Co
 		this.accountListResult.forEach(accountLevelOne -> {
 			accountLevelOne.setAccountListChild(this.accountRepositoryCustomized.searchAllWithParent(accountLevelOne.getIdentity(), this.accountParam.getUserIdentity()));
 
-			accountLevelOne.getAccountListChild().forEach(accountLevelTwo -> {
-				accountLevelTwo.setAccountParent(null);
-				accountLevelTwo.setAccountListChild(this.accountRepositoryCustomized.searchAllWithParent(accountLevelTwo.getIdentity(), this.accountParam.getUserIdentity()));
-
-				accountLevelTwo.getAccountListChild().forEach(accountLevelThree -> accountLevelThree.setAccountParent(null));
-			});
+			accountLevelOne.getAccountListChild().forEach(accountLevelTwo ->
+				accountLevelTwo.setAccountListChild(this.accountRepositoryCustomized.searchAllWithParent(accountLevelTwo.getIdentity(), this.accountParam.getUserIdentity()))
+			);
 		});
 	}
 }

@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import br.com.dfdevforge.sisfintransaction.commons.entities.BaseEntity;
 import br.com.dfdevforge.sisfintransaction.commons.security.UserOwnedEntity;
 import lombok.EqualsAndHashCode;
@@ -52,6 +54,7 @@ public class AccountEntity extends BaseEntity implements UserOwnedEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "acc_identity_parent")
+	@JsonIgnoreProperties("accountListChild")
 	private AccountEntity accountParent;
 
 	@Transient
