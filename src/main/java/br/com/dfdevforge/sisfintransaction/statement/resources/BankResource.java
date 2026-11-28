@@ -20,8 +20,6 @@ import br.com.dfdevforge.sisfintransaction.statement.model.bank.services.BankExe
 @RestController
 @RequestMapping(value = "/bank")
 public class BankResource {
-	private ResourceDataEntity resourceData = new ResourceDataEntity();
-
 	private final BankAccessModuleService bankAccessModuleService;
 	private final BankAccessEditionService bankAccessEditionService;
 	private final BankExecuteSearchService bankExecuteSearchService;
@@ -42,48 +40,60 @@ public class BankResource {
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody BankEntity bank) throws BaseException {
 		this.bankAccessModuleService.setParams(bank);
-		this.resourceData.setMap(this.bankAccessModuleService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.bankAccessModuleService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
 	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody BankEntity bank) throws BaseException {
 		this.bankAccessEditionService.setParams(bank);
-		this.resourceData.setMap(this.bankAccessEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.bankAccessEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeSearch")
 	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody BankEntity bank) throws BaseException {
 		this.bankExecuteSearchService.setParams(bank);
-		this.resourceData.setMap(this.bankExecuteSearchService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.bankExecuteSearchService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
 	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody BankEntity bank) throws BaseException {
 		this.bankExecuteEditionService.setParams(bank);
-		this.resourceData.setMap(this.bankExecuteEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.bankExecuteEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
 	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody BankEntity bank) throws BaseException {
 		this.bankExecuteExclusionService.setParams(bank);
-		this.resourceData.setMap(this.bankExecuteExclusionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.bankExecuteExclusionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
 	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody BankEntity bank) throws BaseException {
 		this.bankExecuteRegistrationService.setParams(bank);
-		this.resourceData.setMap(this.bankExecuteRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.bankExecuteRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 }

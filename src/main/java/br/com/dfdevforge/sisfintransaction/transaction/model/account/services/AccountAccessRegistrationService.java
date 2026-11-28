@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -15,7 +14,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositorie
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class AccountAccessRegistrationService extends AccountBaseService implements CommonService {
 	private final AccountRepositoryCustomized accountRepositoryCustomized;
 

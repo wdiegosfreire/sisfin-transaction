@@ -21,7 +21,6 @@ import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +46,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.e
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementExecuteRegistrationService extends StatementBaseService implements CommonService {
 	private static final String EXECECAO_NAO_IDENTIFICADA = "Exceção não Identificada";
 	private static final String EXTRATO_CONTA_CORRENTE = "Extrato de conta corrente";

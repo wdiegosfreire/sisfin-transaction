@@ -21,8 +21,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.objectivemovement.s
 @RestController
 @RequestMapping(value = "/objectiveMovement")
 public class ObjectiveMovementResource {
-	private ResourceDataEntity resourceData = new ResourceDataEntity();
-
 	private final ObjectiveMovementAccessModuleService objectiveMovementAccessModuleService;
 	private final ObjectiveMovementAccessEditionService objectiveMovementAccessEditionService;
 	private final ObjectiveMovementAccessRegistrationService objectiveMovementAccessRegistrationService;
@@ -45,56 +43,70 @@ public class ObjectiveMovementResource {
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody ObjectiveMovementEntity objectiveMovement) throws BaseException {
 		this.objectiveMovementAccessModuleService.setParams(objectiveMovement);
-		this.resourceData.setMap(this.objectiveMovementAccessModuleService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveMovementAccessModuleService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
 	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody ObjectiveMovementEntity objectiveMovement) throws BaseException {
 		this.objectiveMovementAccessEditionService.setParams(objectiveMovement);
-		this.resourceData.setMap(this.objectiveMovementAccessEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveMovementAccessEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessRegistration")
 	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody ObjectiveMovementEntity objectiveMovement) throws BaseException {
 		this.objectiveMovementAccessRegistrationService.setParams(objectiveMovement);
-		this.resourceData.setMap(this.objectiveMovementAccessRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveMovementAccessRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeSearch")
 	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody ObjectiveMovementEntity objectiveMovement) throws BaseException {
 		this.objectiveMovementExecuteSearchService.setParams(objectiveMovement);
-		this.resourceData.setMap(this.objectiveMovementExecuteSearchService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveMovementExecuteSearchService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
 	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody ObjectiveMovementEntity objectiveMovement) throws BaseException {
 		this.objectiveMovementExecuteEditionService.setParams(objectiveMovement);
-		this.resourceData.setMap(this.objectiveMovementExecuteEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveMovementExecuteEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
 	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody ObjectiveMovementEntity objectiveMovement) throws BaseException {
 		this.objectiveMovementExecuteExclusionService.setParams(objectiveMovement);
-		this.resourceData.setMap(this.objectiveMovementExecuteExclusionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveMovementExecuteExclusionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
 	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody ObjectiveMovementEntity objectiveMovement) throws BaseException {
 		this.objectiveMovementExecuteRegistrationService.setParams(objectiveMovement);
-		this.resourceData.setMap(this.objectiveMovementExecuteRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.objectiveMovementExecuteRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 }

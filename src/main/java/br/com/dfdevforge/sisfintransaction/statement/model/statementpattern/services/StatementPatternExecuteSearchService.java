@@ -2,7 +2,6 @@ package br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.ser
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
@@ -12,7 +11,6 @@ import br.com.dfdevforge.sisfintransaction.statement.model.statementpattern.repo
 
 @Service
 @RequestScope
-@Transactional(rollbackFor = java.lang.Exception.class)
 public class StatementPatternExecuteSearchService extends StatementPatternBaseService implements CommonService {
 	private final StatementPatternRepository statementPatternRepository;
 	private final StatementPatternRepositoryCustomized statementPatternRepositoryCustomized;

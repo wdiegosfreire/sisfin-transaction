@@ -20,8 +20,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.location.services.L
 @RestController
 @RequestMapping(value = "/location")
 public class LocationResource {
-	private ResourceDataEntity resourceData = new ResourceDataEntity();
-
 	private final LocationAccessModuleService locationAccessModuleService;
 	private final LocationAccessEditionService locationAccessEditionService;
 	private final LocationExecuteSearchService locationExecuteSearchService;
@@ -42,48 +40,60 @@ public class LocationResource {
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody LocationEntity location) throws BaseException {
 		this.locationAccessModuleService.setParams(location);
-		this.resourceData.setMap(this.locationAccessModuleService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.locationAccessModuleService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
 	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody LocationEntity location) throws BaseException {
 		this.locationAccessEditionService.setParams(location);
-		this.resourceData.setMap(this.locationAccessEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.locationAccessEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeSearch")
 	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody LocationEntity location) throws BaseException {
 		this.locationExecuteSearchService.setParams(location);
-		this.resourceData.setMap(this.locationExecuteSearchService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.locationExecuteSearchService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
 	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody LocationEntity location) throws BaseException {
 		this.locationExecuteEditionService.setParams(location);
-		this.resourceData.setMap(this.locationExecuteEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.locationExecuteEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
 	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody LocationEntity location) throws BaseException {
 		this.locationExecuteExclusionService.setParams(location);
-		this.resourceData.setMap(this.locationExecuteExclusionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.locationExecuteExclusionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
 	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody LocationEntity location) throws BaseException {
 		this.locationExecuteRegistrationService.setParams(location);
-		this.resourceData.setMap(this.locationExecuteRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.locationExecuteRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 }

@@ -5,12 +5,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.dfdevforge.sisfintransaction.commons.exceptions.BaseException;
 import br.com.dfdevforge.sisfintransaction.statement.model.bank.entities.BankEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.bank.repositories.BankRepository;
 import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.entities.StatementTypeEntity;
 import br.com.dfdevforge.sisfintransaction.statement.model.statementtype.repositories.StatementTypeRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.brand.entities.BrandEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.brand.repositories.BrandRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.measurementunit.entities.MeasurementUnitEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.measurementunit.repositories.MeasurementUnitRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.product.entities.ProductEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.product.repositories.ProductRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.entities.ProductCategoryEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productcategory.repositories.ProductCategoryRepository;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productproperty.entities.ProductPropertyEntity;
+import br.com.dfdevforge.sisfintransaction.supermarket.model.productproperty.repositories.ProductPropertyRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.entities.AccountEntity;
 import br.com.dfdevforge.sisfintransaction.transaction.model.account.repositories.AccountRepository;
 import br.com.dfdevforge.sisfintransaction.transaction.model.location.entities.LocationEntity;
@@ -22,10 +33,29 @@ public abstract class BaseService implements CommonService {
 	protected Map<String, Object> resultMap = new HashMap<>();
 
 	@Autowired private BankRepository bankRepository;
+	@Autowired private BrandRepository brandRepository;
 	@Autowired private AccountRepository accountRepository;
+	@Autowired private ProductRepository productRepository;
 	@Autowired private LocationRepository locationRepository;
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
 	@Autowired private StatementTypeRepository statementTypeRepository;
+	@Autowired private MeasurementUnitRepository measurementUnitRepository;
+	@Autowired private ProductCategoryRepository productCategoryRepository;
+	@Autowired private ProductPropertyRepository productPropertyRepository;
+
+	/*
+	 * O execute() e um metodo default de CommonService; declarado na interface, nenhum @Transactional se aplica a ele
+	 * e cada save() roda em uma transacao propria (sem rollback total).
+	 * Redeclarado aqui, o service que herda de BaseService executa validateUserAccess() -> executeBusinessRule() ->
+	 * configureUserActions() -> returnBusinessData() em uma unica transacao. Services chamados a partir de outro service
+	 * participam da transacao ja aberta (propagacao REQUIRED).
+	 * A anotacao precisa ficar NO METODO: o @Transactional das classes concretas nao se aplica a metodos herdados.
+	 */
+	@Override
+	@Transactional(rollbackFor = java.lang.Exception.class)
+	public Map<String, Object> execute() throws BaseException {
+		return CommonService.super.execute();
+	}
 
 	@Override
 	public void validateUserAccess() throws BaseException {
@@ -56,8 +86,16 @@ public abstract class BaseService implements CommonService {
 		return this.bankRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 
+	protected List<BrandEntity> findBrandsByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.brandRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
 	protected List<AccountEntity> findAccountsByUserIdentityOrderByLevel(long userIdentity) {
 		return this.accountRepository.findByUserIdentityOrderByLevel(userIdentity);
+	}
+
+	protected List<ProductEntity> findProductsByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.productRepository.findByUserIdentityOrderByProductCategoryAsc(userIdentity);
 	}
 
 	protected List<LocationEntity> findLocationsByUserIdentityOrderByNameAsc(long userIdentity) {
@@ -70,5 +108,17 @@ public abstract class BaseService implements CommonService {
 
 	protected List<StatementTypeEntity> findStatementTypesByUserIdentityOrderByNameAsc(long userIdentity) {
 		return this.statementTypeRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
+	protected List<MeasurementUnitEntity> findMeasurementUnitsByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.measurementUnitRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
+	protected List<ProductCategoryEntity> findProductCategoriesByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.productCategoryRepository.findByUserIdentityOrderByNameAsc(userIdentity);
+	}
+
+	protected List<ProductPropertyEntity> findProductPropertiesByUserIdentityOrderByNameAsc(long userIdentity) {
+		return this.productPropertyRepository.findByUserIdentityOrderByNameAsc(userIdentity);
 	}
 }

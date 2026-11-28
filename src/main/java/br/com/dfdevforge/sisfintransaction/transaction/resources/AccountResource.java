@@ -21,8 +21,6 @@ import br.com.dfdevforge.sisfintransaction.transaction.model.account.services.Ac
 @RestController
 @RequestMapping(value = "/account")
 public class AccountResource {
-	private ResourceDataEntity resourceData = new ResourceDataEntity();
-
 	private final AccountAccessModuleService accountAccessModuleService;
 	private final AccountAccessEditionService accountAccessEditionService;
 	private final AccountAccessRegistrationService accountAccessRegistrationService;
@@ -45,56 +43,70 @@ public class AccountResource {
 	@PostMapping(value = "/accessModule")
 	public ResponseEntity<ResourceDataEntity> accessModule(@RequestBody AccountEntity account) throws BaseException {
 		this.accountAccessModuleService.setParams(account);
-		this.resourceData.setMap(this.accountAccessModuleService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.accountAccessModuleService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessEdition")
 	public ResponseEntity<ResourceDataEntity> accessEdition(@RequestBody AccountEntity account) throws BaseException {
 		this.accountAccessEditionService.setParams(account);
-		this.resourceData.setMap(this.accountAccessEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.accountAccessEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/accessRegistration")
 	public ResponseEntity<ResourceDataEntity> accessRegistration(@RequestBody AccountEntity account) throws BaseException {
 		this.accountAccessRegistrationService.setParams(account);
-		this.resourceData.setMap(this.accountAccessRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.accountAccessRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeSearch")
 	public ResponseEntity<ResourceDataEntity> executeSearch(@RequestBody AccountEntity account) throws BaseException {
 		this.accountExecuteSearchService.setParams(account);
-		this.resourceData.setMap(this.accountExecuteSearchService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.accountExecuteSearchService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeEdition")
 	public ResponseEntity<ResourceDataEntity> executeEdition(@RequestBody AccountEntity account) throws BaseException {
 		this.accountExecuteEditionService.setParams(account);
-		this.resourceData.setMap(this.accountExecuteEditionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.accountExecuteEditionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeExclusion")
 	public ResponseEntity<ResourceDataEntity> executeExclusion(@RequestBody AccountEntity account) throws BaseException {
 		this.accountExecuteExclusionService.setParams(account);
-		this.resourceData.setMap(this.accountExecuteExclusionService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.accountExecuteExclusionService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 
 	@PostMapping(value = "/executeRegistration")
 	public ResponseEntity<ResourceDataEntity> executeRegistration(@RequestBody AccountEntity account) throws BaseException {
 		this.accountExecuteRegistrationService.setParams(account);
-		this.resourceData.setMap(this.accountExecuteRegistrationService.execute());
 
-		return ResponseEntity.ok(this.resourceData);
+		ResourceDataEntity resourceData = new ResourceDataEntity();
+		resourceData.setMap(this.accountExecuteRegistrationService.execute());
+
+		return ResponseEntity.ok(resourceData);
 	}
 }
